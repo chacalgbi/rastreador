@@ -4,12 +4,14 @@
     <div class="car_item"><%= msg %></div>
     <div class="car_item">
       <%= turbo_frame_tag "button_#{device_id}" do %>
-        <% if state == 'desbloquear' %>
-          <%= button_to "Desbloquear", home_block_and_desblock_path(id: device_id, action_type: 'desbloquear'), method: :post, class: "btn btn--positive", data: { turbo_stream: true } %>
-        <% elsif state == 'bloquear' %>
-          <%= button_to "Bloquear", home_block_and_desblock_path(id: device_id, action_type: 'bloquear'), method: :post, class: "btn btn--negative", data: { turbo_stream: true } %>
-        <% else %>
-          <%= button_tag "Em uso por outro motorista", class: "btn", disabled: true %>
+        <% if status == 'online' %>
+          <% if state == 'desbloquear' %>
+            <%= button_to "Desbloquear", home_block_and_desblock_path(id: device_id, action_type: 'desbloquear'), method: :post, class: "btn btn--positive", data: { turbo_stream: true } %>
+          <% elsif state == 'bloquear' %>
+            <%= button_to "Bloquear", home_block_and_desblock_path(id: device_id, action_type: 'bloquear'), method: :post, class: "btn btn--negative", data: { turbo_stream: true } %>
+          <% else %>
+            <%= button_tag "Em uso por outro motorista", class: "btn", disabled: true %>
+          <% end %>
         <% end %>
       <% end %>
     </div>
@@ -23,7 +25,10 @@
     </div>
     <div class="car_item">
       <% if events_count != 0 %>
-        <%= button_tag "Últimos Eventos: #{events_count}", class: "btn btn--borderless" %>
+        <%= button_to home_last_events_path(device_id: device_id, open: 'true'), method: :post, class: "btn btn--borderless", data: { turbo_stream: true } do %>
+          <%= image_tag "select-arrow.svg", size: 25, aria: { hidden: true } %>
+          <span>Últimos Eventos: <%= events_count %></span>
+        <% end %>
       <% end %>
     </div>
   </div>

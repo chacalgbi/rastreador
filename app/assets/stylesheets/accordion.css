@@ -3,31 +3,38 @@
     border-block-end-width: var(--border);
     font-size: var(--text-sm);
     overflow: hidden;
+
     &::details-content {
       block-size: 0;
       transition-behavior: allow-discrete;
       transition-duration: var(--time-200);
       transition-property: content-visibility block-size;
     }
+
     &[open]::details-content {
       block-size: auto;
     }
   }
+
   summary {
     align-items: center;
     cursor: default;
     display: flex;
     font-weight: var(--font-medium);
     padding-block: var(--size-4);
+
     &:hover {
       text-decoration: underline;
     }
+
     &:focus-visible {
       outline: var(--border-2) auto var(--color-selected-dark);
     }
+
     &::-webkit-details-marker {
       display: none;
     }
+
     &::after {
       background-image: url("chevron-down.svg");
       background-size: cover;
@@ -38,6 +45,7 @@
       margin-inline-start: auto;
       transition: transform var(--time-200);
     }
+
     details[open] > &::after {
       transform: var(--rotate-180);
     }

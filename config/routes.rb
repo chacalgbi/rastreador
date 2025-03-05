@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   get "home/index"
   get "home/location"
   get "home/details"
-  get 'home/hide_details'
+  get "home/hide_details"
+  post "home/last_events"
   post "home/block_and_desblock"
   resources :registrations, only: [:new, :create]
   get "up" => "rails/health#show", as: :rails_health_check

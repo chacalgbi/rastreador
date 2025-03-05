@@ -39,13 +39,13 @@ class HomeController < ApplicationController
     @event = Event.where(car_id: device_id).order(created_at: :desc).first
     @events_last_48_hours = Event.where(car_id: device_id, created_at: 48.hours.ago..Time.current).count
 
-    msg = define_text(@event)
+    msg = define_text(@event, params[:status])
     state = define_state(@event)
 
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
-          turbo_stream.replace("details_#{device_id}", partial: "home/details", locals: { msg: msg, device_id: device_id, state: state, events_count: @events_last_48_hours }),
+          turbo_stream.replace("details_#{device_id}", partial: "home/details", locals: {status: params[:status], msg: msg, device_id: device_id, state: state, events_count: @events_last_48_hours }),
           turbo_stream.replace("details_button_#{device_id}", partial: "home/details_button", locals: { device_id: device_id, show_details: true })
         ]
       end
@@ -103,9 +103,38 @@ class HomeController < ApplicationController
     end
   end
 
+  def last_events
+    device_id = params[:device_id]
+
+    if params[:open] == 'true'
+      @events = Event.where(car_id: device_id, created_at: 48.hours.ago..Time.current).order(created_at: :desc)
+
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "events_#{device_id}",
+            partial: "home/events",
+            locals: { device_id: device_id, events: @events }
+          )
+        end
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace(
+            "events_#{device_id}",
+            partial: "home/events_blank",
+            locals: { device_id: device_id }
+          )
+        end
+      end
+    end
+  end
+
   private
 
-  def define_text(event)
+  def define_text(event, status)
+    return "Veículo off-line" if status != 'online'
     return "Veículo sem histórico. Você pode bloquear/desbloquear." if event.nil?
     text = "#{event.car_name} disponível."
     if event.event_name == 'desbloquear'

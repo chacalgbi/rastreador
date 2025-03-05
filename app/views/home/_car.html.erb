@@ -1,4 +1,3 @@
-<hr class="mb-4 border-dark">
 <h1 class="text-2xl" style="font-family: var(--font-old-style); color: var(--blue-500)"><%= index %> <%= car['name'] %></h1>
 <div class="p-5 rounded-lg i-full" style="background: linear-gradient(to right, var(--indigo-300), transparent)">
   <div class="car_container">
@@ -11,16 +10,16 @@
     </div>
     <div class="car_item">V. Máx: <%= convert_speed(car['attributes']['speedLimit']) %></div>
     <div class="car_item">
-      <% if car['status'] == 'online' %>
-        <%= turbo_frame_tag "details_button_#{car['id']}" do %>
-          <%= link_to home_details_path(device_id: car['id']), class: "btn", data: { turbo_stream: true, turbo_prefetch: false } do %>
-            <%= image_tag "select-arrow.svg", size: 25, aria: { hidden: true } %>
-            <span>Detalhes</span>
-          <% end %>
+      <%= turbo_frame_tag "details_button_#{car['id']}" do %>
+        <%= link_to home_details_path(device_id: car['id'], status: car['status']), class: "btn", data: { turbo_stream: true, turbo_prefetch: false } do %>
+          <%= image_tag "select-arrow.svg", size: 25, aria: { hidden: true } %>
+          <span>Detalhes</span>
         <% end %>
       <% end %>
     </div>
   </div>
   <%= turbo_frame_tag "location_#{car['id']}" do %><% end %>
   <%= turbo_frame_tag "details_#{car['id']}" do %><% end %>
+  <%= turbo_frame_tag "events_#{car['id']}" do %><% end %>
 </div>
+<br>

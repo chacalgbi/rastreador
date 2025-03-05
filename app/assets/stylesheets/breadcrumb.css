@@ -1,0 +1,25 @@
+.breadcrumb {
+  align-items: center;
+  color: var(--color-text-subtle);
+  column-gap: var(--size-1);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: var(--text-sm);
+  overflow-wrap: break-word;
+
+  a {
+    padding-block-end: 2px;
+  }
+
+  img {
+    filter: var(--color-filter-text);
+  }
+
+  a:hover {
+    color: var(--color-text);
+  }
+
+  @media (width >= 40rem) {
+    column-gap: var(--size-2);
+  }
+}

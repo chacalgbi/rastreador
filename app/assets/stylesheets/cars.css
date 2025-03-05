@@ -9,3 +9,11 @@
   text-align: center;
   padding: 2px
 }
+
+.button-container {
+  text-align: right;
+}
+
+.align-right {
+  display: inline-block;
+}

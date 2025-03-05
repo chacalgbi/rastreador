@@ -1,0 +1,23 @@
+<%= turbo_frame_tag "events_#{device_id}" do %>
+  <br><br>
+  <div class="button-container">
+    <%= button_to home_last_events_path(device_id: device_id, open: 'false'), method: :post, class: "btn btn--plain align-right", data: { turbo_stream: true } do %>
+      <%= image_tag "circle-x.svg", size: 25, aria: { hidden: true } %>
+    <% end %>
+  </div>
+  <br>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Disparado por</th>
+        <th>Data/hora</th>
+        <th class="text-end">Evento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% events.each.with_index(1) do |event, index| %>
+        <%= render "event", event: event, index: index %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
