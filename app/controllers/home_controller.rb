@@ -36,7 +36,7 @@ class HomeController < ApplicationController
 
   def details
     device_id = params[:device_id]
-    @event = Event.where(car_id: device_id).order(created_at: :desc).first
+    @event = Event.where(car_id: device_id, event_name: ['bloquear', 'desbloquear']).order(created_at: :desc).first
     @events_last_48_hours = Event.where(car_id: device_id, created_at: 48.hours.ago..Time.current).count
 
     msg = define_text(@event, params[:status])
