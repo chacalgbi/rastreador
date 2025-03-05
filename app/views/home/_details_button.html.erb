@@ -1,0 +1,13 @@
+<%= turbo_frame_tag "details_button_#{device_id}" do %>
+  <% if show_details %>
+    <%= link_to home_hide_details_path(device_id: device_id), class: "btn", data: { turbo_stream: true } do %>
+      <%= image_tag "undo-2.svg", size: 20, aria: { hidden: true } %>
+      <span>Ocultar</span>
+    <% end %>
+  <% else %>
+    <%= link_to home_details_path(device_id: device_id), class: "btn", data: { turbo_stream: true } do %>
+      <%= image_tag "select-arrow.svg", size: 25, aria: { hidden: true } %>
+      <span>Detalhes</span>
+    <% end %>
+  <% end %>
+<% end %>

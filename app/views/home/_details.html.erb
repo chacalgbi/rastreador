@@ -1,0 +1,30 @@
+<%= turbo_frame_tag "details_#{device_id}" do %>
+  <br>
+  <div class="car_container">
+    <div class="car_item"><%= msg %></div>
+    <div class="car_item">
+      <%= turbo_frame_tag "button_#{device_id}" do %>
+        <% if state == 'desbloquear' %>
+          <%= button_to "Desbloquear", home_block_and_desblock_path(id: device_id, action_type: 'desbloquear'), method: :post, class: "btn btn--positive", data: { turbo_stream: true } %>
+        <% elsif state == 'bloquear' %>
+          <%= button_to "Bloquear", home_block_and_desblock_path(id: device_id, action_type: 'bloquear'), method: :post, class: "btn btn--negative", data: { turbo_stream: true } %>
+        <% else %>
+          <%= button_tag "Em uso por outro motorista", class: "btn", disabled: true %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+  <br>
+  <div class="car_container">
+    <div class="car_item">
+      <%= link_to home_location_path(car_id: device_id), class: "btn", data: { turbo_stream: true, turbo_prefetch: false } do %>
+        Localização atual
+      <% end %>
+    </div>
+    <div class="car_item">
+      <% if events_count != 0 %>
+        <%= button_tag "Últimos Eventos: #{events_count}", class: "btn btn--borderless" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

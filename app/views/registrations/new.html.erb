@@ -1,0 +1,24 @@
+<% if alert = flash[:alert] %>
+  <%= alert %>
+<% end %>
+
+<h1 class="font-bold text-2xl">Cadastrar novo usuário</h1> <br>
+
+<%= form_with model: @user, url: registrations_url, class: "contents", data: { controller: "registration" } do |form| %>
+  <%= form.label :name, "Nome" %> <br>
+  <%= form.text_field :name, required: true, placeholder: "Digite seu nome", class: "input" %> <br> <br>
+
+  <%= form.label :phone, "Telefone" %> <br>
+  <%= form.text_field :phone, required: true, placeholder: "Digite seu telefone", class: "input", id: "user_phone" %> <br> <br>
+
+  <%= form.label :email_address, "E-mail" %> <br>
+  <%= form.email_field :email_address, required: true, placeholder: "Digite seu melhor e-mail", autofocus: true, value: params[:email_address], class: "input" %> <br> <br>
+
+  <%= form.label :password, "Senha" %> <br>
+  <%= form.password_field :password, required: true, placeholder: "Digite uma senha", maxlength: 72, class: "input" %> <br> <br>
+
+  <%= form.label :password_confirmation, "Confirme sua senha" %> <br>
+  <%= form.password_field :password_confirmation, required: true, placeholder: "Confirme sua senha", maxlength: 72, class: "input" %> <br> <br>
+
+  <%= form.submit "Inserir", class: "btn" %>
+<% end %>

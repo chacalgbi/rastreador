@@ -17,12 +17,36 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag "css-zero/reset", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "css-zero/variables", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "css-zero/utilities", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body class="header-layout">
+    <header id="header">
+      <div class="container">
+        <h1 class="font-bold text-2xl">Rastreadores Bahia</h1>
+      </div>
+      <% if Current.user %>
+        <p>Bem-Vindo(a), <%= Current.user.name %></p>
+        <%= link_to 'Sair', session_path(Current.session), data: { turbo_method: :delete }, class: "btn" %>
+      <% else %>
+        <p>Faça login para acessar seus dados</p>
+        <%= link_to 'Entrar', new_session_path, class: "btn" %> | 
+        <%= link_to 'Faça sua inscrição', new_registration_path, class: "btn" %> | 
+        <%= link_to 'Esqueçeu sua senha?', new_password_path, class: "btn" %>
+      <% end %>
+    </header>
+
+    <main id="main">
+      <div class="container">
+        <div id="flash">
+          <%= render '/alert', flash: flash %>
+        </div>
+        <%= yield %>
+      </div>
+    </main>
   </body>
 </html>

@@ -1,0 +1,14 @@
+<div class="header-layout">
+    <%= render '/alert', flash: flash %>
+    <%= form_with url: session_path do |form| %>
+    <h1 class="font-bold text-2xl">Entre com seu email e senha</h1>
+      <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Use seu email cadastrado", value: params[:email_address], class: "input" %><br>
+      <br>
+      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Digite sua senha", maxlength: 72, class: "input" %><br>
+      <br>
+      <%= form.submit "Entrar", class: "btn btn--loading" %>
+      <br><br>
+      <%= link_to "Esqueceu sua senha?", new_password_path %>
+    <% end %>
+</div>
+

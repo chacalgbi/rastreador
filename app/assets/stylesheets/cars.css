@@ -1,0 +1,11 @@
+.car_container {
+  display: flex;
+  justify-content: space-between;
+  gap: 2px;
+}
+
+.car_item {
+  flex: 1;
+  text-align: center;
+  padding: 2px
+}

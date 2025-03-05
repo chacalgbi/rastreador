@@ -1,0 +1,12 @@
+<% if flash[:notice]  %>
+  <div popover class="flash flash--positive" data-controller="element-removal" data-action="animationend->element-removal#remove" role="alert">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+
+<% if flash[:alert]  %>
+  <div popover class="flash flash--negative" data-controller="element-removal" data-action="animationend->element-removal#remove" role="alert">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
