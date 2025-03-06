@@ -1,0 +1,38 @@
+<div class="sidebar-menu">
+  <div class="sidebar-menu__content">
+    <div class="sidebar-menu__group">
+      <div class="sidebar-menu__group-label">Menu</div>
+      <div class="sidebar-menu__items">
+        <details open>
+          <summary class="btn sidebar-menu__button">
+            <%= image_tag "square-terminal.svg", size: 16, aria: { hidden: true } %>
+            <span class="overflow-ellipsis">Opções</span>
+          </summary>
+          <nav class="sidebar-menu__sub">
+            <% if Current.user %>
+              <%= link_to 'Atualizar Veículos', root_path, class: "btn sidebar-menu__button", aria: { current: "page" } %>
+              <% if Current.user.admin %>
+                <%= link_to 'Gerenciar Motoristas', driver_index_path, class: "btn sidebar-menu__button" %>
+                <%= link_to 'Home', root_path, class: "btn sidebar-menu__button" %>
+              <% end %>
+            <% else %>
+              <%= link_to 'Faça sua inscrição', new_registration_path %>
+              <%= link_to 'Esqueçeu sua senha?', new_password_path %>
+            <% end %>
+          </nav>
+        </details>
+      </div>
+    </div>
+  </div>
+  <%= link_to "#", class: "btn sidebar-menu__button mbs-auto" do %>
+    <% if Current.user %>
+      <%= link_to session_path(Current.session), data: { turbo_method: :delete }, class: "text-primary" do %>
+        <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true } %>
+        <%= Current.user.name %> - Sair
+      <% end %>
+    <% else %>
+      <%= image_tag "door-open.svg", size: 24, aria: { hidden: true } %>
+      <%= link_to 'Entrar', new_session_path %>
+    <% end %>
+  <% end %>
+</div>

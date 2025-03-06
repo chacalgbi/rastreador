@@ -1,0 +1,32 @@
+<div class="flex items-center gap">
+  <%= link_to "#", class: "flex items-center gap mie-2" do %>
+    <%= image_tag "satellite.svg", size: 40, aria: { hidden: true } %>
+    <span class="font-bold">Rastreadores Bahia</span>
+  <% end %>
+
+  <nav class="flex items-center gap text-sm text-subtle show@md" style="--column-gap: 1rem">
+    <% if Current.user %>
+      <%= link_to 'Atualizar Veículos', root_path %>
+      <% if Current.user.admin %>
+        <%= link_to 'Gerenciar Motoristas', driver_index_path %>
+        <%= link_to 'Home', root_path %>
+      <% end %>
+    <% else %>
+      <%= link_to 'Faça sua inscrição', new_registration_path %>
+      <%= link_to 'Esqueçeu sua senha?', new_password_path %>
+    <% end %>
+  </nav>
+</div>
+
+<div class="flex items-center gap">
+  <% if Current.user %>
+    <%= Current.user.name %>
+    <%= link_to session_path(Current.session), data: { turbo_method: :delete }, class: "text-primary" do %>
+      <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true } %>
+      Sair
+    <% end %>
+  <% else %>
+    <%= image_tag "door-open.svg", size: 24, aria: { hidden: true } %>
+    <%= link_to 'Entrar', new_session_path %>
+  <% end %>
+</div>

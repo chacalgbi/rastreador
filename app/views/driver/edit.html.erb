@@ -1,0 +1,48 @@
+<h1 class="font-bold text-2xl">Editar Motorista</h1>
+<br>
+
+<%= form_with model: @user, url: driver_path(@user), method: :patch, local: true do |f| %>
+  <% if @user.errors.any? %>
+    <div class="alert alert-danger">
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name, "Nome", class: "text-sm font-medium" %><br>
+    <%= f.text_field :name, class: "input" %><br><br>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email_address, "Email", class: "text-sm font-medium" %><br>
+    <%= f.email_field :email_address, class: "input" %><br><br>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :phone, "Telefone", class: "text-sm font-medium" %><br>
+    <%= f.text_field :phone, class: "input" %><br><br>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :active, "Ativo", class: "text-sm font-medium" %><br>
+    <%= f.select :active, [['Sim', true], ['Não', false]], {}, class: "input" %><br><br>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :admin, "Administrador", class: "text-sm font-medium" %><br>
+    <%= f.select :admin, [['Sim', true], ['Não', false]], {}, class: "input" %><br><br>
+  </div>
+
+  <div class="form-group">
+    <%= f.submit "Atualizar Motorista", class: "btn btn-primary" %>
+    <div class="button-container">
+      <%= link_to driver_index_path, class: "btn btn-primary align-right" do %>
+        <%= image_tag "arrow-left.svg", size: 25, aria: { hidden: true } %>Voltar
+      <% end %>
+    </div>
+  </div>
+<% end %>

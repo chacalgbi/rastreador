@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resource :session
+  resources :driver, only: [:index, :edit, :update, :destroy]
   resources :passwords, param: :token
   get "home/index"
   get "home/location"

@@ -3,9 +3,13 @@
   <div class="car_container">
     <div class="car_item">
       <% if car['status'] == 'online' %>
-        <div class="badge badge--positive">Online <%= format_datetime_br(car['lastUpdate']) %></div>
+        <div class="badge badge--positive">
+          <%= image_tag "satellite-dish.svg", size: 17, aria: { hidden: true } %>  Online <%= format_datetime_br(car['lastUpdate']) %> 
+        </div>
       <% else %>
-        <div class="badge badge--negative">Offline</div>
+        <div class="badge badge--negative">
+        <%= image_tag "navigation-off.svg", size: 17, aria: { hidden: true } %>  Offline
+        </div>
       <% end %>
     </div>
     <div class="car_item">V. Máx: <%= convert_speed(car['attributes']['speedLimit']) %></div>
