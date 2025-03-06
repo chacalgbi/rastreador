@@ -32,4 +32,26 @@
       <% end %>
     </div>
   </div>
+  <div class="car_container">
+    <%= button_tag class: "btn btn--plain", disabled: true do %>
+      <%= image_tag "satellite-dish.svg", size: 20, aria: { hidden: true } %><span>Satélites:<%= info['satelite'] %></span>
+    <% end %>
+    <%= button_tag class: "btn btn--plain", disabled: true do %>
+      <%= image_tag "battery-charging.svg", size: 20, aria: { hidden: true } %><span>Bateria:<%= info['battery'] %>v</span>
+    <% end %>
+    <%= button_tag class: "btn btn--plain", disabled: true do %>
+      <%= image_tag "battery-medium.svg", size: 20, aria: { hidden: true } %><span>Bateria Backup:<%= info['bat_bckp'] %>v</span>
+    <% end %>
+  </div>
+  <div class="car_container">
+    <%= button_tag class: "btn btn--plain", disabled: true do %>
+      <%= image_tag "arrow-up-from-dot.svg", size: 20, aria: { hidden: true } %><span>Altitude:<%= info['altitude'] %>m</span>
+    <% end %>
+    <%= button_tag class: "btn btn--plain", disabled: true do %>
+      <%= image_tag "key-square.svg", size: 20, aria: { hidden: true } %><span>Ignição:<%= info['satelite'] == false ? 'Ligada' : 'Desligada' %></span>
+    <% end %>
+    <%= button_tag class: "btn btn--plain", disabled: true do %>
+      <%= image_tag "shield-off.svg", size: 20, aria: { hidden: true } %><span>N° cercas<%= info['geofenceIds'] %></span>
+    <% end %>
+  </div>
 <% end %>

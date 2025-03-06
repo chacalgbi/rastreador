@@ -9,7 +9,6 @@
       <%= link_to 'Atualizar Veículos', root_path %>
       <% if Current.user.admin %>
         <%= link_to 'Gerenciar Motoristas', driver_index_path %>
-        <%= link_to 'Home', root_path %>
       <% end %>
     <% else %>
       <%= link_to 'Faça sua inscrição', new_registration_path %>

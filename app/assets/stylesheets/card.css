@@ -17,3 +17,12 @@
     border-color: var(--color-primary);
   }
 }
+
+.device_info {
+  display: flex;
+  align-items: center;
+}
+
+.device_info img {
+  margin-right: 8px;
+}

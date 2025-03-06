@@ -39,13 +39,14 @@ class HomeController < ApplicationController
     @event = Event.where(car_id: device_id, event_name: ['bloquear', 'desbloquear']).order(created_at: :desc).first
     @events_last_48_hours = Event.where(car_id: device_id, created_at: 48.hours.ago..Time.current).count
 
+    info = get_info_device
     msg = define_text(@event, params[:status])
     state = define_state(@event)
 
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
-          turbo_stream.replace("details_#{device_id}", partial: "home/details", locals: {status: params[:status], msg: msg, device_id: device_id, state: state, events_count: @events_last_48_hours }),
+          turbo_stream.replace("details_#{device_id}", partial: "home/details", locals: {status: params[:status], info: info, msg: msg, device_id: device_id, state: state, events_count: @events_last_48_hours }),
           turbo_stream.replace("details_button_#{device_id}", partial: "home/details_button", locals: { device_id: device_id, show_details: true })
         ]
       end
@@ -149,5 +150,15 @@ class HomeController < ApplicationController
     return "desbloquear" if event.event_name == 'bloquear' # Qualquer um pode desbloquear, porque o veículo está bloqueado e disponível para uso
     return "bloquear"    if event.event_name == 'desbloquear' && event.driver_id.to_i == Current.user.id # Se o evento é desbloquear e o motorista é o mesmo que desbloqueou, ele pode bloquear
     return "not_user" # se chegar aqui, é porque o evento é desbloquear e o motorista é diferente do que desbloqueou, então ele não pode bloquear
+  end
+
+  def get_info_device
+    response = Net::HTTP.get_response(URI("#{ENV["INFO_URL"]}#{params[:device_id]}"))
+
+    if response.is_a?(Net::HTTPSuccess)
+      JSON.parse(response.body)
+    else
+      redirect_to root_path, alert: "Erro ao buscar informações do veículo: #{response.code}. Msg: #{response.body}"
+    end
   end
 end
