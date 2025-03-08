@@ -8,6 +8,8 @@ class HomeController < ApplicationController
       device_ids = Current.user&.cars.present? ? Current.user.cars.split(",") : []
       @devices = device_ids.present? ? Traccar.get_devices(device_ids) : []
     end
+
+    @devices = Kaminari.paginate_array(@devices).page(params[:page]).per(10)
   end
 
   def location

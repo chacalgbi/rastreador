@@ -4,6 +4,8 @@
 
 <br>
 <% if @devices.present? %>
+  <%= paginate @devices %>
+  <br>
   <% @devices.each.with_index(1) do |device, index| %>
     <%= render 'car', car: device, index: index %>
   <% end %>
