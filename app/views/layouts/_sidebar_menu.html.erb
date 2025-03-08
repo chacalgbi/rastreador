@@ -5,7 +5,7 @@
       <div class="sidebar-menu__items">
         <details open>
           <summary class="btn sidebar-menu__button">
-            <%= image_tag "square-terminal.svg", size: 16, aria: { hidden: true } %>
+            <%= image_tag "list.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
             <span class="overflow-ellipsis">Opções</span>
           </summary>
           <nav class="sidebar-menu__sub">
@@ -26,11 +26,11 @@
   <%= link_to "#", class: "btn sidebar-menu__button mbs-auto" do %>
     <% if Current.user %>
       <%= link_to session_path(Current.session), data: { turbo_method: :delete }, class: "text-primary" do %>
-        <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true } %>
-        <%= Current.user.name %> - Sair
+        <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
+        <%= Current.user.name.truncate(25) %> - Sair
       <% end %>
     <% else %>
-      <%= image_tag "door-open.svg", size: 24, aria: { hidden: true } %>
+      <%= image_tag "door-open.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
       <%= link_to 'Entrar', new_session_path %>
     <% end %>
   <% end %>

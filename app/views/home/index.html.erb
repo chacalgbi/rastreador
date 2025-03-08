@@ -3,6 +3,16 @@
 </div>
 
 <br>
-<% @devices.each.with_index(1) do |device, index| %>
-  <%= render 'car', car: device, index: index %>
+<% if @devices.present? %>
+  <% @devices.each.with_index(1) do |device, index| %>
+    <%= render 'car', car: device, index: index %>
+  <% end %>
+<% else %>
+  <div class="alert flex items-start" role="alert">
+    <%= image_tag "circle-x.svg", size: 16, aria: { hidden: true } %>
+    <div class="flex flex-col mis-3">
+      <h1 class="text-2xl">Você não tem carros disponíveis</h1>
+      <p>Procure seu supervisor para liberar os carros que você precisa.</p>
+    </div>
+  </div>
 <% end %>

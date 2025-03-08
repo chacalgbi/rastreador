@@ -1,13 +1,13 @@
 class HomeController < ApplicationController
+  HOURS_LAST_EVENTS = 100
+
   def index
     if Current.user.admin?
       @devices = Traccar.get_devices
     else
       device_ids = Current.user&.cars.present? ? Current.user.cars.split(",") : []
-      @devices = Traccar.get_devices(device_ids)
+      @devices = device_ids.present? ? Traccar.get_devices(device_ids) : []
     end
-
-    redirect_to root_path, alert: "Erro ao buscar os veículos" if @devices.empty?
   end
 
   def location
@@ -28,7 +28,7 @@ class HomeController < ApplicationController
   def details
     device_id = params[:device_id]
     @event = Event.where(car_id: device_id, event_name: ['bloquear', 'desbloquear']).order(created_at: :desc).first
-    @events_last_48_hours = Event.where(car_id: device_id, created_at: 48.hours.ago..Time.current).count
+    @events_last_x_hours = Event.where(car_id: device_id, created_at: HOURS_LAST_EVENTS.hours.ago..Time.current).count
 
     info = get_info_device
     msg = define_text(@event, params[:status])
@@ -37,7 +37,7 @@ class HomeController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
-          turbo_stream.replace("details_#{device_id}", partial: "home/details", locals: {status: params[:status], info: info, msg: msg, device_id: device_id, state: state, events_count: @events_last_48_hours }),
+          turbo_stream.replace("details_#{device_id}", partial: "home/details", locals: {status: params[:status], info: info, msg: msg, device_id: device_id, state: state, events_count: @events_last_x_hours, event: @event}),
           turbo_stream.replace("details_button_#{device_id}", partial: "home/details_button", locals: { device_id: device_id, show_details: true })
         ]
       end
@@ -91,7 +91,7 @@ class HomeController < ApplicationController
     device_id = params[:device_id]
 
     if params[:open] == 'true'
-      @events = Event.where(car_id: device_id, created_at: 48.hours.ago..Time.current).order(created_at: :desc)
+      @events = Event.where(car_id: device_id, created_at: HOURS_LAST_EVENTS.hours.ago..Time.current).order(created_at: :desc)
 
       respond_to do |format|
         format.turbo_stream do
@@ -132,6 +132,7 @@ class HomeController < ApplicationController
     return "bloquear"    if event.nil? # Se não tem evento, pode bloquear, porque, por padrão o rastreador iniciar desbloqueado
     return "desbloquear" if event.event_name == 'bloquear' # Qualquer um pode desbloquear, porque o veículo está bloqueado e disponível para uso
     return "bloquear"    if event.event_name == 'desbloquear' && event.driver_id.to_i == Current.user.id # Se o evento é desbloquear e o motorista é o mesmo que desbloqueou, ele pode bloquear
+    return "bloquear"    if event.event_name == 'desbloquear' && Current.user.admin? # Se o evento é desbloquear e o motorista é admin, ele pode bloquear
     return "not_user" # se chegar aqui, é porque o evento é desbloquear e o motorista é diferente do que desbloqueou, então ele não pode bloquear
   end
 

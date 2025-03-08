@@ -1,6 +1,6 @@
 <div class="flex items-center gap">
   <%= link_to "#", class: "flex items-center gap mie-2" do %>
-    <%= image_tag "satellite.svg", size: 40, aria: { hidden: true } %>
+    <%= image_tag "satellite.svg", size: 40, aria: { hidden: true }, class: "invertible" %>
     <span class="font-bold">Rastreadores Bahia</span>
   <% end %>
 
@@ -19,13 +19,13 @@
 
 <div class="flex items-center gap">
   <% if Current.user %>
-    <%= Current.user.name %>
+    <%= Current.user.name.truncate(25) %>
     <%= link_to session_path(Current.session), data: { turbo_method: :delete }, class: "text-primary" do %>
-      <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true } %>
+      <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
       Sair
     <% end %>
   <% else %>
-    <%= image_tag "door-open.svg", size: 24, aria: { hidden: true } %>
+    <%= image_tag "door-open.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
     <%= link_to 'Entrar', new_session_path %>
   <% end %>
 </div>
