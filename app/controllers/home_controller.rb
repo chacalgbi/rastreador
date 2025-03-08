@@ -1,27 +1,18 @@
-require 'net/http'
-require 'uri'
-require 'json'
-
 class HomeController < ApplicationController
   def index
-    response = Net::HTTP.get_response(URI(ENV["DEVICES_URL"]))
-
-    if response.is_a?(Net::HTTPSuccess)
-      @devices = JSON.parse(response.body)
+    if Current.user.admin?
+      @devices = Traccar.get_devices
     else
-      redirect_to root_path, alert: "Erro ao buscar os veículos: #{response.code}. Msg: #{response.body}"
+      device_ids = Current.user&.cars.present? ? Current.user.cars.split(",") : []
+      @devices = Traccar.get_devices(device_ids)
     end
+
+    redirect_to root_path, alert: "Erro ao buscar os veículos" if @devices.empty?
   end
 
   def location
-    response = Net::HTTP.get_response(URI("#{ENV["POSITION_URL"]}#{params[:car_id]}"))
-
-    if response.is_a?(Net::HTTPSuccess)
-      data = JSON.parse(response.body)
-      @location_url = data["message"]
-    else
-      redirect_to root_path, alert: "Erro ao buscar a posição do veículo: #{response.code}. Msg: #{response.body}"
-    end
+    @location_url = Traccar.get_position(params[:car_id])
+    redirect_to root_path, alert: "Erro ao buscar a posição do veículo." if @location_url.empty?
 
     respond_to do |format|
       format.turbo_stream do
@@ -77,30 +68,22 @@ class HomeController < ApplicationController
       command: action_type
     }
 
-    uri = URI(ENV["COMMAND_URL"])
-    http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Post.new(uri.path, { 'Content-Type' => 'application/json' })
-    request.body = payload.to_json
-    response = http.request(request)
+    response = Traccar.block_and_desblock(payload)
+    redirect_to root_path, alert: "Erro ao enviar o comando: #{action_type}." if response.empty?
 
-    if response.is_a?(Net::HTTPSuccess)
-      data = JSON.parse(response.body)
-      notice = "#{data}. Aguarde alguns segundos e o veículo será #{action_type == 'bloquear' ? 'BLOQUEADO' : 'DESBLOQUEADO'}."
-      new_button_text = 'Aguarde...'
-      new_button_class = 'btn'
+    notice = "#{response}. Aguarde alguns segundos e o veículo será #{action_type == 'bloquear' ? 'BLOQUEADO' : 'DESBLOQUEADO'}."
+    new_button_text = 'Aguarde...'
+    new_button_class = 'btn'
 
-      flash.now[:notice] = notice
+    flash.now[:notice] = notice
 
-      respond_to do |format|
-        format.turbo_stream do
-          render turbo_stream: [
-            turbo_stream.replace("button_#{device_id}", partial: "home/button", locals: { button_text: new_button_text, button_class: new_button_class }),
-            turbo_stream.append("flash", partial: "/alert", locals: { notice: notice })
-          ]
-        end
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace("button_#{device_id}", partial: "home/button", locals: { button_text: new_button_text, button_class: new_button_class }),
+          turbo_stream.append("flash", partial: "/alert", locals: { notice: notice })
+        ]
       end
-    else
-      redirect_to root_path, alert: "Erro ao enviar o comando: #{action_type}. Msg: #{response.body}."
     end
   end
 
@@ -153,12 +136,9 @@ class HomeController < ApplicationController
   end
 
   def get_info_device
-    response = Net::HTTP.get_response(URI("#{ENV["INFO_URL"]}#{params[:device_id]}"))
+    response = Traccar.get_info_device(params[:device_id])
+    redirect_to root_path, alert: "Erro ao buscar informações do veículo." if response.empty?
 
-    if response.is_a?(Net::HTTPSuccess)
-      JSON.parse(response.body)
-    else
-      redirect_to root_path, alert: "Erro ao buscar informações do veículo: #{response.code}. Msg: #{response.body}"
-    end
+    response
   end
 end

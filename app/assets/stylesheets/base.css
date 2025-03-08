@@ -23,8 +23,10 @@
   --color-filter-text-reversed: invert(1);
   --color-filter-negative: invert(22%) sepia(85%) saturate(1790%) hue-rotate(339deg) brightness(105%) contrast(108%);
   --color-filter-positive: invert(44%) sepia(89%) saturate(409%) hue-rotate(89deg) brightness(94%) contrast(97%);
+}
 
-  @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
+  :root {
     /* Abstractions */
     --color-bg: var(--zinc-950);
     --color-text: white;
@@ -76,4 +78,22 @@ body {
 
 ::selection {
   background-color: var(--color-selected);
+}
+
+img.invertible {
+  filter: invert(0);
+}
+
+@media (prefers-color-scheme: dark) {
+  img.invertible {
+    filter: invert(1);
+  }
+}
+
+.border-light {
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  padding-left: 10px;
 }

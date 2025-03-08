@@ -1,0 +1,46 @@
+<div class="car_container">
+  <div class="car_item"><h1 class="text-2xl">Gerenciar veículos disponíveis para '<%= @driver_name %>'</h1></div>
+</div>
+
+
+<fieldset class="flex flex-col gap-half text-sm" data-controller="check-all">
+  <%= form_with url: cars_update_driver_index_path, method: :post do %>
+
+    <br><hr><br>
+    <div class="car_container">
+      <div class="car_item">
+        <div class="flex" role="alert">
+          <%= image_tag "message-circle-warning.svg", size: 20, aria: { hidden: true } %>
+          <h3 class="font-medium">  Selecione os veículos e clique em 'Atualizar'</h3>
+        </div>
+      </div>
+      <div class="car_item">
+        <div class="flex items-center gap">
+          <%= check_box_tag :check_all, class: "checkbox", data: { action: "check-all#check", check_all_target: "dependee" } %>
+          <%= label_tag :check_all, "SELECIONAR TODOS" %>
+        </div>
+      </div>
+      <div class="car_item">
+        <%= submit_tag 'Atualizar', class: 'btn btn-positive' %>
+      </div>
+    </div>
+    <br><hr><br>
+
+    <% @devices.each_slice(4).with_index do |device_slice, slice_index| %>
+      <div class="car_container">
+        <% device_slice.each do |device| %>
+          <div class="car_item">
+            <div class="items-center gap">
+              <% is_checked = @array_devices.include?(device['id'].to_s) %>
+              <%= check_box_tag 'device_ids[]', device['id'], is_checked, class: "checkbox", data: { action: "check-all#check", check_all_target: "dependant" } %>
+              <%= label_tag "label_car_#{device['id']}", device['name'], class: "text-sm" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%= hidden_field_tag :driver_id, @driver_id %>
+    <%= hidden_field_tag :driver_name, @driver_name %>
+  <% end %>
+</fieldset>

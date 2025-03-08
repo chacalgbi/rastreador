@@ -2,7 +2,6 @@ class DriverController < ApplicationController
   before_action :check_main_user
 
   def index
-    #driver_index_path
     @drivers = User.all
   end
 
@@ -38,6 +37,27 @@ class DriverController < ApplicationController
     end
   end
 
+  def cars
+    user = User.find_by(id: params[:id])
+
+    @array_devices = user&.cars.present? ? user.cars.split(",") : []
+    @driver_id = params[:id]
+    @driver_name = params[:name]
+    @devices = Traccar.get_devices
+    redirect_to driver_index_path, alert: "Veículos não encontrados" if @devices.empty?
+  end
+
+  def cars_update
+    device_ids = params[:device_ids] || []
+    user = User.find_by(id: params[:driver_id])
+    redirect_to driver_index_path, alert: "Motorista não encontrado" if user.nil?
+
+    device_ids_string = device_ids.join(",")
+    user.update(cars: device_ids_string)
+
+    msg = "O motorista #{params[:driver_name]} agora tem acesso a #{device_ids.count} veículos."
+    redirect_to driver_index_path, notice: msg
+  end
 
   private
 

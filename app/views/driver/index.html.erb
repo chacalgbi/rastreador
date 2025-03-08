@@ -9,33 +9,35 @@
       <th>Telefone</th>
       <th>Ativo?</th>
       <th>Admin?</th>
-      <th>Carros</th>
       <th>Criado em</th>
-      <th>Atualizado em</th>
-      <th class="text-end">Editar</th>
-      <th class="text-end">Apagar</th>
+      <th>Editar</th>
+      <th>Permissões</th>
+      <th>Apagar</th>
     </tr>
   </thead>
   <tbody>
     <% @drivers.each.with_index(1) do |driver, index| %>
       <tr>
         <th><%= index %></th>
-        <td class="text-2md"><%= driver.name %></td>
+        <td><%= driver.name %></td>
         <td><%= driver.email_address %></td>
         <td><%= driver.phone %></td>
         <td><%= driver.active ? 'Sim' : 'Não' %></td>
         <td><%= driver.admin ? 'Sim' : 'Não' %></td>
-        <td><%= driver.cars %></td>
         <td><%= driver.created_at.in_time_zone('America/Sao_Paulo').strftime('%d/%m/%Y %H:%M') %></td>
-        <td><%= driver.updated_at.in_time_zone('America/Sao_Paulo').strftime('%d/%m/%Y %H:%M') %></td>
         <td>
           <%= link_to edit_driver_path(id: driver.id) do %>
-            <%= image_tag "user-round-pen.svg", size: 25, aria: { hidden: true } %>
+            <%= image_tag "user-round-pen.svg", size: 30, aria: { hidden: true }, class: "invertible" %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to cars_driver_index_path(id: driver.id, name: driver.name), class: "btn btn--secondary" do %>
+            <%= image_tag "user-round-cog.svg", size: 30, aria: { hidden: true }, class: "invertible" %>
           <% end %>
         </td>
         <td>
           <%= button_to driver_path(driver), method: :delete, data: { turbo_confirm: "Tem certeza que deseja apagar o usuário: #{driver.name}?" } do %>
-            <%= image_tag "user-round-x.svg", size: 25, aria: { hidden: true } %>
+            <%= image_tag "user-round-x.svg", size: 30, aria: { hidden: true }, class: "invertible" %>
           <% end %>
         </td>
       </tr>

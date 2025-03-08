@@ -6,9 +6,9 @@
 
   <nav class="flex items-center gap text-sm text-subtle show@md" style="--column-gap: 1rem">
     <% if Current.user %>
-      <%= link_to 'Atualizar Veículos', root_path %>
+      <%= link_to 'Veículos', root_path %>
       <% if Current.user.admin %>
-        <%= link_to 'Gerenciar Motoristas', driver_index_path %>
+        <%= link_to 'Motoristas', driver_index_path %>
       <% end %>
     <% else %>
       <%= link_to 'Faça sua inscrição', new_registration_path %>

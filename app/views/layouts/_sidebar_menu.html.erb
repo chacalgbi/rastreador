@@ -10,10 +10,9 @@
           </summary>
           <nav class="sidebar-menu__sub">
             <% if Current.user %>
-              <%= link_to 'Atualizar Veículos', root_path, class: "btn sidebar-menu__button", aria: { current: "page" } %>
+              <%= link_to 'Veículos', root_path, class: "btn sidebar-menu__button", aria: { current: "page" } %>
               <% if Current.user.admin %>
-                <%= link_to 'Gerenciar Motoristas', driver_index_path, class: "btn sidebar-menu__button" %>
-                <%= link_to 'Home', root_path, class: "btn sidebar-menu__button" %>
+                <%= link_to 'Motoristas', driver_index_path, class: "btn sidebar-menu__button" %>
               <% end %>
             <% else %>
               <%= link_to 'Faça sua inscrição', new_registration_path %>
