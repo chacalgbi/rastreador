@@ -7,10 +7,22 @@ class PasswordsController < ApplicationController
 
   def create
     if user = User.find_by(email_address: params[:email_address])
-      PasswordsMailer.reset(user).deliver_later
-    end
+      random_string = SecureRandom.alphanumeric(6)
+      titulo = "Redefinição de senha"
+      corpo = "Sua nova senha é:\n\n#{random_string}\n\nPor favor, faça login e altere sua senha."
 
-    redirect_to new_session_path, notice: "Instruções de redefinição de senha enviadas (se houver um usuário com esse endereço de e-mail)."
+      response = Notify.email(params[:email_address], titulo, corpo)
+
+      if response["erroGeral"] == "nao"
+        user.password = random_string
+        user.save
+        redirect_to new_session_path, notice: "Instruções de redefinição de senha enviadas para o email: #{params[:email_address]}."
+      else
+        redirect_to new_session_path, alert: "Erro ao enviar mensagem para o email: #{params[:email_address]}. ERROR: #{response["msg"]}"
+      end
+    else
+      redirect_to new_session_path, alert: "Email não encontrado: #{params[:email_address]}"
+    end
   end
 
   def edit
