@@ -8,7 +8,7 @@ set :deploy_to, "/home/deploy/#{fetch :application}"
 set :assets_manifests, -> {
   [release_path.join("public", fetch(:assets_prefix), '.manifest.json')]
 }
-server 'qa.rastreadoresbahia.com.br/gps', user: 'deploy', roles: %w{app db web}
+server 'qa.rastreadoresbahia.com.br', user: 'deploy', roles: %w{app db web}
 set :branch, "main"
 
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
