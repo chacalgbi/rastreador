@@ -22,23 +22,27 @@
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "css-zero/utilities", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <%= debugbar_head  if defined? Debugbar %>
   </head>
 
-  <div class="header-layout">
-    <header id="header">
-      <div class="flex justify-between container">
-        <%= render "layouts/mobile_menu" %>
-        <%= render "layouts/header_menu" %>
-      </div>
-    </header>
-
-    <main id="main">
-      <div class="container">
-        <div id="flash">
-          <%= render '/alert', flash: flash %>
+  <body>
+    <div class="header-layout">
+      <header id="header">
+        <div class="flex justify-between container">
+          <%= render "layouts/mobile_menu" %>
+          <%= render "layouts/header_menu" %>
         </div>
-        <%= yield %>
-      </div>
-    </main>
-  </div>
+      </header>
+
+      <main id="main">
+        <div class="container">
+          <div id="flash">
+            <%= render '/alert', flash: flash %>
+          </div>
+          <%= yield %>
+        </div>
+      </main>
+    </div>
+    <%= debugbar_body if defined? Debugbar %>
+  </body>
 </html>

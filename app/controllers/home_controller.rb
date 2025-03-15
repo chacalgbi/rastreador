@@ -4,6 +4,7 @@ class HomeController < ApplicationController
   def index
     if Current.user.admin?
       @devices = Traccar.get_devices
+      Debugbar.msg("Devices", {devices: @devices})
     else
       device_ids = Current.user&.cars.present? ? Current.user.cars.split(",") : []
       @devices = device_ids.present? ? Traccar.get_devices(device_ids) : []

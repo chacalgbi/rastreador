@@ -120,6 +120,9 @@ GEM
     debug (1.10.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
+    debugbar (0.4.3)
+      actioncable
+      rails
     dotenv (3.1.7)
     dotenv-rails (3.1.7)
       dotenv (= 3.1.7)
@@ -134,6 +137,9 @@ GEM
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    httplog (1.7.0)
+      rack (>= 2.0)
+      rainbow (>= 2.0.0)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     importmap-rails (2.1.0)
@@ -404,8 +410,10 @@ DEPENDENCIES
   capybara
   css-zero (~> 1.1)
   debug
+  debugbar
   dotenv-rails
   ed25519 (>= 1.2, < 2.0)
+  httplog
   importmap-rails
   jbuilder
   kamal
