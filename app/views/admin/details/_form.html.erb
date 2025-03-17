@@ -1,0 +1,310 @@
+<%= form_with(model: [:admin, detail]) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :device_id, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :device_id, class: "form-control" %>
+      <%= tag.div detail.errors[:device_id].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :device_name, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :device_name, class: "form-control" %>
+      <%= tag.div detail.errors[:device_name].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :model, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :model, class: "form-control" %>
+      <%= tag.div detail.errors[:model].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :ignition, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :ignition, class: "form-control" %>
+      <%= tag.div detail.errors[:ignition].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :rele_state, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :rele_state, class: "form-control" %>
+      <%= tag.div detail.errors[:rele_state].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :url, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :url, class: "form-control" %>
+      <%= tag.div detail.errors[:url].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :velo_max, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :velo_max, class: "form-control" %>
+      <%= tag.div detail.errors[:velo_max].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :battery, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :battery, class: "form-control" %>
+      <%= tag.div detail.errors[:battery].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :bat_bck, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :bat_bck, class: "form-control" %>
+      <%= tag.div detail.errors[:bat_bck].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :horimetro, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :horimetro, class: "form-control" %>
+      <%= tag.div detail.errors[:horimetro].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :odometro, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :odometro, class: "form-control" %>
+      <%= tag.div detail.errors[:odometro].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :cercas, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :cercas, class: "form-control" %>
+      <%= tag.div detail.errors[:cercas].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :satelites, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :satelites, class: "form-control" %>
+      <%= tag.div detail.errors[:satelites].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :version, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :version, class: "form-control" %>
+      <%= tag.div detail.errors[:version].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :imei, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :imei, class: "form-control" %>
+      <%= tag.div detail.errors[:imei].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :bat_nivel, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :bat_nivel, class: "form-control" %>
+      <%= tag.div detail.errors[:bat_nivel].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :signal_gps, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :signal_gps, class: "form-control" %>
+      <%= tag.div detail.errors[:signal_gps].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :signal_gsm, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :signal_gsm, class: "form-control" %>
+      <%= tag.div detail.errors[:signal_gsm].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :acc, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :acc, class: "form-control" %>
+      <%= tag.div detail.errors[:acc].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :acc_virtual, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :acc_virtual, class: "form-control" %>
+      <%= tag.div detail.errors[:acc_virtual].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :charge, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :charge, class: "form-control" %>
+      <%= tag.div detail.errors[:charge].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :heartbeat, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :heartbeat, class: "form-control" %>
+      <%= tag.div detail.errors[:heartbeat].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :obs, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.textarea :obs, class: "form-control" %>
+      <%= tag.div detail.errors[:obs].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :status, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.textarea :status, class: "form-control" %>
+      <%= tag.div detail.errors[:status].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :network, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.textarea :network, class: "form-control" %>
+      <%= tag.div detail.errors[:network].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :params, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.textarea :params, class: "form-control" %>
+      <%= tag.div detail.errors[:params].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :last_event_type, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :last_event_type, class: "form-control" %>
+      <%= tag.div detail.errors[:last_event_type].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :apn, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :apn, class: "form-control" %>
+      <%= tag.div detail.errors[:apn].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :ip_and_port, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :ip_and_port, class: "form-control" %>
+      <%= tag.div detail.errors[:ip_and_port].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :alert_whatsApp, class: "form-check-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.checkbox :alert_whatsApp, class: "form-check-input" %>
+      <%= tag.div detail.errors[:alert_whatsApp].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :alert_telegram, class: "form-check-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.checkbox :alert_telegram, class: "form-check-input" %>
+      <%= tag.div detail.errors[:alert_telegram].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :alert_email, class: "form-check-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.checkbox :alert_email, class: "form-check-input" %>
+      <%= tag.div detail.errors[:alert_email].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :send_exit_cerca, class: "form-check-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.checkbox :send_exit_cerca, class: "form-check-input" %>
+      <%= tag.div detail.errors[:send_exit_cerca].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :send_battery, class: "form-check-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.checkbox :send_battery, class: "form-check-input" %>
+      <%= tag.div detail.errors[:send_battery].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :send_velo_max, class: "form-check-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.checkbox :send_velo_max, class: "form-check-input" %>
+      <%= tag.div detail.errors[:send_velo_max].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :send_rele, class: "form-check-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.checkbox :send_rele, class: "form-check-input" %>
+      <%= tag.div detail.errors[:send_rele].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :created_at, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.datetime_field :created_at, class: "form-control" %>
+      <%= tag.div detail.errors[:created_at].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :updated_at, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.datetime_field :updated_at, class: "form-control" %>
+      <%= tag.div detail.errors[:updated_at].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", admin_details_path, class: "btn btn-white" %>
+  </div>
+<% end %>

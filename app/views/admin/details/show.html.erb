@@ -1,0 +1,101 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Showing detail" do %>
+    <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+    <li class="breadcrumb-item"><%= link_to "Details", admin_details_path %></li>
+  <% end %>
+
+  <%= render "page_header_actions" do %>
+    <%= link_to "Edit detail", edit_admin_detail_path(@detail), class: "btn btn-primary" %>
+    <%= link_to "Delete detail", [:admin, @detail], class: "btn btn-white", data: { method: :delete, confirm: "Are you sure?" } %>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Detail details</h3>
+      </div>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-md-3">Device</dt>
+          <dd class="col-md-9"><%= @detail.device_id %></dd>
+          <dt class="col-md-3">Device name</dt>
+          <dd class="col-md-9"><%= @detail.device_name %></dd>
+          <dt class="col-md-3">Model</dt>
+          <dd class="col-md-9"><%= @detail.model %></dd>
+          <dt class="col-md-3">Ignition</dt>
+          <dd class="col-md-9"><%= @detail.ignition %></dd>
+          <dt class="col-md-3">Rele state</dt>
+          <dd class="col-md-9"><%= @detail.rele_state %></dd>
+          <dt class="col-md-3">Url</dt>
+          <dd class="col-md-9"><%= @detail.url %></dd>
+          <dt class="col-md-3">Velo max</dt>
+          <dd class="col-md-9"><%= @detail.velo_max %></dd>
+          <dt class="col-md-3">Battery</dt>
+          <dd class="col-md-9"><%= @detail.battery %></dd>
+          <dt class="col-md-3">Bat bck</dt>
+          <dd class="col-md-9"><%= @detail.bat_bck %></dd>
+          <dt class="col-md-3">Horimetro</dt>
+          <dd class="col-md-9"><%= @detail.horimetro %></dd>
+          <dt class="col-md-3">Odometro</dt>
+          <dd class="col-md-9"><%= @detail.odometro %></dd>
+          <dt class="col-md-3">Cercas</dt>
+          <dd class="col-md-9"><%= @detail.cercas %></dd>
+          <dt class="col-md-3">Satelites</dt>
+          <dd class="col-md-9"><%= @detail.satelites %></dd>
+          <dt class="col-md-3">Version</dt>
+          <dd class="col-md-9"><%= @detail.version %></dd>
+          <dt class="col-md-3">Imei</dt>
+          <dd class="col-md-9"><%= @detail.imei %></dd>
+          <dt class="col-md-3">Bat nivel</dt>
+          <dd class="col-md-9"><%= @detail.bat_nivel %></dd>
+          <dt class="col-md-3">Signal gps</dt>
+          <dd class="col-md-9"><%= @detail.signal_gps %></dd>
+          <dt class="col-md-3">Signal gsm</dt>
+          <dd class="col-md-9"><%= @detail.signal_gsm %></dd>
+          <dt class="col-md-3">Acc</dt>
+          <dd class="col-md-9"><%= @detail.acc %></dd>
+          <dt class="col-md-3">Acc virtual</dt>
+          <dd class="col-md-9"><%= @detail.acc_virtual %></dd>
+          <dt class="col-md-3">Charge</dt>
+          <dd class="col-md-9"><%= @detail.charge %></dd>
+          <dt class="col-md-3">Heartbeat</dt>
+          <dd class="col-md-9"><%= @detail.heartbeat %></dd>
+          <dt class="col-md-3">Obs</dt>
+          <dd class="col-md-9"><%= @detail.obs %></dd>
+          <dt class="col-md-3">Status</dt>
+          <dd class="col-md-9"><%= @detail.status %></dd>
+          <dt class="col-md-3">Network</dt>
+          <dd class="col-md-9"><%= @detail.network %></dd>
+          <dt class="col-md-3">Params</dt>
+          <dd class="col-md-9"><%= @detail.params %></dd>
+          <dt class="col-md-3">Last event type</dt>
+          <dd class="col-md-9"><%= @detail.last_event_type %></dd>
+          <dt class="col-md-3">Apn</dt>
+          <dd class="col-md-9"><%= @detail.apn %></dd>
+          <dt class="col-md-3">Ip and port</dt>
+          <dd class="col-md-9"><%= @detail.ip_and_port %></dd>
+          <dt class="col-md-3">Alert whatsapp</dt>
+          <dd class="col-md-9"><%= @detail.alert_whatsApp %></dd>
+          <dt class="col-md-3">Alert telegram</dt>
+          <dd class="col-md-9"><%= @detail.alert_telegram %></dd>
+          <dt class="col-md-3">Alert email</dt>
+          <dd class="col-md-9"><%= @detail.alert_email %></dd>
+          <dt class="col-md-3">Send exit cerca</dt>
+          <dd class="col-md-9"><%= @detail.send_exit_cerca %></dd>
+          <dt class="col-md-3">Send battery</dt>
+          <dd class="col-md-9"><%= @detail.send_battery %></dd>
+          <dt class="col-md-3">Send velo max</dt>
+          <dd class="col-md-9"><%= @detail.send_velo_max %></dd>
+          <dt class="col-md-3">Send rele</dt>
+          <dd class="col-md-9"><%= @detail.send_rele %></dd>
+          <dt class="col-md-3">Created at</dt>
+          <dd class="col-md-9"><%= @detail.created_at %></dd>
+          <dt class="col-md-3">Updated at</dt>
+          <dd class="col-md-9"><%= @detail.updated_at %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

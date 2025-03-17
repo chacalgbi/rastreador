@@ -1,0 +1,17 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Editing detail" do %>
+  <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+  <li class="breadcrumb-item"><%= link_to "Details", admin_details_path %></li>
+  <li class="breadcrumb-item"><%= link_to "Show this detail", [:admin, @detail] %></li>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="card">
+      <div class="card-body">
+        <%= render "form", detail: @detail %>
+      </div>
+    </div>
+  </div>
+</div>

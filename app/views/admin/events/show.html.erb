@@ -1,0 +1,43 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Showing event" do %>
+    <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+    <li class="breadcrumb-item"><%= link_to "Events", admin_events_path %></li>
+  <% end %>
+
+  <%= render "page_header_actions" do %>
+    <%= link_to "Edit event", edit_admin_event_path(@event), class: "btn btn-primary" %>
+    <%= link_to "Delete event", [:admin, @event], class: "btn btn-white", data: { method: :delete, confirm: "Are you sure?" } %>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Event details</h3>
+      </div>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-md-3">Car</dt>
+          <dd class="col-md-9"><%= @event.car_id %></dd>
+          <dt class="col-md-3">Car name</dt>
+          <dd class="col-md-9"><%= @event.car_name %></dd>
+          <dt class="col-md-3">Driver</dt>
+          <dd class="col-md-9"><%= @event.driver_id %></dd>
+          <dt class="col-md-3">Driver name</dt>
+          <dd class="col-md-9"><%= @event.driver_name %></dd>
+          <dt class="col-md-3">Event type</dt>
+          <dd class="col-md-9"><%= @event.event_type %></dd>
+          <dt class="col-md-3">Event name</dt>
+          <dd class="col-md-9"><%= @event.event_name %></dd>
+          <dt class="col-md-3">Message</dt>
+          <dd class="col-md-9"><%= @event.message %></dd>
+          <dt class="col-md-3">Created at</dt>
+          <dd class="col-md-9"><%= @event.created_at %></dd>
+          <dt class="col-md-3">Updated at</dt>
+          <dd class="col-md-9"><%= @event.updated_at %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

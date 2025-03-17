@@ -1,0 +1,136 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Details" do %>
+    <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+  <% end %>
+
+  <%= render "page_header_actions" do %>
+    <%= link_to "Filters", "#offcanvas_filters", "data-bs-toggle": "offcanvas", class: "btn btn-white" %>
+    <%= link_to "New detail", new_admin_detail_path, class: "btn btn-primary" %>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table table-vcenter table-nowrap card-table table-striped">
+          <thead>
+            <tr>
+              <th><%= sort_link @search, :device_id %></th>
+              <th><%= sort_link @search, :device_name %></th>
+              <th><%= sort_link @search, :model %></th>
+              <th><%= sort_link @search, :ignition %></th>
+              <th><%= sort_link @search, :rele_state %></th>
+              <th><%= sort_link @search, :url %></th>
+              <th><%= sort_link @search, :velo_max %></th>
+              <th><%= sort_link @search, :battery %></th>
+              <th><%= sort_link @search, :bat_bck %></th>
+              <th><%= sort_link @search, :horimetro %></th>
+              <th><%= sort_link @search, :odometro %></th>
+              <th><%= sort_link @search, :cercas %></th>
+              <th><%= sort_link @search, :satelites %></th>
+              <th><%= sort_link @search, :version %></th>
+              <th><%= sort_link @search, :imei %></th>
+              <th><%= sort_link @search, :bat_nivel %></th>
+              <th><%= sort_link @search, :signal_gps %></th>
+              <th><%= sort_link @search, :signal_gsm %></th>
+              <th><%= sort_link @search, :acc %></th>
+              <th><%= sort_link @search, :acc_virtual %></th>
+              <th><%= sort_link @search, :charge %></th>
+              <th><%= sort_link @search, :heartbeat %></th>
+              <th><%= sort_link @search, :obs %></th>
+              <th><%= sort_link @search, :status %></th>
+              <th><%= sort_link @search, :network %></th>
+              <th><%= sort_link @search, :params %></th>
+              <th><%= sort_link @search, :last_event_type %></th>
+              <th><%= sort_link @search, :apn %></th>
+              <th><%= sort_link @search, :ip_and_port %></th>
+              <th><%= sort_link @search, :alert_whatsApp %></th>
+              <th><%= sort_link @search, :alert_telegram %></th>
+              <th><%= sort_link @search, :alert_email %></th>
+              <th><%= sort_link @search, :send_exit_cerca %></th>
+              <th><%= sort_link @search, :send_battery %></th>
+              <th><%= sort_link @search, :send_velo_max %></th>
+              <th><%= sort_link @search, :send_rele %></th>
+              <th><%= sort_link @search, :created_at %></th>
+              <th><%= sort_link @search, :updated_at %></th>
+              <th class="w-1"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @details.each do |detail| %>
+              <tr>
+                <td><%= detail.device_id %></td>
+                <td><%= detail.device_name %></td>
+                <td><%= detail.model %></td>
+                <td><%= detail.ignition %></td>
+                <td><%= detail.rele_state %></td>
+                <td><%= detail.url %></td>
+                <td><%= detail.velo_max %></td>
+                <td><%= detail.battery %></td>
+                <td><%= detail.bat_bck %></td>
+                <td><%= detail.horimetro %></td>
+                <td><%= detail.odometro %></td>
+                <td><%= detail.cercas %></td>
+                <td><%= detail.satelites %></td>
+                <td><%= detail.version %></td>
+                <td><%= detail.imei %></td>
+                <td><%= detail.bat_nivel %></td>
+                <td><%= detail.signal_gps %></td>
+                <td><%= detail.signal_gsm %></td>
+                <td><%= detail.acc %></td>
+                <td><%= detail.acc_virtual %></td>
+                <td><%= detail.charge %></td>
+                <td><%= detail.heartbeat %></td>
+                <td><%= detail.obs %></td>
+                <td><%= detail.status %></td>
+                <td><%= detail.network %></td>
+                <td><%= detail.params %></td>
+                <td><%= detail.last_event_type %></td>
+                <td><%= detail.apn %></td>
+                <td><%= detail.ip_and_port %></td>
+                <td><%= detail.alert_whatsApp %></td>
+                <td><%= detail.alert_telegram %></td>
+                <td><%= detail.alert_email %></td>
+                <td><%= detail.send_exit_cerca %></td>
+                <td><%= detail.send_battery %></td>
+                <td><%= detail.send_velo_max %></td>
+                <td><%= detail.send_rele %></td>
+                <td><%= detail.created_at %></td>
+                <td><%= detail.updated_at %></td>
+                <td>
+                  <%= link_to "View", [:admin, detail], class: "btn btn-white btn-sm" %>
+                  <%= link_to "Edit", edit_admin_detail_path(detail), class: "btn btn-white btn-sm" %>
+                  <%= link_to "Delete", [:admin, detail], class: "btn btn-white btn-sm", data: { method: :delete, confirm: "Are you sure?" } %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer d-flex align-items-center fs-5">
+        <div class="d-none d-md-block">
+          <div>Download: <%= link_to "CSV", url_for(format: :csv, q: request.params[:q]) %></div>
+          <%== pagy_info(@pagy) %>
+        </div>
+        <div class="ms-auto">
+          <%== pagy_bootstrap_nav(@pagy) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="offcanvas_filters" tabindex="-1" class="offcanvas offcanvas-end">
+  <div class="offcanvas-header">
+    <h2 class="offcanvas-title">Filters</h2>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <%= search_form_for [:admin, @search], class: "offcanvas-body" do |f| %>
+    <%# f.label :name_cont, class: "form-label" %>
+    <%# f.text_field :name_cont, class: "form-control mb-3" %>
+
+    <%= f.submit "Filter", class: "btn btn-primary" %>
+    <%= link_to "Clear Filter", admin_details_path, class: "btn btn-white" %>
+  <% end %>
+</div>

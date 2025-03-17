@@ -1,0 +1,39 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Showing user" do %>
+    <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+    <li class="breadcrumb-item"><%= link_to "Users", admin_users_path %></li>
+  <% end %>
+
+  <%= render "page_header_actions" do %>
+    <%= link_to "Edit user", edit_admin_user_path(@user), class: "btn btn-primary" %>
+    <%= link_to "Delete user", [:admin, @user], class: "btn btn-white", data: { method: :delete, confirm: "Are you sure?" } %>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">User details</h3>
+      </div>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-md-3">Email address</dt>
+          <dd class="col-md-9"><%= @user.email_address %></dd>
+          <dt class="col-md-3">Name</dt>
+          <dd class="col-md-9"><%= @user.name %></dd>
+          <dt class="col-md-3">Phone</dt>
+          <dd class="col-md-9"><%= @user.phone %></dd>
+          <dt class="col-md-3">Password digest</dt>
+          <dd class="col-md-9"><%= @user.password_digest %></dd>
+          <dt class="col-md-3">Active</dt>
+          <dd class="col-md-9"><%= @user.active %></dd>
+          <dt class="col-md-3">Admin</dt>
+          <dd class="col-md-9"><%= @user.admin %></dd>
+          <dt class="col-md-3">Cars</dt>
+          <dd class="col-md-9"><%= @user.cars %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

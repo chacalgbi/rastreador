@@ -1,4 +1,14 @@
 Rails.application.routes.draw do
+  namespace :admin do
+    get    '/',        to: 'home#index'
+    get    'sign_in',  to: 'sessions#new'
+    post   'sign_in',  to: 'sessions#create'
+    delete 'sign_out', to: 'sessions#destroy'
+    resources :users
+    resources :details
+    resources :events
+    resource  :password_reset
+  end
   resource :session
   resources :driver, only: [:index, :edit, :update, :destroy] do
     collection do
