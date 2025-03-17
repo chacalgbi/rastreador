@@ -2,6 +2,8 @@
   <div class="car_item"><h1 class="text-2xl" style="font-family: var(--font-system-ui)">Gerenciar veículos</h1></div>
 </div>
 
+<%= turbo_stream_from "home_stream" %>
+
 <br>
 <% if @devices.present? %>
   <%= paginate @devices %>

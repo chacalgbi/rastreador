@@ -72,5 +72,5 @@ Rails.application.configure do
 end
 
 Debugbar.configure do |config|
-  config.enabled = true
+  config.enabled = false
 end
