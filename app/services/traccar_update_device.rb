@@ -13,10 +13,12 @@ class TraccarUpdateDevice
 
   def update_detail
     # Filtra os parâmetros para remover aqueles que têm valores vazios
-    filtered_params = @params.permit(
-      :device_id, :battery, :bat_bck, :bat_nivel, :satelite, :signal_gps, :signal_gsm,
-      :cercas, :acc, :acc_virtual, :rele, :charge, :horimetro, :odometro, :heartbeat,
-      :url, :velo_max
+    params = ActionController::Parameters.new(@params)
+
+    filtered_params = params.permit(
+      :device_name, :model, :ignition, :rele_state, :last_event_type, :last_user, :last_rele_modified, :url, :velo_max,
+      :battery, :bat_bck, :horimetro, :odometro, :cercas, :satelites, :version, :imei, :bat_nivel, :signal_gps,
+      :signal_gsm, :acc, :acc_virtual, :charge, :heartbeat, :obs, :status, :network, :params, :apn, :ip_and_port
     ).to_h.reject { |_, v| v.blank? }
 
     @detail.update(filtered_params)

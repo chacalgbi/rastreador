@@ -2,6 +2,7 @@ class Admin::EventsController < Admin::BaseController
   before_action :set_event, only: %i[ show edit update destroy ]
 
   def index
+    params[:q] ||= { s: 'created_at desc' }
     @search = Event.all.ransack(params[:q])
 
     respond_to do |format|
@@ -49,6 +50,6 @@ class Admin::EventsController < Admin::BaseController
     end
 
     def event_params
-      params.require(:event).permit(:car_id, :car_name, :driver_id, :driver_name, :event_type, :event_name, :message, :created_at, :updated_at)
+      params.require(:event).permit(:id, :car_id, :car_name, :driver_id, :driver_name, :event_type, :event_name, :message, :created_at, :updated_at)
     end
 end

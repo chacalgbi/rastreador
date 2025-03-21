@@ -1,6 +1,7 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'cgi'
 
 class Notify
 
@@ -9,7 +10,7 @@ class Notify
       email: email,
       titulo: titulo,
       corpo: corpo,
-      identidade: "Rastreador recuperação de senha para #{email}",
+      identidade: "Notify.email #{email}",
       userAdmin: ENV["NOTIFY_USER"],
       passAdmin: ENV["NOTIFY_PASS"]
     }
@@ -24,6 +25,21 @@ class Notify
     data = JSON.parse(response.body)
     log("email ERRO #{response.code} #{data}") unless response.is_a?(Net::HTTPSuccess)
     data
+  end
+
+  def self.telegram(chat_id, corpo)
+    encoded_text = CGI.escape(corpo)
+    url = "https://api.telegram.org/bot#{ENV["TOKEN_BOT"]}/sendMessage?chat_id=#{chat_id}&text=#{encoded_text}"
+
+    response = Net::HTTP.get_response(URI(url))
+    if response.is_a?(Net::HTTPSuccess)
+      resp = JSON.parse(response.body)
+      log("telegram SUCCESS | Enviado para #{resp.dig('result', 'chat', 'username')}")
+    else
+      log("telegram ERRO | #{response.code} #{response.body}")
+    end
+
+    true
   end
 
   private
