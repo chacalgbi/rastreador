@@ -272,6 +272,14 @@
   </div>
 
   <div class="form-group row mb-2">
+    <%= form.label :send_moving, class: "form-check-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.checkbox :send_moving, class: "form-check-input" %>
+      <%= tag.div detail.errors[:send_moving].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
     <%= form.label :send_velo_max, class: "form-check-label col-md-3 col-form-label" %>
     <div class="col-md px-0">
       <%= form.checkbox :send_velo_max, class: "form-check-input" %>

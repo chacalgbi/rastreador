@@ -1,12 +1,13 @@
 class BuildAlert
   def initialize(payload, detail)
+    # '🚙🚗🚘🚨⚠️✅📣📢🪫📡⌛🔋🔓🔒💬🔴🟠🟡🟢🗺️'
     @payload = payload
     @detail = detail
   end
 
   def build
     begin
-      @type = @payload.dig(:event, :type)
+      @type = @payload.dig(:last_event_type)
 
       define_values
 
@@ -27,16 +28,12 @@ class BuildAlert
         deviceStopped
       when 'deviceOffline'
         deviceOffline
-      when 'deviceOnline'
-        deviceOnline
-      when 'deviceUnknown'
-        deviceUnknown
       when 'alarm'
         alarm
       when 'commandResult'
         commandResult
       else
-        standard
+        nil
       end
     rescue StandardError => e
       error_message = "BuildAlert | Error: #{e.message}\nBacktrace:\n#{e.backtrace.first(5).join("\n")}"
@@ -54,10 +51,19 @@ class BuildAlert
     @alert_telegram = @detail.alert_telegram
     @alert_email = @detail.alert_email
 
-    @veiculo = @payload.dig(:device, :name)
-    @email = @payload.dig(:device, :contact)
-    @phone = @payload.dig(:device, :phone)
-    @telegram = @payload.dig(:device, :model)
+    @veiculo = @payload.dig(:device_name) || @detail.device_name
+    @email = @payload.dig(:email)
+    @phone = @payload.dig(:phone)
+    @telegram = @payload.dig(:telegram)
+    @cerca = @payload.dig(:cerca)
+    @url = @payload.dig(:url)
+    @velocidade = @payload.dig(:velocidade)
+    @velo_max = @payload.dig(:velo_max)
+    @alarme = @payload.dig(:last_event_type)
+    @alarme_type = @payload.dig(:alarme_type)
+    @command = @payload.dig(:command)
+    @rele = @payload.dig(:rele_state)
+    @odometro = @payload.dig(:odometro)
   end
 
   def ignitionOn
@@ -73,20 +79,27 @@ class BuildAlert
   end
 
   def deviceMoving
-    msg1 = "O veículo '#{@veiculo}' está em MOVIMENTO."
+    odometro = @odometro ? "\n\nOdômetro: #{@odometro}" : ''
+    url = @url ? "\n\nLocal: #{@url}" : ''
+    msg1 = "O veículo '#{@veiculo}' está em MOVIMENTO. 🚗💨.#{odometro}#{url}"
     events(@type, 'movendo', msg1)
-    nil
+
+    return nil unless @detail.send_moving
+    payload_job_send_alert(msg1, @type)
   end
 
   def deviceStopped
-    msg1 = "O veículo '#{@veiculo}' está PARADO."
+    odometro = @odometro ? "\n\nOdômetro: #{@odometro}" : ''
+    url = @url ? "\n\nLocal: #{@url}" : ''
+    msg1 = "O veículo '#{@veiculo}' está PARADO.#{odometro}#{url}"
     events(@type, 'parado', msg1)
-    nil
+
+    return nil unless @detail.send_moving
+    payload_job_send_alert(msg1, @type)
   end
 
   def geofenceExit
-    cerca = @payload.dig(:geofence, :name)
-    msg1 = "Veículo '#{@veiculo}' em uso por '#{@motorista}' SAIU da cerca '#{cerca}'.\n\nLocal: #{url_google_maps}"
+    msg1 = "Veículo '#{@veiculo}' em uso por '#{@motorista}' SAIU da cerca '#{@cerca}'.\n\nLocal: #{@url}"
     msg2 = "⚠️ AVISO! ⚠️\n\n#{msg1}"
 
     events(@type, 'cerca', msg1)
@@ -96,8 +109,7 @@ class BuildAlert
   end
 
   def geofenceEnter
-    cerca = @payload.dig(:geofence, :name)
-    msg1 = "Veículo '#{@veiculo}' em uso por '#{@motorista}' ENTROU da cerca '#{cerca}'.\n\nLocal: #{url_google_maps}"
+    msg1 = "Veículo '#{@veiculo}' em uso por '#{@motorista}' ENTROU da cerca '#{@cerca}'.\n\nLocal: #{@url}"
     msg2 = "💬 INFORMAÇÃO 💬\n\n#{msg1}"
 
     events(@type, 'cerca', msg1)
@@ -107,10 +119,7 @@ class BuildAlert
   end
 
   def deviceOverspeed
-    velocidade = km_por_hora(@payload.dig(:event, :attributes, :speed))
-    limite = km_por_hora(@payload.dig(:event, :attributes, :speedLimit))
-
-    msg1 = "Veículo '#{@veiculo}' em uso por '#{@motorista}' em VELOCIDADE ACIMA do permitido: #{velocidade}.\n\nLimite: #{limite} \n\nLocal: #{url_google_maps}"
+    msg1 = "Veículo '#{@veiculo}' em uso por '#{@motorista}' em VELOCIDADE ACIMA do permitido: #{@velocidade}.\n\nLimite: #{@velo_max} \n\nLocal: #{@url}"
     msg2 = "🚨 ALERTA! 🚨\n\n#{msg1}"
 
     events(@type, 'velocidade', msg1)
@@ -121,50 +130,36 @@ class BuildAlert
 
   def deviceOffline
     msg1 = "O veículo '#{@veiculo}' está 🔴OFF-LINE."
-    #msg2 = "💬 INFORMAÇÃO 💬\n\n"
-
     events(@type, 'Off-Line', msg1)
-
     nil
   end
 
   def alarm
-    alarme_type = @payload.dig(:event, :attributes, :alarm)
-    alarme_text = alarme_type(alarme_type)
-    msg1 = "Veículo '#{@veiculo}' em uso por '#{@motorista}' disparou o alarme '#{alarme_text}'.\n\nLocal: #{url_google_maps}"
+    url = @url ? "\n\nLocal: #{@url}" : ''
+    alarme_text = alarme_type(@alarme_type)
+    msg1 = "Veículo '#{@veiculo}' em uso por '#{@motorista}' disparou o alarme '#{alarme_text}'.#{url}"
     msg2 = "🚨 ALERTA! 🚨\n\n#{msg1}"
 
-    events(@type, alarme_type, msg1)
+    events(@type, @alarme_type, msg1)
 
     return nil unless @detail.send_battery
-    payload_job_send_alert(msg2, alarme_type)
+    payload_job_send_alert(msg2, @alarme_type)
   end
 
   def commandResult
-    msg1 = @payload.dig(:position, :attributes, :result)
-    events(@type, 'resposta', msg1)
-    nil
-  end
-
-  def deviceOnline
-  end
-
-  def deviceUnknown
-  end
-
-  def standard
+    if @rele == 'on' || @rele == 'off'
+      msg1 = "O veículo '#{@veiculo}' foi #{@rele == 'on' ? '🔒BLOQUEADO' : '🔓DESBLOQUEADO'}."
+      msg2 = "💬 INFORMAÇÃO! 💬\n\n#{msg1}"
+      events(@type, 'rele', msg1)
+      return nil unless @detail.send_rele
+      payload_job_send_alert(msg2, @type)
+    else
+      msg1 = @command
+      events(@type, 'resposta', msg1)
+    end
   end
 
   # ========== HELPERS ==========
-
-  def km_por_hora(milhas_nauticas)
-    km_por_hora = (milhas_nauticas * 1.853).to_i
-    "#{km_por_hora} km/h"
-  end
-
-  def url_google_maps
-    "https://www.google.com/maps?q=#{@payload.dig(:position, :latitude)},#{@payload.dig(:position, :longitude)}"
-  end
 
   def events(event_type, event_name, msg1)
     Event.create(
@@ -193,11 +188,15 @@ class BuildAlert
   def alarme_type(alarme_type)
     case alarme_type
     when 'lowBattery'
-      'Bateria baixa'
+      '🪫Bateria baixa'
     when 'powerCut'
-      'Corte de energia'
+      '🪫Corte de energia'
     when 'sos'
-      'SOS'
+      '📣SOS'
+    when 'powerRestored'
+      '🔋Energia restaurada'
+    when 'accident'
+      'Acidente'
     else
       'Alarme desconhecido'
     end

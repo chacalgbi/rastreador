@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_17_182940) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_23_182920) do
   create_table "admin_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", null: false
     t.string "password_digest", null: false
@@ -60,6 +60,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_17_182940) do
     t.boolean "send_rele", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "send_moving", default: false
   end
 
   create_table "events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

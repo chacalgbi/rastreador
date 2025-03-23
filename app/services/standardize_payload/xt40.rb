@@ -25,14 +25,10 @@ class StandardizePayload::Xt40
         deviceOverspeed
       when 'deviceOffline'
         deviceOffline
-      when 'deviceOnline'
-        deviceOnline
-      when 'deviceUnknown'
-        deviceUnknown
-      when 'alarm'
-        alarm
       when 'commandResult'
         commandResult
+      when 'alarm'
+        alarm
       else
         nil
       end
@@ -46,117 +42,95 @@ class StandardizePayload::Xt40
 
     private
 
+  def atributos_comuns
+    {
+      last_event_type: @type,
+      alarme_type: @payload.dig(:event, :attributes, :alarm),
+      device_name: @payload.dig(:device, :name),
+      email:       @payload.dig(:device, :contact),
+      phone:       @payload.dig(:device, :phone),
+      telegram:    @payload.dig(:device, :model),
+      status:      @payload.dig(:device, :status),
+      imei:        @payload.dig(:device, :uniqueId),
+      url:         url_google_maps,
+      velo_max:    km_por_hora(@payload.dig(:device, :attributes, :speedLimit)),
+      velocidade:  km_por_hora(@payload.dig(:event, :attributes, :speed) || 0),
+      cerca:       @payload.dig(:geofence, :name),
+      command:     @payload.dig(:position, :attributes, :result)
+    }
+  end
+
   def ignitionOn
     {
-      device_name: @payload.dig(:device, :name),
       ignition: @payload.dig(:position, :attributes, :ignition) ? 'on' : 'off',
-      last_event_type: @type,
-      url: url_google_maps,
-      velo_max: km_por_hora(@payload.dig(:device, :attributes, :speedLimit) || 0),
       horimetro: horas,
       odometro: kilometros,
-      cercas: @payload.dig(:position, :geofenceIds).join(','),
-      imei: @payload.dig(:device, :uniqueId),
+      cercas: @payload.dig(:position, :geofenceIds) ? @payload.dig(:position, :geofenceIds).join(',') : nil,
       bat_nivel: "#{@payload.dig(:position, :attributes, :batteryLevel)}%",
       charge: @payload.dig(:position, :attributes, :charge) ? 'on' : 'off',
-      status: @payload.dig(:device, :status)
+      **atributos_comuns
     }
   end
 
   def ignitionOff
     {
-      device_name: @payload.dig(:device, :name),
       ignition: @payload.dig(:position, :attributes, :ignition) ? 'on' : 'off',
-      last_event_type: @type,
-      url: url_google_maps,
-      velo_max: km_por_hora(@payload.dig(:device, :attributes, :speedLimit) || 0),
       horimetro: horas,
       odometro: kilometros,
-      cercas: @payload.dig(:position, :geofenceIds).join(','),
-      imei: @payload.dig(:device, :uniqueId),
+      cercas: @payload.dig(:position, :geofenceIds) ? @payload.dig(:position, :geofenceIds).join(',') : nil,
       bat_nivel: "#{@payload.dig(:position, :attributes, :batteryLevel)}%",
       charge: @payload.dig(:position, :attributes, :charge) ? 'on' : 'off',
-      status: @payload.dig(:device, :status)
+      **atributos_comuns
     }
   end
 
   def deviceMoving
     {
-      device_name: @payload.dig(:device, :name),
-      status: @payload.dig(:device, :status),
-      velo_max: km_por_hora(@payload.dig(:device, :attributes, :speedLimit) || 0),
-      imei: @payload.dig(:device, :uniqueId),
-      last_event_type: @type,
-      url: url_google_maps
-      # horimetro: horas, // Verificar se os valores são parciais ou totais
-      # odometro: kilometros,
+      odometro: kilometros,
+      horimetro: horas,
+      **atributos_comuns
     }
   end
 
   def deviceStopped
     {
-      device_name: @payload.dig(:device, :name),
-      status: @payload.dig(:device, :status),
-      velo_max: km_por_hora(@payload.dig(:device, :attributes, :speedLimit) || 0),
-      imei: @payload.dig(:device, :uniqueId),
-      last_event_type: @type,
-      url: url_google_maps
-      # horimetro: horas, // Verificar se os valores são parciais ou totais
-      # odometro: kilometros,
+      odometro: kilometros,
+      horimetro: horas,
+      **atributos_comuns
     }
   end
 
   def geofenceExit
     {
-      device_name: @payload.dig(:device, :name),
-      last_event_type: @type,
-      url: url_google_maps,
-      velo_max: km_por_hora(@payload.dig(:device, :attributes, :speedLimit) || 0),
-      imei: @payload.dig(:device, :uniqueId),
-      status: @payload.dig(:device, :status)
+      horimetro: horas,
+      odometro: kilometros,
+      **atributos_comuns
     }
   end
 
   def geofenceEnter
     {
-      device_name: @payload.dig(:device, :name),
-      last_event_type: @type,
-      url: url_google_maps,
-      velo_max: km_por_hora(@payload.dig(:device, :attributes, :speedLimit) || 0),
-      imei: @payload.dig(:device, :uniqueId),
-      status: @payload.dig(:device, :status)
+      horimetro: horas,
+      odometro: kilometros,
+      **atributos_comuns
     }
   end
 
   def deviceOverspeed
     {
-      last_event_type: @type,
-      speed: km_por_hora(@payload.dig(:event, :attributes, :speed) || 0),
-      velo_max: km_por_hora(@payload.dig(:event, :attributes, :speedLimit) || 0),
-      url: url_google_maps,
-      device_name: @payload.dig(:device, :name),
-      status: @payload.dig(:device, :status),
+      **atributos_comuns
     }
   end
 
   def deviceOffline
     {
-      device_name: @payload.dig(:device, :name),
-      last_event_type: @type,
-      velo_max: km_por_hora(@payload.dig(:device, :attributes, :speedLimit) || 0),
-      imei: @payload.dig(:device, :uniqueId),
-      status: @payload.dig(:device, :status)
+      **atributos_comuns
     }
   end
 
   def alarm
     {
-      device_name: @payload.dig(:device, :name),
-      last_event_type: define_alarm_type(@payload.dig(:event, :attributes, :alarm)),
-      url: url_google_maps,
-      velo_max: km_por_hora(@payload.dig(:device, :attributes, :speedLimit) || 0),
-      imei: @payload.dig(:device, :uniqueId),
-      status: @payload.dig(:device, :status)
+      **atributos_comuns
     }
   end
 
@@ -176,17 +150,59 @@ class StandardizePayload::Xt40
     end
   end
 
-  def deviceOnline
-    nil # Não envia alerta
+  def commandResult_releOn
+    {
+      rele_state: 'on',
+      last_rele_modified: Time.now,
+      **atributos_comuns
+    }
   end
 
-  def deviceUnknown
-    nil # Não envia alerta
+  def commandResult_releOff
+    {
+      rele_state: 'off',
+      last_rele_modified: Time.now,
+      **atributos_comuns
+    }
+  end
+
+  def commandResult_status
+    status = decode_status_string(@payload.dig(:position, :attributes, :result))
+    {
+      horimetro: horas,
+      odometro: kilometros,
+      cercas: @payload.dig(:position, :geofenceIds) ? @payload.dig(:position, :geofenceIds).join(',') : nil,
+      ignition: status["ACC"].start_with?('ON') ? 'on' : 'off',
+      rele_state: status["RELAYER"] == 'DISABLE' ? 'off' : 'on',
+      battery: status['VOLTAGE'].split(',').first.to_f.round(2) || 0,
+      bat_bck: status['VOLTAGE'].split(',').last.to_f.round(2) || 0,
+      signal_gps: "#{status["GPS"]},#{status["GPS SIGNAL"]}",
+      signal_gsm: status["GSM Signal"],
+      acc_virtual: status["ACCVIRT"].start_with?('ON') ? 'on' : 'off',
+      charge: status["CHARGER"].start_with?('NORMAL') ? 'on' : 'off',
+      **atributos_comuns
+    }
+  end
+
+  def commandResult_params
+    params = @payload.dig(:position, :attributes, :result).split(" ")
+    {
+      apn: params[0],
+      ip_and_port: params[1],
+      **atributos_comuns
+    }
   end
 
   # ============= Helpers ===============
 
+  def decode_status_string(status)
+    status_array = status.split("\n")
+    status_pairs = status_array.map { |s| s.split(':') }
+    status_pairs.to_h
+  end
+
   def url_google_maps
+    return nil unless @payload.dig(:position, :latitude) && @payload.dig(:position, :longitude)
     "https://www.google.com/maps?q=#{@payload.dig(:position, :latitude)},#{@payload.dig(:position, :longitude)}"
   end
 
@@ -204,95 +220,13 @@ class StandardizePayload::Xt40
     # "#{(milhas * 1.60934).round(1)}km"
     metros = @payload.dig(:position, :attributes, :totalDistance) || 0
     km = metros / 1000
-    "#{(km * 1.60934).round(1)}km"
+    "#{km.round(2)}km"
   end
 
   def km_por_hora(milhas_nauticas)
+    return nil if milhas_nauticas.nil?
     km_por_hora = (milhas_nauticas * 1.853).to_i
     "#{km_por_hora} km/h"
-  end
-
-  def define_alarm_type(alarme_type)
-    case alarme_type
-    when 'lowBattery'
-      'Bateria baixa'
-    when 'powerCut'
-      'Corte de energia'
-    when 'sos'
-      'SOS'
-    else
-      'Alarme desconhecido'
-    end
-  end
-
-  # ============= Helpers Command ===============
-
-  def commandResult_releOn
-    {
-      device_name: @payload.dig(:device, :name),
-      status: @payload.dig(:device, :status),
-      imei: @payload.dig(:device, :uniqueId),
-      velo_max: km_por_hora(@payload.dig(:device, :attributes, :speedLimit) || 0),
-      rele_state: 'on',
-      last_event_type: "Rele on",
-      url: url_google_maps,
-      last_rele_modified: Time.now
-    }
-  end
-
-  def commandResult_releOff
-    {
-      device_name: @payload.dig(:device, :name),
-      status: @payload.dig(:device, :status),
-      imei: @payload.dig(:device, :uniqueId),
-      velo_max: km_por_hora(@payload.dig(:device, :attributes, :speedLimit) || 0),
-      rele_state: 'off',
-      last_event_type: "Rele off",
-      url: url_google_maps,
-      last_rele_modified: Time.now
-    }
-  end
-
-  def commandResult_status
-    status = decode_status_string(@payload.dig(:position, :attributes, :result))
-    {
-      device_name: @payload.dig(:device, :name),
-      status: @payload.dig(:device, :status),
-      imei: @payload.dig(:device, :uniqueId),
-      velo_max: km_por_hora(@payload.dig(:device, :attributes, :speedLimit) || 0),
-      horimetro: horas,
-      odometro: kilometros,
-      url: url_google_maps,
-      cercas: @payload.dig(:position, :geofenceIds) ? @payload.dig(:position, :geofenceIds).join(',') : nil,
-      last_event_type: "Status",
-      ignition: status["ACC"].start_with?('ON') ? 'on' : 'off',
-      rele_state: status["RELAYER"] == 'DISABLE' ? 'off' : 'on',
-      battery: status['VOLTAGE'].split(',').first.to_f.round(2) || 0,
-      bat_bck: status['VOLTAGE'].split(',').last.to_f.round(2) || 0,
-      signal_gps: "#{status["GPS"]},#{status["GPS SIGNAL"]}",
-      signal_gsm: status["GSM Signal"],
-      acc_virtual: status["ACCVIRT"].start_with?('ON') ? 'on' : 'off',
-      charge: status["CHARGER"].start_with?('NORMAL') ? 'on' : 'off'
-    }
-  end
-
-  def commandResult_params
-    params = @payload.dig(:position, :attributes, :result).split(" ")
-    {
-      device_name: @payload.dig(:device, :name),
-      status: @payload.dig(:device, :status),
-      imei: @payload.dig(:device, :uniqueId),
-      last_event_type: "params",
-      url: url_google_maps,
-      apn: params[0],
-      ip_and_port: params[1]
-    }
-  end
-
-  def decode_status_string(status)
-    status_array = status.split("\n")
-    status_pairs = status_array.map { |s| s.split(':') }
-    status_pairs.to_h
   end
 end
 
