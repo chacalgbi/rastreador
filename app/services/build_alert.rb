@@ -64,6 +64,7 @@ class BuildAlert
     @command = @payload.dig(:command)
     @rele = @payload.dig(:rele_state)
     @odometro = @payload.dig(:odometro)
+    @last_rele_modified = @payload.dig(:last_rele_modified)
   end
 
   def ignitionOn
@@ -147,7 +148,7 @@ class BuildAlert
   end
 
   def commandResult
-    if @rele == 'on' || @rele == 'off'
+    if !@last_rele_modified.nil? && (@rele == 'on' || @rele == 'off')
       msg1 = "O veículo '#{@veiculo}' foi #{@rele == 'on' ? '🔒BLOQUEADO' : '🔓DESBLOQUEADO'}."
       msg2 = "💬 INFORMAÇÃO! 💬\n\n#{msg1}"
       events(@type, 'rele', msg1)
@@ -156,6 +157,7 @@ class BuildAlert
     else
       msg1 = @command
       events(@type, 'resposta', msg1)
+      nil
     end
   end
 

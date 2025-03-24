@@ -56,11 +56,11 @@ class StandardizePayload::St8310u
       velo_max:    km_por_hora(@payload.dig(:device, :attributes, :speedLimit)),
       velocidade:  km_por_hora(@payload.dig(:event, :attributes, :speed) || 0),
       cerca:       @payload.dig(:geofence, :name),
+      command:     @payload.dig(:position, :attributes, :result),
       battery:     @payload.dig(:position, :attributes, :io1),
       bat_bck:     @payload.dig(:position, :attributes, :io2),
       ignition:    @payload.dig(:position, :attributes, :ignition) ? 'on' : 'off',
-      cercas:      @payload.dig(:position, :geofenceIds) ? @payload.dig(:position, :geofenceIds).join(',') : nil,
-      command:     @payload.dig(:position, :attributes, :result)
+      cercas:      @payload.dig(:position, :geofenceIds) ? @payload.dig(:position, :geofenceIds).join(',') : nil
     }
   end
 
@@ -133,17 +133,23 @@ class StandardizePayload::St8310u
   def commandResult
     commandResult_type = @payload.dig(:position, :attributes, :result)
     return nil if commandResult_type.nil?
-    array_commandResult_type = commandResult_type.split(';')
-    state = array_commandResult_type[16] == '00000001' ? 'on' : 'off'
+    return commandResult_rele(commandResult_type) if commandResult_type.start_with?('04;0') # Comando de rele
+    return atributos_comuns if commandResult_type.start_with?('01;03') # Requisitar Status
 
-    {
-      rele_state: state,
-      last_rele_modified: Time.now,
-      **atributos_comuns
-    }
+    nil
   end
 
-  # ============= Helpers ===============
+    # ============= Helpers ===============
+
+  def commandResult_rele(commandResult_type)
+      array_commandResult_type = commandResult_type.split(';')
+      state = array_commandResult_type[16] == '00000001' ? 'on' : 'off'
+      {
+        rele_state: state,
+        last_rele_modified: Time.now,
+        **atributos_comuns
+      }
+  end
 
   def decode_status_string(status)
     status_array = status.split("\n")

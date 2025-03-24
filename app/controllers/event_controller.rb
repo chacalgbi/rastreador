@@ -4,7 +4,6 @@ class EventController < PublicController
     @detail = Detail.find_by(device_id: params[:device][:id])
 
     if @detail.nil?
-      log("webhook_traccar - detail not found")
       return render json: { msg: "detail not found" }, status: :not_found
     else
       build_events
