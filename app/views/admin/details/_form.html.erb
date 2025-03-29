@@ -40,6 +40,14 @@
   </div>
 
   <div class="form-group row mb-2">
+    <%= form.label :last_user, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :last_user, class: "form-control" %>
+      <%= tag.div detail.errors[:last_user].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
     <%= form.label :url, class: "form-label col-md-3 col-form-label" %>
     <div class="col-md px-0">
       <%= form.text_field :url, class: "form-control" %>

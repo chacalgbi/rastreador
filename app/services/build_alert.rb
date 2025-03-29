@@ -46,7 +46,7 @@ class BuildAlert
   private
 
   def define_values
-    @motorista = @detail.last_user || 'Motorista não identificado'
+    @motorista = @detail.last_user
     @alert_whatsApp = @detail.alert_whatsApp
     @alert_telegram = @detail.alert_telegram
     @alert_email = @detail.alert_email
@@ -137,8 +137,9 @@ class BuildAlert
 
   def alarm
     url = @url ? "\n\nLocal: #{@url}" : ''
+    motorista = @motorista == '' || nil ? '' : " em uso por '#{@motorista}'"
     alarme_text = alarme_type(@alarme_type)
-    msg1 = "Veículo '#{@veiculo}' em uso por '#{@motorista}' disparou o alarme '#{alarme_text}'.#{url}"
+    msg1 = "Veículo '#{@veiculo}'#{motorista} disparou o alarme '#{alarme_text}'.#{url}"
     msg2 = "🚨 ALERTA! 🚨\n\n#{msg1}"
 
     events(@type, @alarme_type, msg1)

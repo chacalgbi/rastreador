@@ -1,0 +1,39 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Showing command" do %>
+    <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+    <li class="breadcrumb-item"><%= link_to "Commands", admin_commands_path %></li>
+  <% end %>
+
+  <%= render "page_header_actions" do %>
+    <%= link_to "Edit command", edit_admin_command_path(@command), class: "btn btn-primary" %>
+    <%= link_to "Delete command", [:admin, @command], class: "btn btn-white", data: { method: :delete, confirm: "Are you sure?" } %>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Command details</h3>
+      </div>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-md-3">Id</dt>
+          <dd class="col-md-9"><%= @command.id %></dd>
+          <dt class="col-md-3">Type</dt>
+          <dd class="col-md-9"><%= @command.type_device %></dd>
+          <dt class="col-md-3">Name</dt>
+          <dd class="col-md-9"><%= @command.name %></dd>
+          <dt class="col-md-3">Command</dt>
+          <dd class="col-md-9"><%= @command.command %></dd>
+          <dt class="col-md-3">Description</dt>
+          <dd class="col-md-9"><%= @command.description %></dd>
+          <dt class="col-md-3">Created at</dt>
+          <dd class="col-md-9"><%= @command.created_at %></dd>
+          <dt class="col-md-3">Updated at</dt>
+          <dd class="col-md-9"><%= @command.updated_at %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

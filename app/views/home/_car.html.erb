@@ -1,29 +1,31 @@
-<h1 class="text-2xl" style="font-family: var(--font-old-style); color: var(--blue-500)"><%= index %> <%= car['name'] %></h1>
+<h1 class="text-2xl" style="font-family: var(--font-old-style); color: var(--blue-500)"><%= index %> <%= car.device_name %></h1>
 <div class="p-5 rounded-lg i-full" style="background: linear-gradient(to right, var(--indigo-300), transparent)">
   <div class="car_container">
     <div class="car_item">
-      <% if car['status'] == 'online' %>
+      <% if car.status == 'online' %>
         <div class="badge badge--positive">
-          <%= image_tag "satellite-dish.svg", size: 17, aria: { hidden: true } %>  Online <%= format_datetime_br(car['lastUpdate']) %> 
+          <%= image_tag "satellite-dish.svg", size: 17, aria: { hidden: true } %>  Online
         </div>
       <% else %>
         <div class="badge badge--negative">
-        <%= image_tag "navigation-off.svg", size: 17, aria: { hidden: true } %>  Offline
+        <%= image_tag "navigation-off.svg", size: 17, aria: { hidden: true } %>  Offline 
+        </div>
+        <div class="badge badge--negative">
+        <%= image_tag "timer.svg", size: 17, aria: { hidden: true } %> Última atualização: <%= car.updated_at.getlocal("-03:00").strftime("%H:%M - %d/%m/%Y") %> 
         </div>
       <% end %>
     </div>
-    <div class="car_item">V. Máx: <%= convert_speed(car['attributes']['speedLimit']) %></div>
     <div class="car_item">
-      <%= turbo_frame_tag "details_button_#{car['id']}" do %>
-        <%= link_to home_details_path(device_id: car['id'], status: car['status']), class: "btn", data: { turbo_stream: true, turbo_prefetch: false } do %>
-          <%= image_tag "select-arrow.svg", size: 25, aria: { hidden: true } %>
-          <span>Detalhes</span>
-        <% end %>
+      V. Máx: <%= car.velo_max %>
+    </div>
+    <div class="car_item">
+      <%= turbo_frame_tag "details_button_#{car.device_id}" do %>
+        <%= render 'details/button_details', show_details: false, device_id: car.device_id, status: car.status %>
       <% end %>
     </div>
   </div>
-  <%= turbo_frame_tag "location_#{car['id']}" do %><% end %>
-  <%= turbo_frame_tag "details_#{car['id']}" do %><% end %>
-  <%= turbo_frame_tag "events_#{car['id']}" do %><% end %>
+  <%= turbo_frame_tag "location_#{car.device_id}" do %><% end %>
+  <%= turbo_frame_tag "details_#{car.device_id}" do %><% end %>
+  <%= turbo_frame_tag "events_#{car.device_id}" do %><% end %>
 </div>
 <br>

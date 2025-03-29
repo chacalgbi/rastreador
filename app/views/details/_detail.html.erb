@@ -1,11 +1,3 @@
-<div class="car_container" id="detail_<%= detail.device_id %>">
-  <%= button_tag class: "btn btn--plain" do %>
-    <%= image_tag "arrow-up-from-dot.svg", size: 20, aria: { hidden: true } %><span>Bateria:<%= detail.battery %></span>
-  <% end %>
-  <%= button_tag class: "btn btn--plain" do %>
-    <%= image_tag "key-square.svg", size: 20, aria: { hidden: true } %><span>Bat BKP:<%= detail.bat_bck %></span>
-  <% end %>
-  <%= button_tag class: "btn btn--plain" do %>
-    <%= image_tag "shield-off.svg", size: 20, aria: { hidden: true } %><span>Bat Nível:<%= detail.bat_nivel %></span>
-  <% end %>
+<div id="detail_<%= detail.device_id %>">
+  <%= render 'details/information', info: detail %>
 </div>

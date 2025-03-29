@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :users
     resources :details
     resources :events
+    resources :commands
     resource  :password_reset
   end
   resource :session

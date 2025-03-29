@@ -1,0 +1,55 @@
+<%= form_with(model: [:admin, command]) do |form| %>
+
+  <div class="form-group row mb-2">
+    <%= form.label :type_device, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :type_device, class: "form-control" %>
+      <%= tag.div command.errors[:type_device].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :name, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :name, class: "form-control" %>
+      <%= tag.div command.errors[:name].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :command, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :command, class: "form-control" %>
+      <%= tag.div command.errors[:command].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :description, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.textarea :description, class: "form-control" %>
+      <%= tag.div command.errors[:description].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :created_at, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.datetime_field :created_at, class: "form-control" %>
+      <%= tag.div command.errors[:created_at].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :updated_at, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.datetime_field :updated_at, class: "form-control" %>
+      <%= tag.div command.errors[:updated_at].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancel", admin_commands_path, class: "btn btn-white" %>
+  </div>
+<% end %>

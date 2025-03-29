@@ -6,9 +6,9 @@
       <%= turbo_frame_tag "button_#{device_id}" do %>
         <% if status == 'online' %>
           <% if state == 'desbloquear' %>
-            <%= button_to "Desbloquear", home_block_and_desblock_path(id: device_id, action_type: 'desbloquear'), method: :post, class: "btn btn--positive", data: { turbo_stream: true } %>
+            <%= button_to "Desbloquear", home_block_and_desblock_path(id: device_id, action_type: 'desbloquear', model: info.model, imei: info.imei), method: :post, class: "btn btn--positive", data: { turbo_stream: true } %>
           <% elsif state == 'bloquear' %>
-            <%= button_to "Bloquear", home_block_and_desblock_path(id: device_id, action_type: 'bloquear'), method: :post, class: "btn btn--negative", data: { turbo_stream: true } %>
+            <%= button_to "Bloquear", home_block_and_desblock_path(id: device_id, action_type: 'bloquear', model: info.model, imei: info.imei), method: :post, class: "btn btn--negative", data: { turbo_stream: true } %>
           <% else %>
             <%= button_tag "Em uso por outro motorista", class: "btn", disabled: true %>
           <% end %>
@@ -19,7 +19,7 @@
   <br>
   <div class="car_container">
     <div class="car_item">
-      <%= link_to home_location_path(car_id: device_id), class: "btn", data: { turbo_stream: true, turbo_prefetch: false } do %>
+      <%= link_to home_location_path(car_id: device_id, url: info.url), class: "btn", data: { turbo_stream: true, turbo_prefetch: false } do %>
         Localização atual
       <% end %>
     </div>
@@ -32,29 +32,7 @@
       <% end %>
     </div>
   </div>
-  <div class="car_container">
-    <%= button_tag class: "btn btn--plain" do %>
-      <%= image_tag "satellite-dish.svg", size: 20, aria: { hidden: true } %><span>Satélites:<%= info['satelite'] %></span>
-    <% end %>
-    <%= button_tag class: "btn btn--plain" do %>
-      <%= image_tag "battery-charging.svg", size: 20, aria: { hidden: true } %><span>Bat:<%= info['battery'] %>v</span>
-    <% end %>
-    <%= button_tag class: "btn btn--plain" do %>
-      <%= image_tag "battery-medium.svg", size: 20, aria: { hidden: true } %><span>Bat Bkp:<%= info['bat_bckp'] %>v</span>
-    <% end %>
-  </div>
-  <hr>
-  <div class="car_container">
-    <%= button_tag class: "btn btn--plain" do %>
-      <%= image_tag "arrow-up-from-dot.svg", size: 20, aria: { hidden: true } %><span>Alti:<%= info['altitude'] %>m</span>
-    <% end %>
-    <%= button_tag class: "btn btn--plain" do %>
-      <%= image_tag "key-square.svg", size: 20, aria: { hidden: true } %><span>Ignição:<%= info['satelite'] == false ? 'On' : 'Off' %></span>
-    <% end %>
-    <%= button_tag class: "btn btn--plain" do %>
-      <%= image_tag "shield-off.svg", size: 20, aria: { hidden: true } %><span>N° cercas<%= info['geofenceIds'] %></span>
-    <% end %>
-  </div>
-  <div class="car_container" id="detail_<%= device_id %>">
+  <div id="detail_<%= device_id %>" > <!-- Será substituida quando o evento de Status for enviado pelo rastreador -->
+    <%= render 'details/information', info: info %>
   </div>
 <% end %>
