@@ -31,9 +31,9 @@
         <% device_slice.each do |device| %>
           <div class="car_item">
             <div class="items-center gap">
-              <% is_checked = @array_devices.include?(device['id'].to_s) %>
-              <%= check_box_tag 'device_ids[]', device['id'], is_checked, class: "checkbox", data: { action: "check-all#check", check_all_target: "dependant" } %>
-              <%= label_tag "label_car_#{device['id']}", device['name'], class: "text-sm" %>
+              <% is_checked = @array_devices.include?(device.device_id.to_s) %>
+              <%= check_box_tag 'device_ids[]', device.device_id, is_checked, class: "checkbox", data: { action: "check-all#check", check_all_target: "dependant" } %>
+              <%= label_tag "label_car_#{device.device_id}", device.device_name, class: "text-sm" %>
             </div>
           </div>
         <% end %>

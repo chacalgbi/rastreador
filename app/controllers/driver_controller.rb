@@ -43,7 +43,7 @@ class DriverController < ApplicationController
     @array_devices = user&.cars.present? ? user.cars.split(",") : []
     @driver_id = params[:id]
     @driver_name = params[:name]
-    @devices = Traccar.get_devices
+    @devices = Detail.all
     redirect_to driver_index_path, alert: "Veículos não encontrados" if @devices.empty?
   end
 
