@@ -5,7 +5,7 @@ namespace :solid_queue do
       within current_path do
         with rails_env: fetch(:rails_env) do
           # roda em background e joga o log pra shared/log
-          execute :nohup, "bundle exec bin/jobs >> #{shared_path}/log/solid_queue.log 2>&1 &"
+          execute :nohup, "rbenv exec bundle exec bin/jobs >> #{shared_path}/log/solid_queue.log 2>&1 &"
         end
       end
     end
