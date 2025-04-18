@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   def index
     if Current.user.admin?
       @devices = Detail.all
-      Debugbar.msg("Devices", {devices: @devices})
+      # Debugbar.msg("Devices", {devices: @devices})
     else
       device_ids = Current.user&.cars.present? ? Current.user.cars.split(",") : []
       @devices = device_ids.present? ? Detail.where(device_id: device_ids) : []
