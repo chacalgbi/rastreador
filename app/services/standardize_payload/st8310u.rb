@@ -25,6 +25,8 @@ class StandardizePayload::St8310u
         deviceOverspeed
       when 'deviceOffline'
         deviceOffline
+      when 'deviceOnline'
+        deviceOnline
       when 'commandResult'
         commandResult
       when 'alarm'
@@ -119,6 +121,12 @@ class StandardizePayload::St8310u
   end
 
   def deviceOffline
+    {
+      **atributos_comuns
+    }
+  end
+
+  def deviceOnline
     {
       **atributos_comuns
     }
