@@ -98,7 +98,7 @@ class HomeController < ApplicationController
     device_id = params[:device_id]
 
     if params[:open] == 'true'
-      @events = Event.where(car_id: device_id, created_at: HOURS_LAST_EVENTS.hours.ago..Time.current).where.not(event_type: 'commandResult').order(created_at: :desc)
+      @events = Event.where(car_id: device_id, created_at: HOURS_LAST_EVENTS.hours.ago..Time.current).where.not(event_name: 'resposta').order(created_at: :desc)
 
       respond_to do |format|
         format.turbo_stream do
