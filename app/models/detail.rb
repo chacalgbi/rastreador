@@ -11,11 +11,13 @@ class Detail < ApplicationRecord
 
   private
 
-  def set_default_values
-    self.model ||= "xt40"
-    self.ignition ||= "off"
-    self.rele_state ||= "off"
-    self.status ||= "online"
-    self.last_user ||= "System"
-  end
+def set_default_values
+  Rails.logger.debug ">>> Executando set_default_values para Detail #{id}"
+
+  self.model = "xt40" if model.blank?
+  self.ignition = "off" if ignition.blank?
+  self.rele_state = "off" if rele_state.blank?
+  self.status = "online" if status.blank?
+  self.last_user = "System" if last_user.blank?
+end
 end

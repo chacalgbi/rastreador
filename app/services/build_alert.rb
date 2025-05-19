@@ -1,4 +1,6 @@
 class BuildAlert
+  IGNORED_EVENT_TYPES = ['deviceOffline', 'deviceOnline', 'ignitionOn', 'ignitionOff', 'deviceMoving', 'deviceStopped'].freeze
+
   def initialize(payload, detail)
     # '🚙🚗🚘🚨⚠️✅📣📢🪫📡⌛🔋🔓🔒💬🔴🟠🟡🟢🗺️'
     @payload = payload
@@ -16,18 +18,20 @@ class BuildAlert
         ignitionOn
       when 'ignitionOff'
         ignitionOff
+      when 'deviceOffline'
+        deviceOffline
+      when 'deviceOnline'
+        deviceOnline
+      when 'deviceMoving'
+        deviceMoving
+      when 'deviceStopped'
+        deviceStopped
       when 'geofenceExit'
         geofenceExit
       when 'geofenceEnter'
         geofenceEnter
       when 'deviceOverspeed'
         deviceOverspeed
-      when 'deviceMoving'
-        deviceMoving
-      when 'deviceStopped'
-        deviceStopped
-      when 'deviceOffline'
-        deviceOffline
       when 'alarm'
         alarm
       when 'commandResult'
@@ -135,6 +139,12 @@ class BuildAlert
     nil
   end
 
+  def deviceOnline
+    msg1 = "O veículo '#{@veiculo}' está 🟢ON-LINE."
+    events(@type, 'On-Line', msg1)
+    nil
+  end
+
   def alarm
     url = @url ? "\n\nLocal: #{@url}" : ''
     motorista = @motorista == '' || nil ? '' : " em uso por '#{@motorista}'"
@@ -165,6 +175,8 @@ class BuildAlert
   # ========== HELPERS ==========
 
   def events(event_type, event_name, msg1)
+    return if IGNORED_EVENT_TYPES.include?(event_type)
+
     Event.create(
       car_id: @detail.device_id,
       car_name: @veiculo,

@@ -25,6 +25,8 @@ class StandardizePayload::Xt40
         deviceOverspeed
       when 'deviceOffline'
         deviceOffline
+      when 'deviceOnline'
+        deviceOnline
       when 'commandResult'
         commandResult
       when 'alarm'
@@ -123,6 +125,12 @@ class StandardizePayload::Xt40
   end
 
   def deviceOffline
+    {
+      **atributos_comuns
+    }
+  end
+
+  def deviceOnline
     {
       **atributos_comuns
     }

@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  HOURS_LAST_EVENTS = 100
+  HOURS_LAST_EVENTS = 48
 
   def index
     if Current.user.admin?
