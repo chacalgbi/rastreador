@@ -31,7 +31,7 @@ class HomeController < ApplicationController
   def details
     device_id = params[:device_id]
     @event = Detail.find_by(device_id: device_id)
-    @events_last_x_hours = Event.where(car_id: device_id, created_at: HOURS_LAST_EVENTS.hours.ago..Time.current).where.not(event_type: 'commandResult').count
+    @events_last_x_hours = Event.where(car_id: device_id, created_at: HOURS_LAST_EVENTS.hours.ago..Time.current).where.not(event_name: 'resposta').count
 
     send_command_status
 
