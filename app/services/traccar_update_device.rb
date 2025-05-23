@@ -7,6 +7,7 @@ class TraccarUpdateDevice
   def update
     update_detail
     update_view
+    update_admin_view
   end
 
   private
@@ -30,6 +31,16 @@ class TraccarUpdateDevice
       action: "replace",
       target: "detail_#{@detail.device_id}",
       partial: "details/detail",
+      locals: { detail: @detail }
+    )
+  end
+
+  def update_admin_view
+    Turbo::StreamsChannel.broadcast_action_to(
+      "admin_detail_stream",
+      action: "replace",
+      target: "admin_detail_stream_div",
+      partial: "details/detail_admin",
       locals: { detail: @detail }
     )
   end

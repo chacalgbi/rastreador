@@ -97,3 +97,32 @@ img.invertible {
   margin: 5px;
   padding-left: 10px;
 }
+
+.bg-success {
+  background-color: #28a745 !important;
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.bg-secondary {
+  background-color: #6c757d !important;
+}
+
+.text-white {
+  color: #f8f2f2 !important;
+}
+
+.text-size-large {
+  font-size: 1.5rem !important;
+}
+.text-size-small {
+  font-size: 0.875rem !important;
+}
+.text-size-medium {
+  font-size: 1rem !important;
+}
+.text-size-xlarge {
+  font-size: 2rem !important;
+}

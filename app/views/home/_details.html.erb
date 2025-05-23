@@ -29,6 +29,8 @@
           <%= image_tag "select-arrow.svg", size: 25, aria: { hidden: true } %>
           <span>Últimos Eventos: <%= events_count %></span>
         <% end %>
+      <% else %>
+        <%= button_tag "Sem eventos", class: "btn btn--borderless", disabled: true %>
       <% end %>
     </div>
   </div>

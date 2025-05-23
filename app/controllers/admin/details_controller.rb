@@ -43,6 +43,26 @@ class Admin::DetailsController < Admin::BaseController
     redirect_to admin_details_url, notice: "Detail was successfully destroyed."
   end
 
+  def rele
+    command_name = params[:state] == 'ON' ? 'rele_on' : 'rele_off'
+    command = Command.find_by(type_device: params[:model], name: command_name)
+    send_command = command.type_device == 'st8310u' ? command.command.gsub('XXXX', params[:imei]) : command.command
+
+    response = Traccar.command(params[:device_id], send_command)
+
+    if response != 200
+      redirect_to admin_details_url, alert: "Erro ao enviar o comando: #{params[:state]}."
+      return
+    end
+
+    @detail = Detail.find_by(device_id: params[:device_id])
+    @detail.last_user = params[:state] == 'ON' ? '' : 'System'
+    @detail.save
+
+    notice = "O veículo será #{params[:state] == 'ON' ? 'BLOQUEADO' : 'DESBLOQUEADO'}."
+    redirect_to admin_details_url, notice: notice
+  end
+
   private
     def set_detail
       @detail = Detail.find(params[:id])

@@ -13,7 +13,7 @@
   <div class="container-xl">
     <div class="card">
       <div class="table-responsive">
-        <table class="table table-vcenter table-nowrap card-table table-striped">
+        <table class="table table-vcenter table-nowrap card-table">
           <thead>
             <tr>
               <th><%= sort_link @search, :id %></th>
@@ -21,11 +21,13 @@
               <th><%= sort_link @search, :device_id %></th>
               <th><%= sort_link @search, :device_name %></th>
               <th><%= sort_link @search, :last_user %></th>
-              <th><%= sort_link @search, :model %></th>
+              <th><%= sort_link @search, "Modelo" %></th>
               <th><%= sort_link @search, :ignition %></th>
               <th><%= sort_link @search, :status %></th>
-              <th><%= sort_link @search, :rele_state %></th>
-              <th><%= sort_link @search, :last_event_type %></th>
+              <th><%= sort_link @search, "Estado Relé" %></th>
+              <th>Lig/Desl</th>
+              <th><%= sort_link @search, "Último evento" %></th>
+              <th><%= sort_link @search, "Atualizado em" %></th>
               <th><%= sort_link @search, :odometro %></th>
               <th><%= sort_link @search, :battery %></th>
               <th><%= sort_link @search, :url %></th>
@@ -57,7 +59,6 @@
               <th><%= sort_link @search, :send_velo_max %></th>
               <th><%= sort_link @search, :send_rele %></th>
               <th><%= sort_link @search, :created_at %></th>
-              <th><%= sort_link @search, :updated_at %></th>
               <th class="w-1"></th>
             </tr>
           </thead>
@@ -71,12 +72,19 @@
                 <td><%= detail.last_user %></td>
                 <td><%= detail.model %></td>
                 <td><%= detail.ignition %></td>
-                <td><%= detail.status %></td>
+                <td class="<%= status_class(detail.status) %>"><%= detail.status %></td>
                 <td><%= detail.rele_state %></td>
+                <td style="display: flex; gap: 3px;">
+                  <%= button_to "ON",  admin_details_rele_path, method: :post, params: { device_id: detail.device_id, model: detail.model, state: "ON",  imei: detail.imei }, class: "btn btn-primary btn-sm", data: { confirm: "Tem certeza que deseja LIGAR o rele? O veículo pode está em movimento." }  %>
+                  <%= button_to "OFF", admin_details_rele_path, method: :post, params: { device_id: detail.device_id, model: detail.model, state: "OFF", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { confirm: "Tem certeza que deseja DESLIGAR o rele?" }  %>
+                </td>
                 <td><%= detail.last_event_type %></td>
+                <td><%= detail.updated_at %></td>
                 <td><%= detail.odometro %></td>
                 <td><%= detail.battery %></td>
-                <td><%= detail.url %></td>
+                <td>
+                  <%= link_to detail.url, detail.url, target: "_blank", rel: "noopener noreferrer" if detail.url.present? %>
+                </td>
                 <td><%= detail.velo_max %></td>
                 <td><%= detail.bat_bck %></td>
                 <td><%= detail.horimetro %></td>
@@ -105,7 +113,6 @@
                 <td><%= detail.send_velo_max %></td>
                 <td><%= detail.send_rele %></td>
                 <td><%= detail.created_at %></td>
-                <td><%= detail.updated_at %></td>
                 <td>
                   <%= link_to "Ver", [:admin, detail], class: "btn btn-white btn-sm" %>
                   <%= link_to "Deletar", [:admin, detail], class: "btn btn-white btn-sm", data: { method: :delete, confirm: "Deseja realmente apagar esse carro?" } %>
