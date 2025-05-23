@@ -2,14 +2,8 @@ class HomeController < ApplicationController
   HOURS_LAST_EVENTS = 48
 
   def index
-    if Current.user.admin?
-      @devices = Detail.all
-      # Debugbar.msg("Devices", {devices: @devices})
-    else
-      device_ids = Current.user&.cars.present? ? Current.user.cars.split(",") : []
-      @devices = device_ids.present? ? Detail.where(device_id: device_ids) : []
-    end
-
+    @devices = Current.user.admin? ? devices_admin : devices_user
+    return render partial: "indexpartial", locals: { devices: @devices } if turbo_frame_request?
     @devices = Kaminari.paginate_array(@devices).page(params[:page]).per(10)
   end
 
@@ -123,6 +117,22 @@ class HomeController < ApplicationController
   end
 
   private
+
+  def devices_admin
+    return Detail.where("LOWER(device_name) LIKE LOWER(:query)", query: "%#{params[:query].downcase}%") if params[:query].present?
+    Detail.all
+  end
+
+  def devices_user
+    device_ids = Current.user&.cars.present? ? Current.user.cars.split(",") : []
+    if params[:query].present?
+      devices = device_ids.present? ? Detail.where("LOWER(device_name) LIKE LOWER(:query)", query: "%#{params[:query].downcase}%").where(device_id: device_ids) : []
+    else
+      devices = device_ids.present? ? Detail.where(device_id: device_ids) : []
+    end
+
+    devices
+  end
 
   def send_command_status
     command = Command.find_by(type_device: @event.model, name: 'Status')

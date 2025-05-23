@@ -4,7 +4,11 @@
 
 <%= turbo_stream_from "home_stream" %>
 
-<br>
+<%= form_with(url: root_path, method: :get, data: {controller: "search-devices", turbo_frame: "devices_active"}, class: "card flex-col gap") do |form| %>
+  <%= form.label :query, "Pesquisar Veículos", class: "text-sm font-medium leading-none" %>
+  <%= form.text_field :query, data: {action: "input->search-devices#search"}, placeholder: "Digite o modelo ou código do veículo", class: "input" %>
+<% end %>
+
 <% if @devices.present? %>
   <%= paginate @devices %>
   <br>
