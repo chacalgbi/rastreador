@@ -43,6 +43,11 @@ class Admin::CommandsController < Admin::BaseController
     redirect_to admin_commands_url, notice: "Command was successfully destroyed."
   end
 
+  def send_command
+    response = Traccar.command(params[:deviceid], params[:comando])
+    redirect_to admin_commands_path, notice: "Comando enviado com sucesso! #{response}"
+  end
+
   private
     def set_command
       @command = Command.find(params[:id])

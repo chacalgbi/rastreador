@@ -1,0 +1,10 @@
+<%= form_with url: admin_commands_send_command_path, class: "card flex flex-col gap" do |form| %>
+  <div class="flex flex-col gap mb-2">
+    <div class="flex flex-col gap-half">
+      <%= form.text_field :comando, placeholder: "Digite o comando", class: "input" %>
+      <%= form.text_field :deviceid, placeholder: "Id do device", class: "input" %>
+      <%= form.submit "Enviar", class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar este comando?" } %>
+    </div>
+    O comando será enviado sem tratamento, portanto, tenha certeza de que o comando está correto.
+  </div>
+<% end %>

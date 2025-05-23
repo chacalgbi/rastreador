@@ -6,7 +6,8 @@ Rails.application.routes.draw do
     delete 'sign_out', to: 'sessions#destroy'
     resources :users
     resources :details
-    post    'details/rele'
+    post 'details/rele'
+    post 'commands/send_command'
     resources :events
     resources :commands
     resource  :password_reset
