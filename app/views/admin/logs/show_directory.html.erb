@@ -1,0 +1,19 @@
+<div class="page-body">
+  <div class="container-xl">
+    <h1>Logs em: <%= @directory_name.capitalize %></h1>
+
+    <%= link_to "Voltar para Diretórios", admin_logs_path %>
+    <br>
+
+    <% if @log_files.empty? %>
+      <p>Nenhum arquivo de log encontrado neste diretório.</p>
+    <% else %>
+      <ul style="font-size: 1.2rem;">
+        <% @log_files.each do |filename| %>
+          <li><%= link_to filename, log_file_admin_logs_path(directory: @directory_name, filename: filename) %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>
+

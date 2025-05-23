@@ -1,0 +1,10 @@
+<div class="page-body">
+  <div class="container-xl">
+    <h1>Diretórios de Log</h1>
+    <ul style="font-size: 1.2rem;">
+      <% @directories.each do |dir| %>
+        <li><%= link_to dir.capitalize, directory_admin_logs_path(dir) %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>

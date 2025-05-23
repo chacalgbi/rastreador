@@ -10,6 +10,14 @@ Rails.application.routes.draw do
     resources :events
     resources :commands
     resource  :password_reset
+
+    resources :logs, only: [:index] do
+      collection do
+        get ':directory', to: 'logs#show_directory', as: 'directory', constraints: { directory: /carros|informacao/ }
+        get ':directory/:filename', to: 'logs#show_log', as: 'log_file', constraints: { directory: /carros|informacao/, filename: /.+\.log/ }
+        delete ":directory/:filename", to: "logs#clear_log", as: "clear_log_file", constraints: { directory: /carros|informacao/, filename: /.+\.log/ }
+      end
+    end
   end
   resource :session
   resources :driver, only: [:index, :edit, :update, :destroy] do

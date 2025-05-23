@@ -1,0 +1,36 @@
+<div class="page-body">
+  <div class="container-xl">
+    <h1>Log: <%= @filename %></h1>
+    <h2>Diretório: <%= @directory_name.capitalize %></h2>
+
+    <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem;">
+      <%= link_to "Voltar para #{@directory_name.capitalize}", directory_admin_logs_path(@directory_name) %>
+      <%= button_to "Limpar este Log", 
+                    clear_log_file_admin_logs_path(directory: @directory_name, filename: @filename),
+                    method: :delete,
+                    form: { data: { turbo_confirm: "ATENÇÃO!\n\nVocê tem certeza que deseja limpar TODO o conteúdo deste arquivo de log (#{@filename})?\n\nEsta ação NÃO pode ser desfeita." } },
+                    class: "btn btn-danger btn-sm" %>
+    </div>
+
+    <%= form_with(url: log_file_admin_logs_path(directory: @directory_name, filename: @filename), method: :get, local: true) do |form| %>
+      <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <%= form.label :search, "Pesquisar no arquivo todo:", style: "margin-right: 0.5rem;" %>
+        <%= form.text_field :search, value: @search_term, placeholder: "Digite o termo..." %>
+        <%= form.submit "Pesquisar" %>
+        <% if @search_term.present? %>
+          <%= link_to "Limpar Busca", log_file_admin_logs_path(directory: @directory_name, filename: @filename) %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if @is_search_result %>
+      <p>Resultados da busca por "<strong><%= @search_term %></strong>":</p>
+    <% else %>
+      <p>Exibindo as últimas <%= Admin::LogsController::LINES_TO_SHOW %> linhas:</p>
+    <% end %>
+    <pre style="background-color:rgb(56, 56, 57); border: 1px solid #dee2e6; padding: 1rem; white-space: pre-wrap; word-wrap: break-word; font-size: 1rem;">
+      <%= @log_content %>
+    </pre>
+  </div>
+</div>
+
