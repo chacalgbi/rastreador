@@ -3,6 +3,7 @@ class Admin::DetailsController < Admin::BaseController
 
   def index
     @search = Detail.all.ransack(params[:q])
+    @search.sorts = 'updated_at desc' if @search.sorts.empty?
 
     respond_to do |format|
       format.html { @pagy, @details = pagy(@search.result) }

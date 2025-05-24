@@ -75,8 +75,8 @@
                 <td style="background-color:<%= detail.status == 'online' ? '#32CD32' : '#e6727e' %>;"><%= detail.status %></td>
                 <td style="background-color:<%= detail.rele_state == 'on' ? '#9ACD32' : '#e6727e' %>;"><%= detail.rele_state %></td>
                 <td style="display: flex; gap: 3px;">
-                  <%= button_to "ON",  admin_details_rele_path, method: :post, params: { device_id: detail.device_id, model: detail.model, state: "ON",  imei: detail.imei }, class: "btn btn-primary btn-sm", data: { confirm: "Tem certeza que deseja LIGAR o rele? O veículo pode está em movimento." }  %>
-                  <%= button_to "OFF", admin_details_rele_path, method: :post, params: { device_id: detail.device_id, model: detail.model, state: "OFF", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { confirm: "Tem certeza que deseja DESLIGAR o rele?" }  %>
+                  <%= button_to "ON",  admin_details_rele_path, method: :post, params: { device_id: detail.device_id, model: detail.model, state: "ON",  imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja LIGAR o rele? O veículo pode está em movimento." }  %>
+                  <%= button_to "OFF", admin_details_rele_path, method: :post, params: { device_id: detail.device_id, model: detail.model, state: "OFF", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja DESLIGAR o rele?" }  %>
                 </td>
                 <td><%= detail.last_event_type %></td>
                 <td><%= detail.updated_at %></td>
