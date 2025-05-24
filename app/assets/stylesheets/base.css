@@ -98,18 +98,6 @@ img.invertible {
   padding-left: 10px;
 }
 
-.bg-success {
-  background-color: #28a745 !important;
-}
-
-.bg-danger {
-  background-color: #dc3545 !important;
-}
-
-.bg-secondary {
-  background-color: #6c757d !important;
-}
-
 .text-white {
   color: #f8f2f2 !important;
 }
