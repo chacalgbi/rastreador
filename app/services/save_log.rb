@@ -21,7 +21,7 @@ class SaveLog
         nil
       end
     rescue StandardError => e
-      Rails.logger.error("SaveLog.save - #{e.message}")
+      Rails.logger.error("SaveLog.save | Error: #{e.message}\nBacktrace:\n#{e.backtrace.first(5).join("\n")}\n\n")
       nil
     end
   end
@@ -55,7 +55,7 @@ class SaveLog
   end
 
   def error_payload
-    path = Rails.root.join('log', 'error_payload')
+    path = Rails.root.join('log', 'informacao')
     file = File.join(path, "error_payload.log")
 
     FileUtils.mkdir_p(path) unless File.directory?(path)
@@ -67,7 +67,7 @@ class SaveLog
   end
 
   def error_alert
-    path = Rails.root.join('log', 'error_alert')
+    path = Rails.root.join('log', 'informacao')
     file = File.join(path, "error_alert.log")
 
     FileUtils.mkdir_p(path) unless File.directory?(path)

@@ -27,6 +27,8 @@ class StandardizePayload::St8310u
         deviceOffline
       when 'deviceOnline'
         deviceOnline
+      when 'deviceUnknown'
+        deviceUnknown
       when 'commandResult'
         commandResult
       when 'alarm'
@@ -52,7 +54,7 @@ class StandardizePayload::St8310u
       email:       @payload.dig(:device, :contact),
       phone:       @payload.dig(:device, :phone),
       telegram:    @payload.dig(:device, :model),
-      status:      @payload.dig(:device, :status),
+      status:      @payload.dig(:device, :status) == 'online' ? 'online' : 'offline',
       imei:        @payload.dig(:device, :uniqueId),
       url:         url_google_maps,
       velo_max:    km_por_hora(@payload.dig(:device, :attributes, :speedLimit)),
@@ -115,6 +117,12 @@ class StandardizePayload::St8310u
   end
 
   def deviceOverspeed
+    {
+      **atributos_comuns
+    }
+  end
+
+  def deviceUnknown
     {
       **atributos_comuns
     }

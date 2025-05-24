@@ -20,6 +20,7 @@ export default class extends Controller {
   }
 
   showNotification() {
+    let dataHora = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
     let notificationtype = ''
 
     switch (this.eventValue) {
@@ -38,12 +39,15 @@ export default class extends Controller {
     }
 
 
-    $.notify(`Veículo:${this.vehicleValue} ID:${this.deviceidValue}
+    $.notify(`${dataHora} 
+      Veículo:${this.vehicleValue} ID:${this.deviceidValue}
       Evento:${this.eventValue}
       Relé:${this.relayValue} Ign:${this.ignitionValue} Odm:${this.odometroValue} Bateria:${this.batteryValue} Gsm:${this.signalgsmValue} Gps:${this.signalgpsValue}`,
       {
-        autoHideDelay: 10000,
+        autoHideDelay: 15000,
         className: notificationtype
       });
+
+    console.log(`${dataHora} - Veículo:${this.vehicleValue} ID:${this.deviceidValue} Evento:${this.eventValue}`)
   }
 }
