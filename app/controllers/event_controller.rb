@@ -15,6 +15,7 @@ class EventController < PublicController
   private
 
   def build_events
+    SaveLog.new('params', "PARAMETROS: #{params}").save
     standardized_data = StandardizePayload::Decoder.new(params, @detail).decide
     log("build_events - standardized_data: #{standardized_data}")
     return if standardized_data.nil?
