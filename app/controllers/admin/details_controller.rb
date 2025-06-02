@@ -64,6 +64,21 @@ class Admin::DetailsController < Admin::BaseController
     redirect_to admin_details_url, notice: notice
   end
 
+  def send_command
+    send_command = SendCommand.new(params[:model], params[:device_id], params[:command], params[:imei])
+    response = ''
+    case params[:command]
+    when 'zerar_hodometro'
+      response = send_command.reset_odometer
+    when 'zerar_horimetro'
+      response = send_command.reset_hour_meter
+    else
+      response = "Comando desconhecido: #{params[:command]}"
+    end
+
+    redirect_to admin_details_url, notice: response
+  end
+
   private
     def set_detail
       @detail = Detail.find(params[:id])

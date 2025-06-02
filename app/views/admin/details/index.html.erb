@@ -29,11 +29,11 @@
               <th><%= sort_link @search, "Último evento" %></th>
               <th><%= sort_link @search, :updated_at %></th>
               <th><%= sort_link @search, :odometro %></th>
+              <th><%= sort_link @search, :horimetro %></th>
               <th><%= sort_link @search, :battery %></th>
               <th><%= sort_link @search, :url %></th>
               <th><%= sort_link @search, :velo_max %></th>
               <th><%= sort_link @search, :bat_bck %></th>
-              <th><%= sort_link @search, :horimetro %></th>
               <th><%= sort_link @search, :cercas %></th>
               <th><%= sort_link @search, :satelites %></th>
               <th><%= sort_link @search, :version %></th>
@@ -80,14 +80,14 @@
                 </td>
                 <td><%= detail.last_event_type %></td>
                 <td><%= detail.updated_at %></td>
-                <td><%= detail.odometro %></td>
+                <td><%= button_to "#{detail.odometro } Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_hodometro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Hodômetro?" }  %></td>
+                <td><%= button_to "#{detail.horimetro} Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_horimetro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Horímetro?" }  %></td>
                 <td><%= detail.battery %></td>
                 <td>
                   <%= link_to detail.url, detail.url, target: "_blank", rel: "noopener noreferrer" if detail.url.present? %>
                 </td>
                 <td><%= detail.velo_max %></td>
                 <td><%= detail.bat_bck %></td>
-                <td><%= detail.horimetro %></td>
                 <td><%= detail.cercas %></td>
                 <td><%= detail.satelites %></td>
                 <td><%= detail.version %></td>

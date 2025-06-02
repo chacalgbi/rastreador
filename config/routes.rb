@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     resources :users
     resources :details
     post 'details/rele'
+    post 'details/send_command'
     post 'commands/send_command'
     resources :events
     resources :commands
