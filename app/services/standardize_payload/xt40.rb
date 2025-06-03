@@ -161,6 +161,8 @@ class StandardizePayload::Xt40
       commandResult_status
     elsif commandResult_type.start_with?('APN')
       commandResult_params
+    elsif commandResult_type.start_with?('NetworkMode')
+      commandResult_network
     else
       nil
     end
@@ -201,10 +203,25 @@ class StandardizePayload::Xt40
   end
 
   def commandResult_params
-    params = @payload.dig(:position, :attributes, :result).split(" ")
+    params = @payload.dig(:position, :attributes, :result)
+    params_array = params.split(" ")
+    other_params = extract_params(params) || []
     {
-      apn: params[0],
-      ip_and_port: params[1],
+      apn: params_array[0],
+      ip_and_port: params_array[1],
+      heartbeat: other_params[1],
+      params: "#{other_params[0]} #{other_params[2]} #{other_params[3]}",
+      **atributos_comuns
+    }
+  end
+
+  def commandResult_network
+    params = @payload.dig(:position, :attributes, :result)
+    result = NetworkParserXt40.new(params).parse
+    return nil unless result
+    result_parsed = "#{result[:network_mode]} #{result[:signal_strength]}% #{result[:signal_quality]} #{result[:frequency_band]} #{result[:operator]}"
+    {
+      network: result_parsed,
       **atributos_comuns
     }
   end
@@ -243,6 +260,37 @@ class StandardizePayload::Xt40
     return nil if milhas_nauticas.nil?
     km_por_hora = (milhas_nauticas * 1.853).to_i
     "#{km_por_hora} km/h"
+  end
+
+  def extract_params(params)
+    begin
+      target_keys = ["GMT", "HBT", "MIL", "BEND"]
+      extracted_data = {}
+
+      # Regex para encontrar as chaves desejadas e capturar seus valores
+      # (?:...) -> grupo não capturante
+      # \s* -> zero ou mais espaços após o ':'
+      # (.*?) -> captura o valor (não guloso)
+      # (?=...) -> lookahead positivo para encontrar o limite do valor
+      # \s+[A-Z]{2,}: -> próximo delimitador (espaço + chave com 2+ letras maiúsculas + :)
+      # |$ -> ou o fim da string
+      regex = /(#{target_keys.join("|")}):\s*(.*?)(?=\s+[A-Z]{2,}:|$)/
+
+      params.scan(regex).each do |key, value|
+        extracted_data[key] = value.strip
+      end
+      result_array = extracted_data.map { |key, value| "#{key}: #{value}" }
+
+      # extracted_data: {"GMT" => "W3", "HBT" => "5.10", "MIL" => "ON<0.01km>", "BEND" => "ON.15  BD"}
+      # result_array:   ["GMT: W3", "HBT: 5.10", "MIL: ON<0.01km>", "BEND: ON.15  BD"]
+
+      result_array
+    rescue StandardError => e
+      error_message = "StandardizePayload::Xt40.extract_params | Error: #{e.message}\nBacktrace:\n#{e.backtrace.first(5).join("\n")}"
+      Rails.logger.error("#{error_message}\n")
+      SaveLog.new('error_payload', error_message).save
+      nil
+    end
   end
 end
 

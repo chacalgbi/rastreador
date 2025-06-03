@@ -17,17 +17,17 @@
           <thead>
             <tr>
               <th><%= sort_link @search, :id %></th>
-              <th>Editar</th>
               <th><%= sort_link @search, :device_id %></th>
               <th><%= sort_link @search, :device_name %></th>
               <th><%= sort_link @search, :last_user %></th>
               <th><%= sort_link @search, "Modelo" %></th>
               <th><%= sort_link @search, :ignition %></th>
               <th><%= sort_link @search, :status %></th>
-              <th><%= sort_link @search, "Estado Relé" %></th>
+              <th><%= sort_link @search, "Relé" %></th>
               <th>Lig/Desl</th>
-              <th><%= sort_link @search, "Último evento" %></th>
+              <th><%= sort_link @search, "Últ evento" %></th>
               <th><%= sort_link @search, :updated_at %></th>
+              <th><%= sort_link @search, :network %></th>
               <th><%= sort_link @search, :odometro %></th>
               <th><%= sort_link @search, :horimetro %></th>
               <th><%= sort_link @search, :battery %></th>
@@ -46,7 +46,7 @@
               <th><%= sort_link @search, :charge %></th>
               <th><%= sort_link @search, :heartbeat %></th>
               <th><%= sort_link @search, :obs %></th>
-              <th><%= sort_link @search, :network %></th>
+              <th>Obter Params</th>
               <th><%= sort_link @search, :params %></th>
               <th><%= sort_link @search, :apn %></th>
               <th><%= sort_link @search, :ip_and_port %></th>
@@ -65,8 +65,7 @@
           <tbody>
             <% @details.each do |detail| %>
               <tr>
-                <td><%= detail.id %></td>
-                <td><%= link_to "Editar", edit_admin_detail_path(detail), class: "btn btn-white btn-sm" %></td>
+                <td><%= link_to "#{detail.id} Editar", edit_admin_detail_path(detail), class: "btn btn-white btn-sm" %></td>
                 <td><%= detail.device_id %></td>
                 <td><%= detail.device_name %></td>
                 <td><%= detail.last_user %></td>
@@ -79,7 +78,8 @@
                   <%= button_to "OFF", admin_details_rele_path, method: :post, params: { device_id: detail.device_id, model: detail.model, state: "OFF", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja DESLIGAR o rele?" }  %>
                 </td>
                 <td><%= detail.last_event_type %></td>
-                <td><%= detail.updated_at %></td>
+                <td><%= detail.updated_at.strftime("%H:%M:%S %d/%m/%Y") %></td>
+                <td><%= detail.network %></td>
                 <td><%= button_to "#{detail.odometro } Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_hodometro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Hodômetro?" }  %></td>
                 <td><%= button_to "#{detail.horimetro} Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_horimetro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Horímetro?" }  %></td>
                 <td><%= detail.battery %></td>
@@ -100,7 +100,7 @@
                 <td><%= detail.charge %></td>
                 <td><%= detail.heartbeat %></td>
                 <td><%= detail.obs %></td>
-                <td><%= detail.network %></td>
+                <td><%= button_to "Obter", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "parametros", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja OBTER os parametros?" }  %></td>
                 <td><%= detail.params %></td>
                 <td><%= detail.apn %></td>
                 <td><%= detail.ip_and_port %></td>

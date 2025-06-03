@@ -27,7 +27,8 @@ class HomeController < ApplicationController
     @event = Detail.find_by(device_id: device_id)
     @events_last_x_hours = Event.where(car_id: device_id, created_at: HOURS_LAST_EVENTS.hours.ago..Time.current).where.not(event_name: 'resposta').count
 
-    send_command_status
+    send_command('Status')
+    send_command('network')
 
     info = @event
     msg = define_text(@event, params[:status])
@@ -134,8 +135,8 @@ class HomeController < ApplicationController
     devices
   end
 
-  def send_command_status
-    command = Command.find_by(type_device: @event.model, name: 'Status')
+  def send_command(command_name)
+    command = Command.find_by(type_device: @event.model, name: command_name)
     send_command = command.present? ? command.command : nil
 
     if @event.model == 'st8310u'

@@ -1,3 +1,4 @@
+<!-- https://lucide.dev/icons/ -->
 <% if info.model == 'xt40' %>
   <div class="car_container">
     <%= button_tag class: "btn btn--plain" do %>
@@ -5,9 +6,6 @@
     <% end %>
     <%= button_tag class: "btn btn--plain" do %>
       <%= image_tag "shield-off.svg", size: 20, aria: { hidden: true } %><span>GSM: <%= info.signal_gsm %></span>
-    <% end %>
-    <%= button_tag class: "btn btn--plain" do %>
-      <%= image_tag "battery-medium.svg", size: 20, aria: { hidden: true } %><span>Bkp: <%= info.bat_bck %>v</span>
     <% end %>
   </div>
   <hr>
@@ -18,8 +16,20 @@
     <%= button_tag class: "btn btn--plain" do %>
       <%= image_tag "key-square.svg", size: 20, aria: { hidden: true } %><span>Igni: <%= info.ignition %></span>
     <% end %>
+  </div>
+  <hr>
+  <div class="car_container">
     <%= button_tag class: "btn btn--plain" do %>
       <%= image_tag "battery-charging.svg", size: 20, aria: { hidden: true } %><span>Bat: <%= info.battery %>v</span>
+    <% end %>
+    <%= button_tag class: "btn btn--plain" do %>
+      <%= image_tag "battery-medium.svg", size: 20, aria: { hidden: true } %><span>Bkp: <%= info.bat_bck %>v</span>
+    <% end %>
+  </div>
+  <hr>
+  <div class="car_container">
+    <%= button_tag class: "btn btn--plain" do %>
+      <%= image_tag "cpu.svg", size: 20, aria: { hidden: true } %><span><%= info.network %></span>
     <% end %>
   </div>
 <% else %>

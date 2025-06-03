@@ -72,6 +72,8 @@ class Admin::DetailsController < Admin::BaseController
       response = send_command.reset_odometer
     when 'zerar_horimetro'
       response = send_command.reset_hour_meter
+    when 'parametros'
+      response = send_command.params
     else
       response = "Comando desconhecido: #{params[:command]}"
     end
