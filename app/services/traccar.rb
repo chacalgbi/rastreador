@@ -39,7 +39,7 @@ class Traccar
     elsif response.code.to_i == 401
       log("get_info_device ERRO | 401 Tentando autenticar novamente")
       self.session
-      self.get_info_device(device_id) # Tenta novamente após autenticar
+      return self.get_info_device(device_id) # Tenta novamente após autenticar
     else
       log("get_info_device ERRO | #{response.code} #{response.body}")
       []
@@ -71,9 +71,67 @@ class Traccar
     elsif response.code.to_i == 401
       log("command ERRO | 401 Tentando autenticar novamente")
       self.session
-      self.command(device_id, command) # Tenta novamente após autenticar
+      return self.command(device_id, command) # Tenta novamente após autenticar
     else
       log("command ERRO | #{response.code} #{response.body}")
+    end
+
+    response.code.to_i
+  end
+
+  def self.reset_horimetro(device_id)
+    log("reset_horimetro #{device_id}")
+
+    payload = {
+      deviceId: device_id.to_i,
+      hours: 0
+    }
+
+    uri = URI("#{ENV["TRACCAR_URL"]}/api/devices/#{device_id}/accumulators")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Put.new(uri.path, { 'Content-Type' => 'application/json' })
+    request['Cookie'] = @@global_cookies if @@global_cookies
+    request.body = payload.to_json
+    response = http.request(request)
+
+    if response.is_a?(Net::HTTPSuccess)
+      log("reset_horimetro SUCESSO | Response: #{response.code.to_i}")
+    elsif response.code.to_i == 401
+      log("reset_horimetro ERRO | 401 Tentando autenticar novamente")
+      self.session
+      return self.reset_horimetro(device_id) # Tenta novamente após autenticar
+    else
+      log("reset_horimetro ERRO | #{response.code} #{response.body}")
+    end
+
+    response.code.to_i
+  end
+
+  def self.reset_odometro(device_id)
+    log("reset_odometro #{device_id}")
+
+    payload = {
+      deviceId: device_id.to_i,
+      totalDistance: 0
+    }
+
+    uri = URI("#{ENV["TRACCAR_URL"]}/api/devices/#{device_id}/accumulators")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Put.new(uri.path, { 'Content-Type' => 'application/json' })
+    request['Cookie'] = @@global_cookies if @@global_cookies
+    request.body = payload.to_json
+    response = http.request(request)
+
+    if response.is_a?(Net::HTTPSuccess)
+      log("reset_odometro SUCESSO | Response: #{response.code.to_i}")
+    elsif response.code.to_i == 401
+      log("reset_odometro ERRO | 401 Tentando autenticar novamente")
+      self.session
+      return self.reset_odometro(device_id) # Tenta novamente após autenticar
+    else
+      log("reset_odometro ERRO | #{response.code} #{response.body}")
     end
 
     response.code.to_i
