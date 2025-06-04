@@ -17,6 +17,8 @@ class SaveLog
         error_payload
       when 'error_alert'
         error_alert
+      when 'error'
+        error
       when 'params'
         params
       else
@@ -71,6 +73,18 @@ class SaveLog
   def error_alert
     path = Rails.root.join('log', 'informacao')
     file = File.join(path, "error_alert.log")
+
+    FileUtils.mkdir_p(path) unless File.directory?(path)
+
+    FileUtils.touch(file)
+
+    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger.info("#{@log}\n")
+  end
+
+  def error
+    path = Rails.root.join('log', 'informacao')
+    file = File.join(path, "error.log")
 
     FileUtils.mkdir_p(path) unless File.directory?(path)
 

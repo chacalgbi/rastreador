@@ -138,12 +138,10 @@ class HomeController < ApplicationController
   def send_command(command_name)
     command = Command.find_by(type_device: @event.model, name: command_name)
     send_command = command.present? ? command.command : nil
+    return if send_command.nil?
+    send_command = send_command.gsub('XXXX', @event.imei) if @event.model == 'st8310u'
 
-    if @event.model == 'st8310u'
-      send_command = send_command.gsub('XXXX', @event.imei)
-    end
-
-    Traccar.command(@event.device_id, send_command)
+    SendCommandJob.perform_later({device_id: @event.device_id, command: send_command})
   end
 
   def define_text(event, status)

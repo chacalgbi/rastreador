@@ -5,13 +5,13 @@
       <%= image_tag "satellite-dish.svg", size: 20, aria: { hidden: true } %><span>GPS: <%= info.signal_gps %></span>
     <% end %>
     <%= button_tag class: "btn btn--plain" do %>
-      <%= image_tag "shield-off.svg", size: 20, aria: { hidden: true } %><span>GSM: <%= info.signal_gsm %></span>
+      <%= image_tag "card-sim.svg", size: 20, aria: { hidden: true } %><span>GSM: <%= info.signal_gsm %></span>
     <% end %>
   </div>
   <hr>
   <div class="car_container">
     <%= button_tag class: "btn btn--plain" do %>
-      <%= image_tag "arrow-up-from-dot.svg", size: 20, aria: { hidden: true } %><span>Odm: <%= info.odometro %>m</span>
+      <%= image_tag "arrow-up-from-dot.svg", size: 20, aria: { hidden: true } %><span>Odm: <%= info.odometro %></span>
     <% end %>
     <%= button_tag class: "btn btn--plain" do %>
       <%= image_tag "key-square.svg", size: 20, aria: { hidden: true } %><span>Igni: <%= info.ignition %></span>
@@ -29,7 +29,7 @@
   <hr>
   <div class="car_container">
     <%= button_tag class: "btn btn--plain" do %>
-      <%= image_tag "cpu.svg", size: 20, aria: { hidden: true } %><span><%= info.network %></span>
+      <%= image_tag "radio-tower.svg", size: 20, aria: { hidden: true } %><span><%= info.network %></span>
     <% end %>
   </div>
 <% else %>
