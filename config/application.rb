@@ -13,5 +13,6 @@ module Rastreador
     config.active_record.default_timezone = :local
     config.i18n.default_locale = :'pt-BR'
     config.autoload_lib(ignore: %w[assets tasks])
+    config.eager_load_paths << Rails.root.join("app/jobs")
   end
 end
