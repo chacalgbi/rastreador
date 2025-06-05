@@ -5,8 +5,7 @@ namespace :solid_queue do
       within current_path do
         with rails_env: fetch(:rails_env) do
           # roda em background e joga o log pra shared/log
-          # execute :nohup, "/home/deploy/.rbenv/shims/bundle exec rails runner \'SolidQueue::Supervisor.start\' >> #{shared_path}/log/solid_queue.log 2>&1 &"
-          execute :echo, "'--- Testando carregamento de SendCommandJob ---'; /home/deploy/.rbenv/shims/bundle exec rails runner \"puts 'SendCommandJob carregado com sucesso' if defined?(SendCommandJob); puts 'SendCommandJob NÃO encontrado' unless defined?(SendCommandJob)\" >> #{shared_path}/log/capistrano_test.log 2>&1"
+          execute :nohup, "/home/deploy/.rbenv/shims/bundle exec #{current_path}/bin/jobs >> #{shared_path}/log/solid_queue.log 2>&1 &"
         end
       end
     end
