@@ -2,31 +2,42 @@ class SendAlertJob < ApplicationJob
   queue_as :default
 
   def perform(params)
-    return false if params.nil? || params.empty?
+    begin
+      return false if params.nil? || params.empty?
+      arg = params.symbolize_keys!
+      return false if arg[:message].nil? || arg[:message].empty?
 
-    arg = params.symbolize_keys!
+      msg = "SendAlertJob - event: #{arg[:event]}, message: #{arg[:message]}, alert_whatsApp: #{arg[:alert_whatsApp]}, alert_telegram: #{arg[:alert_telegram]}, alert_email: #{arg[:alert_email]}"
+      SaveLog.new('alert_job', msg).save
 
-    return false if arg[:message].nil? || arg[:message].empty?
+      if arg[:alert_whatsApp]
+        # Implement WhatsApp notification logic here
+      end
 
-    if arg[:alert_whatsApp]
-    end
-
-    if arg[:alert_telegram]
-      unless arg[:telegram].nil? || arg[:telegram].empty?
-        chats = arg[:telegram].split(',')
-        chats.each do |chat|
-          Notify.telegram(chat, arg[:message])
+      if arg[:alert_telegram]
+        unless arg[:telegram].nil? || arg[:telegram].empty?
+          chats = arg[:telegram].split(',')
+          chats.each do |chat|
+            Notify.telegram(chat, arg[:message])
+          end
         end
       end
-    end
 
-    if arg[:alert_email]
-      unless arg[:email].nil? || arg[:email].empty?
-        emails = arg[:email].split(',')
-        emails.each do |email|
-          NotifyMailer.notify(email, "Alerta(#{arg[:event]})", arg[:message]).deliver_later
+      if arg[:alert_email]
+        unless arg[:email].nil? || arg[:email].empty?
+          emails = arg[:email].split(',')
+          emails.each do |email|
+            NotifyMailer.notify(email, "Alerta(#{arg[:event]})", arg[:message]).deliver_later
+          end
         end
       end
+
+      true
+    rescue StandardError => e
+      error_message = "SendAlertJob.perform | Error: #{e.message}\nBacktrace:\n#{e.backtrace.first(5).join("\n")}"
+      Rails.logger.error("#{error_message}\n")
+      SaveLog.new('error', error_message).save
+      nil
     end
 
   end

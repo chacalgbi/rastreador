@@ -1,9 +1,10 @@
 require 'fileutils'
 
 class SaveLog
-  def initialize(type, log)
-    @log = log
+  def initialize(type, log, log2 = nil)
     @type = type
+    @log = log
+    @log2 = log2
   end
 
   def save
@@ -21,6 +22,8 @@ class SaveLog
         error
       when 'params'
         params
+      when 'alert_job'
+        alert_job
       else
         nil
       end
@@ -43,7 +46,7 @@ class SaveLog
     FileUtils.touch(file)
 
     logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
-    logger.info("#{@log}\n")
+    logger.info("Parametros: #{@log}\nPadronizado: #{@log2}\n")
   end
 
   def info
@@ -85,6 +88,18 @@ class SaveLog
   def error
     path = Rails.root.join('log', 'informacao')
     file = File.join(path, "error.log")
+
+    FileUtils.mkdir_p(path) unless File.directory?(path)
+
+    FileUtils.touch(file)
+
+    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger.info("#{@log}\n")
+  end
+
+  def alert_job
+    path = Rails.root.join('log', 'informacao')
+    file = File.join(path, "alert_job.log")
 
     FileUtils.mkdir_p(path) unless File.directory?(path)
 

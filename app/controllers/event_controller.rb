@@ -15,25 +15,16 @@ class EventController < PublicController
   private
 
   def build_events
-    SaveLog.new('params', "PARAMETROS: #{params}").save
     standardized_data = StandardizePayload::Decoder.new(params, @detail).decide
-    log("build_events - standardized_data: #{standardized_data}")
     return if standardized_data.nil?
 
-    SaveLog.new('event_car', params).save
+    SaveLog.new('event_car', params, standardized_data).save
 
     build_alert = BuildAlert.new(standardized_data, @detail).build
-    log("build_events - build_alert: #{build_alert}")
 
     TraccarUpdateDevice.new(standardized_data, @detail).update
 
     return if build_alert.nil?
     SendAlertJob.perform_later(build_alert)
-  end
-
-  def log(message)
-    msg = "EventController.#{message}"
-    Rails.logger.info("\n#{msg}\n")
-    SaveLog.new('info', msg).save
   end
 end
