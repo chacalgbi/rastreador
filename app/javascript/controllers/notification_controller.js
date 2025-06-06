@@ -40,14 +40,14 @@ export default class extends Controller {
 
 
     $.notify(`${dataHora} 
-      Veículo:${this.vehicleValue} ID:${this.deviceidValue}
-      Evento:${this.eventValue}
-      Relé:${this.relayValue} Ign:${this.ignitionValue} Odm:${this.odometroValue} Bateria:${this.batteryValue} Gsm:${this.signalgsmValue} Gps:${this.signalgpsValue}`,
+      ID:${this.deviceidValue}
+      Veículo:${this.vehicleValue}
+      Evento:${this.eventValue}`,
       {
         autoHideDelay: 15000,
         className: notificationtype
       });
-
+      // Relé:${this.relayValue} Ign:${this.ignitionValue} Odm:${this.odometroValue} Bateria:${this.batteryValue} Gsm:${this.signalgsmValue} Gps:${this.signalgpsValue}
     console.log(`${dataHora} - Veículo:${this.vehicleValue} ID:${this.deviceidValue} Evento:${this.eventValue}`)
   }
 }
