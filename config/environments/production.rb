@@ -40,8 +40,9 @@ Rails.application.configure do
   config.logger   = ActiveSupport::TaggedLogging.logger(STDOUT)
 
   # Change to "debug" to log everything (including potentially personally-identifiable information!)
-  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
-  config.paths["log"] = "/home/deploy/rastreador/production.log"
+  config.log_level = :info
+  ActiveRecord::Base.logger = Rails.logger
+  config.paths["log"] = "/home/deploy/rastreador/shared/log/production.log"
 
   # Prevent health checks from clogging up the logs.
   config.silence_healthcheck_path = "/up"
