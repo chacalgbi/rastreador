@@ -18,11 +18,11 @@ class EventController < PublicController
     standardized_data = StandardizePayload::Decoder.new(params, @detail).decide
     return if standardized_data.nil?
 
-    SaveLog.new('event_car', params, standardized_data).save
-
     build_alert = BuildAlert.new(standardized_data, @detail).build
 
     TraccarUpdateDevice.new(standardized_data, @detail).update
+
+    SaveLog.new('event_car', params, standardized_data, build_alert).save
 
     return if build_alert.nil?
     SendAlertJob.perform_later(build_alert)

@@ -1,10 +1,11 @@
 require 'fileutils'
 
 class SaveLog
-  def initialize(type, log, log2 = nil)
+  def initialize(type, log, log2 = nil, log3 = nil)
     @type = type
     @log = log
     @log2 = log2
+    @log3 = log3
   end
 
   def save
@@ -46,7 +47,7 @@ class SaveLog
     FileUtils.touch(file)
 
     logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
-    logger.info("Parametros: #{@log}\nPadronizado: #{@log2}\n")
+    logger.info("PARAMETROS: #{@log}\nPADRONIZADO: #{@log2 || 'Sem padronização'}\nALERTA: #{@log3 || 'Sem alertas'}\n")
   end
 
   def info

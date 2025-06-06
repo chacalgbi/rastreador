@@ -6,8 +6,9 @@ class SendAlertJob < ApplicationJob
       return false if params.nil? || params.empty?
       arg = params.symbolize_keys!
       return false if arg[:message].nil? || arg[:message].empty?
+      msg_log = arg[:message].gsub(/[\r\n]+/, " ")
 
-      msg = "SendAlertJob - event: #{arg[:event]}, message: #{arg[:message]}, alert_whatsApp: #{arg[:alert_whatsApp]}, alert_telegram: #{arg[:alert_telegram]}, alert_email: #{arg[:alert_email]}"
+      msg = "Zap: #{arg[:alert_whatsApp]}, Telegram: #{arg[:alert_telegram]}, Email: #{arg[:alert_email]} | #{msg_log}"
       SaveLog.new('alert_job', msg).save
 
       if arg[:alert_whatsApp]
