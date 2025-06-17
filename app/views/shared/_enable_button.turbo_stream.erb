@@ -1,0 +1,12 @@
+<turbo-stream action="after" target="detail_<%= device_id %>">
+  <template>
+    <script>
+      (function() {
+        const button = document.getElementById('button_block_device_<%= device_id %>');
+        if (button) {
+          button.disabled = false;
+        }
+      })();
+    </script>
+  </template>
+</turbo-stream>

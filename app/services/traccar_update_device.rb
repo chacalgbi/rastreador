@@ -33,6 +33,14 @@ class TraccarUpdateDevice
       partial: "details/detail",
       locals: { detail: @detail }
     )
+
+    # Só desbloqueia o botão de (Ligar/desligar relé) se o dispositivo estiver online, pois se entrar nesse método
+    # é porque o dispositivo está online e respondeu ao callBack
+    Turbo::StreamsChannel.broadcast_render_to(
+      "home_stream",
+      partial: "shared/enable_button",
+      locals: { device_id: @detail.device_id }
+    )
   end
 
   def update_admin_view

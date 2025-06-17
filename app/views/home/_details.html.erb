@@ -6,9 +6,9 @@
       <%= turbo_frame_tag "button_#{device_id}" do %>
         <% if status == 'online' %>
           <% if state == 'desbloquear' %>
-            <%= button_to "Desbloquear", home_block_and_desblock_path(id: device_id, action_type: 'desbloquear', model: info.model, imei: info.imei), method: :post, class: "btn btn--positive", data: { turbo_stream: true } %>
+            <%= button_to "Desbloquear", home_block_and_desblock_path(id: device_id, action_type: 'desbloquear', model: info.model, imei: info.imei), method: :post, class: "btn btn--positive", id: "button_block_device_#{device_id}", data: { turbo_stream: true }, disabled: true %>
           <% elsif state == 'bloquear' %>
-            <%= button_to "Bloquear", home_block_and_desblock_path(id: device_id, action_type: 'bloquear', model: info.model, imei: info.imei), method: :post, class: "btn btn--negative", data: { turbo_stream: true } %>
+            <%= button_to "Bloquear", home_block_and_desblock_path(id: device_id, action_type: 'bloquear', model: info.model, imei: info.imei), method: :post, class: "btn btn--negative", id: "button_block_device_#{device_id}", data: { turbo_stream: true }, disabled: true %>
           <% else %>
             <%= button_tag "Em uso por outro motorista", class: "btn", disabled: true %>
           <% end %>
