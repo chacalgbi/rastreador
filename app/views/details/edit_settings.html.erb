@@ -1,0 +1,110 @@
+<div class="container">
+  <h1 class="text-2xl header-section-details" style="color: #FFFFFF;">Configurações do veículo: <%= @detail.device_name || @detail.device_id %></h1>
+  
+  <%= form_with model: @detail, url: update_settings_detail_path(@detail), method: :patch, local: true, class: "settings-form" do |form| %>
+    
+    <div class="settings-section">
+      <h3 style="color: #FFFFFF;">Canais de Alerta</h3>
+      
+      <div class="form-group">
+        <%= form.check_box :alert_whatsApp, class: "form-check-input" %>
+        <%= form.label :alert_whatsApp, "Alerta por WhatsApp", class: "form-check-label" %>
+      </div>
+      
+      <div class="form-group">
+        <%= form.check_box :alert_telegram, class: "form-check-input" %>
+        <%= form.label :alert_telegram, "Alerta por Telegram", class: "form-check-label" %>
+      </div>
+      
+      <div class="form-group">
+        <%= form.check_box :alert_email, class: "form-check-input" %>
+        <%= form.label :alert_email, "Alerta por E-mail", class: "form-check-label" %>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3 style="color: #FFFFFF;">Tipos de Notificações</h3>
+
+      <div class="form-group">
+        <%= form.check_box :send_battery, class: "form-check-input" %>
+        <%= form.label :send_battery, "Alerta de corte de bateria", class: "form-check-label" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.check_box :send_velo_max, class: "form-check-input" %>
+        <%= form.label :send_velo_max, "Alerta de veículo em velo. máxima excedida", class: "form-check-label" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.check_box :send_exit_cerca, class: "form-check-input" %>
+        <%= form.label :send_exit_cerca, "Alerta de veículo entrando/saindo da cerca virtual", class: "form-check-label" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.check_box :send_rele, class: "form-check-input" %>
+        <%= form.label :send_rele, "Alerta de veículo bloqueado/desbloqueado", class: "form-check-label" %>
+      </div>
+
+      <div class="form-group">
+        <%= form.check_box :send_moving, class: "form-check-input" %>
+        <%= form.label :send_moving, "Alerta de veículo em movimento/parado", class: "form-check-label" %>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit "Salvar Configurações", class: "btn btn--positive" %>
+      <%= link_to "Cancelar", root_path, class: "btn btn--secondary" %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .settings-form {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .header-section-details {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .settings-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .settings-section h3 {
+    margin-bottom: 1rem;
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 0.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .form-check-input {
+    margin-right: 0.5rem;
+    transform: scale(1.2);
+  }
+  
+  .form-check-label {
+    font-weight: 500;
+    cursor: pointer;
+  }
+  
+  .form-actions {
+    margin-top: 2rem;
+    text-align: center;
+  }
+  
+  .form-actions .btn {
+    margin: 0 0.5rem;
+  }
+</style>

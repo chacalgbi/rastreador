@@ -28,6 +28,12 @@ Rails.application.routes.draw do
       post :cars_update
     end
   end
+  resources :details, only: [:index] do
+    member do
+      get :edit_settings
+      patch :update_settings
+    end
+  end
   resources :passwords, param: :token
   get "home/index"
   get "home/location"

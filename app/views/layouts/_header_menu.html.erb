@@ -9,6 +9,7 @@
       <%= link_to 'Veículos', root_path %>
       <% if Current.user.admin %>
         <%= link_to 'Motoristas', driver_index_path %>
+        <%= link_to 'Alertas e Notificações', details_path %>
       <% end %>
     <% else %>
       <%= link_to 'Faça sua inscrição', new_registration_path %>
