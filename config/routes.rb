@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   get "home/details"
   get "home/hide_details"
   post "home/last_events"
+  post "home/odometro"
   post "home/block_and_desblock"
   post "event/webhook_traccar"
   resources :registrations, only: [:new, :create]

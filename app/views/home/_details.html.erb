@@ -34,6 +34,14 @@
       <% end %>
     </div>
   </div>
+  <% if @user_admin %>
+    <br>
+    <div class="car_container">
+      <%= button_to "Zerar Odômetro",  home_odometro_path, method: :post, params: { device_id: info.device_id, model: info.model, command: "zerar_hodometro", imei: info.imei }, class: "btn btn-primary btn-sm", data: { turbo_stream: true, turbo_confirm: "Tem certeza que deseja ZERAR o Hodômetro?" }  %>
+      <%= button_to "Zerar Horímetro", home_odometro_path, method: :post, params: { device_id: info.device_id, model: info.model, command: "zerar_horimetro", imei: info.imei }, class: "btn btn-primary btn-sm", data: { turbo_stream: true, turbo_confirm: "Tem certeza que deseja ZERAR o Horímetro?" }  %>
+    </div>
+    <br>
+  <% end %>
   <div id="detail_<%= device_id %>" > <!-- Será substituida quando o evento de Status for enviado pelo rastreador -->
     <%= render 'details/information', info: info %>
   </div>

@@ -1,34 +1,37 @@
 <!-- https://lucide.dev/icons/ -->
 <% if info.model == 'xt40' %>
   <div class="car_container">
-    <%= button_tag class: "btn btn--plain" do %>
+    <%= button_tag class: "btn btn--plain", data: { field: "signal_gps", value: info.signal_gps, device_id: info.device_id } do %>
       <%= image_tag "satellite-dish.svg", size: 20, aria: { hidden: true } %><span>GPS: <%= info.signal_gps %></span>
     <% end %>
-    <%= button_tag class: "btn btn--plain" do %>
+    <%= button_tag class: "btn btn--plain", data: { field: "signal_gsm", value: info.signal_gsm, device_id: info.device_id } do %>
       <%= image_tag "card-sim.svg", size: 20, aria: { hidden: true } %><span>GSM: <%= info.signal_gsm %></span>
     <% end %>
   </div>
   <hr>
   <div class="car_container">
-    <%= button_tag class: "btn btn--plain" do %>
+    <%= button_tag class: "btn btn--plain", data: { field: "odometro", value: info.odometro, device_id: info.device_id } do %>
       <%= image_tag "arrow-up-from-dot.svg", size: 20, aria: { hidden: true } %><span>Odm: <%= info.odometro %></span>
     <% end %>
-    <%= button_tag class: "btn btn--plain" do %>
+    <%= button_tag class: "btn btn--plain", data: { field: "horimetro", value: info.horimetro, device_id: info.device_id } do %>
+      <%= image_tag "timer.svg", size: 20, aria: { hidden: true } %><span>Hori: <%= info.horimetro %></span>
+    <% end %>
+    <%= button_tag class: "btn btn--plain", data: { field: "ignition", value: info.ignition, device_id: info.device_id } do %>
       <%= image_tag "key-square.svg", size: 20, aria: { hidden: true } %><span>Igni: <%= info.ignition %></span>
     <% end %>
   </div>
   <hr>
   <div class="car_container">
-    <%= button_tag class: "btn btn--plain" do %>
+    <%= button_tag class: "btn btn--plain", data: { field: "battery", value: info.battery, device_id: info.device_id } do %>
       <%= image_tag "battery-charging.svg", size: 20, aria: { hidden: true } %><span>Bat: <%= info.battery %>v</span>
     <% end %>
-    <%= button_tag class: "btn btn--plain" do %>
+    <%= button_tag class: "btn btn--plain", data: { field: "bat_bck", value: info.bat_bck, device_id: info.device_id } do %>
       <%= image_tag "battery-medium.svg", size: 20, aria: { hidden: true } %><span>Bkp: <%= info.bat_bck %>v</span>
     <% end %>
   </div>
   <hr>
   <div class="car_container">
-    <%= button_tag class: "btn btn--plain" do %>
+    <%= button_tag class: "btn btn--plain", data: { field: "network", value: info.network, device_id: info.device_id } do %>
       <%= image_tag "radio-tower.svg", size: 20, aria: { hidden: true } %><span><%= info.network %></span>
     <% end %>
   </div>

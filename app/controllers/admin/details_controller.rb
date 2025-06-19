@@ -71,11 +71,11 @@ class Admin::DetailsController < Admin::BaseController
     when 'zerar_hodometro'
       response_rastreador = send_command.reset_odometer
       response_traccar = Traccar.reset_odometro(params[:device_id])
-      response = "#{response_rastreador} | Traccar: #{response_traccar}"
+      response = "Em breve o valor do hodômetro será atualizado! #{response_rastreador} | #{response_traccar}"
     when 'zerar_horimetro'
       response_rastreador = send_command.reset_hour_meter
       response_traccar = Traccar.reset_horimetro(params[:device_id])
-      response = "#{response_rastreador} | Traccar: #{response_traccar}"
+      response = "Em breve o valor do horímetro será atualizado! #{response_rastreador} | #{response_traccar}"
     when 'parametros'
       response = send_command.params
     else

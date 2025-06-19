@@ -1,0 +1,44 @@
+<!-- filepath: /home/thome/Área de Trabalho/Devs/rails/rastreador/app/views/shared/_highlight_changes.turbo_stream.erb -->
+<turbo-stream action="after" target="detail_<%= device_id %>">
+  <template>
+    <script>
+      (function() {
+        const deviceId = '<%= device_id %>';
+        const changedFields = <%= changed_fields.to_json.html_safe %>;
+
+        changedFields.forEach(field => {
+          const button = document.querySelector(`[data-device-id="${deviceId}"][data-field="${field}"]`);
+          if (button) {
+            button.classList.remove('updated');
+            button.offsetHeight; // Força reflow
+            button.classList.add('updated');
+
+            setTimeout(() => {
+              button.classList.remove('updated');
+            }, 1200);
+          }
+        });
+      })();
+    </script>
+  </template>
+</turbo-stream>
+
+<style>
+  @keyframes highlight-flash {
+    0% { background-color: transparent; transform: scale(1); }
+    25% { background-color: #fff3cd; transform: scale(1.02); box-shadow: 0 0 10px rgba(255, 193, 7, 0.5); }
+    50% { background-color: #ffeaa7; transform: scale(1.02); }
+    75% { background-color: #fff3cd; transform: scale(1.01); }
+    100% { background-color: transparent; transform: scale(1); }
+  }
+
+  .btn.updated {
+    animation: highlight-flash 1.2s ease-in-out;
+    transition: all 0.3s ease;
+  }
+
+  .btn.updated span {
+    font-weight: bold;
+    color: #856404;
+  }
+</style>

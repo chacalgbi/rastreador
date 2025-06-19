@@ -1,5 +1,10 @@
 class HomeController < ApplicationController
   HOURS_LAST_EVENTS = 48
+  before_action :set_global_variables
+
+  def set_global_variables
+    @user_admin = Current.user.admin?
+  end
 
   def index
     @devices = Current.user.admin? ? devices_admin : devices_user
@@ -114,6 +119,38 @@ class HomeController < ApplicationController
           )
         end
       end
+    end
+  end
+
+  def odometro
+    send_command = SendCommand.new(params[:model], params[:device_id], params[:command], params[:imei])
+    response = ''
+    case params[:command]
+    when 'zerar_hodometro'
+      response_rastreador = send_command.reset_odometer
+      response_traccar = Traccar.reset_odometro(params[:device_id])
+      response = "#{response_rastreador} | #{response_traccar}\n Em breve o valor será atualizado!"
+    when 'zerar_horimetro'
+      response_rastreador = send_command.reset_hour_meter
+      response_traccar = Traccar.reset_horimetro(params[:device_id])
+      response = "#{response_rastreador} | #{response_traccar}\n Em breve o valor será atualizado!"
+    when 'parametros'
+      response = send_command.params
+    else
+      response = "Comando desconhecido: #{params[:command]}"
+    end
+
+    flash.now[:notice] = response
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.append(
+          "flash",
+          partial: "/alert",
+          locals: { notice: response }
+        )
+      end
+      format.html { redirect_to root_path, notice: response }
     end
   end
 
