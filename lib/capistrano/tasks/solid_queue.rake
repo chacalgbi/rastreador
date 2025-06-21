@@ -14,8 +14,17 @@ namespace :solid_queue do
   desc "Stop Solid Queue"
   task :stop do
     on roles(:app) do
-      # mata qualquer processo bin/jobs
-      execute :pkill, "-f bin/jobs || true"
+      execute "pkill -TERM -f bin/jobs || true"
+      execute "sleep 3"
+      execute "pkill -KILL -f bin/jobs || true"
+      execute "sleep 2"
+    end
+  end
+
+  desc "Check if Solid Queue is running"
+  task :status do
+    on roles(:app) do
+      execute "pgrep -f bin/jobs && echo 'SolidQueue is running' || echo 'SolidQueue is not running'"
     end
   end
 

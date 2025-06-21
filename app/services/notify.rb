@@ -37,6 +37,8 @@ class Notify
     encoded_text = CGI.escape(corpo)
     url = "https://api.telegram.org/bot#{ENV["TOKEN_BOT"]}/sendMessage?chat_id=#{chat_id}&text=#{encoded_text}"
 
+    log("telegram | URL: #{url}")
+
     response = Net::HTTP.get_response(URI(url))
     resp = JSON.parse(response.body)
 
@@ -59,6 +61,8 @@ class Notify
       cel: cel_number.gsub(/\D/, ''),
       msg: corpo
     }
+
+    log("whatsapp | Payload: #{payload}")
 
     uri = URI(ENV["NOTIFY_WHATSAPP"])
     http = Net::HTTP.new(uri.host, uri.port)
