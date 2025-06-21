@@ -11,18 +11,18 @@ class SendAlertJob < ApplicationJob
       msg = "WhatsApp: (#{arg[:alert_whatsApp]} #{arg[:phone]}), Telegram: (#{arg[:alert_telegram]} #{arg[:telegram]}), Email: (#{arg[:alert_email]} #{arg[:email]}) | #{msg_log}"
       SaveLog.new('alert_job', msg).save
 
-      if arg[:alert_whatsApp]
-        unless arg[:phone].nil? || arg[:phone].empty?
-          arg[:phone].each do |cel|
-            Notify.whatsapp(cel, arg[:message])
-          end
-        end
-      end
-
       if arg[:alert_telegram]
         unless arg[:telegram].nil? || arg[:telegram].empty?
           arg[:telegram].each do |chat|
             Notify.telegram(chat, arg[:message])
+          end
+        end
+      end
+
+      if arg[:alert_whatsApp]
+        unless arg[:phone].nil? || arg[:phone].empty?
+          arg[:phone].each do |cel|
+            Notify.whatsapp(cel, arg[:message])
           end
         end
       end
