@@ -1,0 +1,9 @@
+<% content_for :title, "Nova notificação" %>
+
+<h1 class="font-bold text-4xl mbe-4">Nova notificação</h1>
+
+<%= render "form", notification: @notification %>
+
+<div class="inline-flex flex-wrap items-center gap mbs-2" style="--row-gap: .5rem">
+  <%= link_to "Voltar para notificações", notifications_path, class: "btn" %>
+</div>

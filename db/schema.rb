@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_25_163456) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_19_215456) do
   create_table "admin_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", null: false
     t.string "password_digest", null: false
@@ -80,6 +80,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_25_163456) do
     t.string "event_type"
     t.string "event_name"
     t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.text "whatsapp"
+    t.text "email"
+    t.text "telegram"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

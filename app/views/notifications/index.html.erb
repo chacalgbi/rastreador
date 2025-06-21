@@ -1,0 +1,15 @@
+<% content_for :title, "Canais de Notificações" %>
+
+<div class="flex items-center justify-between mbe-4">
+  <h1 class="font-bold text-4xl">Canais de Notificações</h1>
+  <%= link_to "Nova notificação", new_notification_path, class: "btn btn--primary" %>
+</div>
+
+<div id="notifications" class="flex flex-col" style="gap: 2rem;">
+  <% @notifications.each do |notification| %>
+    <div class="flex flex-col items-start gap">
+      <%= render notification %>
+      <%= link_to "Editar notificação", notification, class: "btn" %>
+    </div>
+  <% end %>
+</div>

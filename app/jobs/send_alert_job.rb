@@ -8,17 +8,20 @@ class SendAlertJob < ApplicationJob
       return false if arg[:message].nil? || arg[:message].empty?
       msg_log = arg[:message].gsub(/[\r\n]+/, " ")
 
-      msg = "Zap: #{arg[:alert_whatsApp]}, Telegram: #{arg[:alert_telegram]}, Email: #{arg[:alert_email]} | #{msg_log}"
+      msg = "WhatsApp: (#{arg[:alert_whatsApp]} #{arg[:phone]}), Telegram: (#{arg[:alert_telegram]} #{arg[:telegram]}), Email: (#{arg[:alert_email]} #{arg[:email]}) | #{msg_log}"
       SaveLog.new('alert_job', msg).save
 
       if arg[:alert_whatsApp]
-        # Implement WhatsApp notification logic here
+        unless arg[:phone].nil? || arg[:phone].empty?
+          arg[:phone].each do |cel|
+            Notify.whatsapp(cel, arg[:message])
+          end
+        end
       end
 
       if arg[:alert_telegram]
         unless arg[:telegram].nil? || arg[:telegram].empty?
-          chats = arg[:telegram].split(',')
-          chats.each do |chat|
+          arg[:telegram].each do |chat|
             Notify.telegram(chat, arg[:message])
           end
         end
@@ -26,8 +29,8 @@ class SendAlertJob < ApplicationJob
 
       if arg[:alert_email]
         unless arg[:email].nil? || arg[:email].empty?
-          emails = arg[:email].split(',')
-          emails.each do |email|
+          arg[:email].each do |email|
+            # Notify.email(email, "Alerta(#{arg[:event]})", arg[:message]) # Não usando na versão atual
             NotifyMailer.notify(email, "Alerta(#{arg[:event]})", arg[:message]).deliver_later
           end
         end

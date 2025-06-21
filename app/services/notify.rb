@@ -15,16 +15,22 @@ class Notify
       passAdmin: ENV["NOTIFY_PASS"]
     }
 
-    log("email #{payload}")
-
     uri = URI(ENV["NOTIFY_EMAIL"])
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.path, { 'Content-Type' => 'application/json' })
     request.body = payload.to_json
     response = http.request(request)
     data = JSON.parse(response.body)
-    log("email ERRO #{response.code} #{data}") unless response.is_a?(Net::HTTPSuccess)
-    data
+
+    if response.is_a?(Net::HTTPSuccess)
+      log("email SUCCESS | Enviado para #{email}")
+    else
+      log_msg = "email ERRO | Email: #{email}, Msg: #{corpo}, Response_code: #{response.code}, Response_body: #{data}"
+      log(log_msg)
+      SaveLog.new('notify_error', "Notify.#{log_msg}").save
+    end
+
+    true
   end
 
   def self.telegram(chat_id, corpo)
@@ -32,13 +38,42 @@ class Notify
     url = "https://api.telegram.org/bot#{ENV["TOKEN_BOT"]}/sendMessage?chat_id=#{chat_id}&text=#{encoded_text}"
 
     response = Net::HTTP.get_response(URI(url))
+    resp = JSON.parse(response.body)
+
     if response.is_a?(Net::HTTPSuccess)
-      resp = JSON.parse(response.body)
       log("telegram SUCCESS | Enviado para #{resp.dig('result', 'chat', 'username')}")
     else
-      log("telegram ERRO | #{response.code} #{response.body}")
+      log_msg = "telegram ERRO | Chat_id: #{chat_id}, Msg: #{corpo}, Response_code: #{response.code}, Response_body: #{resp}"
+      log(log_msg)
+      SaveLog.new('notify_error', "Notify.#{log_msg}").save
     end
 
+    true
+  end
+
+  def self.whatsapp(cel_number, corpo)
+    payload = {
+      identidade: "Notify.whatsapp #{cel_number}",
+      userAdmin: ENV["NOTIFY_USER"],
+      passAdmin: ENV["NOTIFY_PASS"],
+      cel: cel_number.gsub(/\D/, ''),
+      msg: corpo
+    }
+
+    uri = URI(ENV["NOTIFY_WHATSAPP"])
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri.path, { 'Content-Type' => 'application/json' })
+    request.body = payload.to_json
+    response = http.request(request)
+    data = JSON.parse(response.body)
+
+    if response.is_a?(Net::HTTPSuccess)
+      log("whatsapp SUCCESS | Enviado para #{cel_number}")
+    else
+      log_msg = "whatsapp ERRO | Payload: #{payload}, Response_code: #{response.code}, Response_body: #{data}"
+      log(log_msg)
+      SaveLog.new('notify_error', "Notify.#{log_msg}").save
+    end
     true
   end
 

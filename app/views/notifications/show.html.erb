@@ -1,0 +1,7 @@
+<%= render @notification %>
+
+<div class="flex flex-wrap items-center gap mbs-6" style="--row-gap: .5rem">
+  <%= link_to "Editar notificação", edit_notification_path(@notification), class: "btn" %>
+  <%= link_to "Voltar para notificações", notifications_path, class: "btn" %>
+  <%= button_to "Destruir notificação", @notification, method: :delete, class: "btn" %>
+</div>

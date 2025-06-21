@@ -13,7 +13,8 @@
               <%= link_to 'Veículos', root_path, class: "btn sidebar-menu__button", aria: { current: "page" } %>
               <% if Current.user.admin %>
                 <%= link_to 'Motoristas', driver_index_path, class: "btn sidebar-menu__button" %>
-                <%= link_to 'Alertas e Notificações', details_path, class: "btn sidebar-menu__button" %>
+                <%= link_to 'Config Alertas', details_path, class: "btn sidebar-menu__button" %>
+                <%= link_to 'Notificações', notifications_path, class: "btn sidebar-menu__button" %>
               <% end %>
             <% else %>
               <%= link_to 'Faça sua inscrição', new_registration_path %>

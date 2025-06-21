@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :notifications
   namespace :admin do
     get    '/',        to: 'home#index'
     get    'sign_in',  to: 'sessions#new'
