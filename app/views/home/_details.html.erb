@@ -6,9 +6,41 @@
       <%= turbo_frame_tag "button_#{device_id}" do %>
         <% if status == 'online' %>
           <% if state == 'desbloquear' %>
-            <%= button_to "Desbloquear", home_block_and_desblock_path(id: device_id, action_type: 'desbloquear', model: info.model, imei: info.imei), method: :post, class: "btn btn--positive", id: "button_block_device_#{device_id}", data: { turbo_stream: true }, disabled: true %>
+            <div contents data-controller="dialog">
+              <button type="button" id="button_block_device_<%= device_id %>" class="btn btn--positive" data-action="dialog#showModal" disabled>Desbloquear</button>
+
+              <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc">
+                <div class="dialog__content">
+                  <h2 class="text-lg font-semibold leading-none mbe-2" id="dialog_label">Tem certeza que deseja DESBLOQUEAR o veículo?</h2>
+                  <p class="text-lg text-subtle mbe-4" id="dialog_desc">
+                    Esta ação irá desbloquear o veículo, permitindo que ele seja utilizado e irá registrar que você é o usuário.
+                  </p>
+
+                  <div class="flex items-center justify-end gap">
+                    <button type="button" class="btn" data-action="click->dialog#close">Cancelar</button>
+                    <%= button_to "Confirmar", home_block_and_desblock_path(id: device_id, action_type: 'desbloquear', model: info.model, imei: info.imei), method: :post, class: "btn btn--positive", data: { turbo_stream: true, action: "click->dialog#close" } %>
+                  </div>
+                </div>
+              </dialog>
+            </div>
           <% elsif state == 'bloquear' %>
-            <%= button_to "Bloquear", home_block_and_desblock_path(id: device_id, action_type: 'bloquear', model: info.model, imei: info.imei), method: :post, class: "btn btn--negative", id: "button_block_device_#{device_id}", data: { turbo_stream: true }, disabled: true %>
+            <div contents data-controller="dialog">
+              <button type="button" id="button_block_device_<%= device_id %>" class="btn btn--negative" data-action="dialog#showModal" disabled>Bloquear</button>
+
+              <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc">
+                <div class="dialog__content">
+                  <h2 class="text-lg font-semibold leading-none mbe-2" id="dialog_label">Tem certeza que deseja BLOQUEAR o veículo?</h2>
+                  <p class="text-lg text-subtle mbe-4" id="dialog_desc">
+                    CUIDADO! O VEÍCULO PODE ESTÁ EM MOVIMENTO!
+                  </p>
+
+                  <div class="flex items-center justify-end gap">
+                    <button type="button" class="btn" data-action="click->dialog#close">Cancelar</button>
+                    <%= button_to "Confirmar", home_block_and_desblock_path(id: device_id, action_type: 'bloquear', model: info.model, imei: info.imei), method: :post, class: "btn btn--negative", data: { turbo_stream: true, action: "click->dialog#close"  } %>
+                  </div>
+                </div>
+              </dialog>
+            </div>
           <% else %>
             <%= button_tag "Em uso por outro motorista", class: "btn", disabled: true %>
           <% end %>
@@ -37,12 +69,46 @@
   <% if @user_admin %>
     <br>
     <div class="car_container">
-      <%= button_to "Zerar Odômetro",  home_odometro_path, method: :post, params: { device_id: info.device_id, model: info.model, command: "zerar_hodometro", imei: info.imei }, class: "btn btn-primary btn-sm", data: { turbo_stream: true, turbo_confirm: "Tem certeza que deseja ZERAR o Hodômetro?" }  %>
-      <%= button_to "Zerar Horímetro", home_odometro_path, method: :post, params: { device_id: info.device_id, model: info.model, command: "zerar_horimetro", imei: info.imei }, class: "btn btn-primary btn-sm", data: { turbo_stream: true, turbo_confirm: "Tem certeza que deseja ZERAR o Horímetro?" }  %>
+      <div contents data-controller="dialog">
+        <button type="button" class="btn" data-action="dialog#showModal">Zerar Odômetro</button>
+
+        <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc">
+          <div class="dialog__content">
+            <h2 class="text-lg font-semibold leading-none mbe-2" id="dialog_label">Tem certeza que deseja ZERAR o Odômetro?</h2>
+            <p class="text-lg text-subtle mbe-4" id="dialog_desc">
+              Esta ação não pode ser desfeita. Isso irá apagar permanentemente a contagem do Odômetro do seu veículo.
+            </p>
+
+            <div class="flex items-center justify-end gap">
+              <button type="button" class="btn" data-action="click->dialog#close">Cancelar</button>
+              <%= button_to "Confirmar",  home_odometro_path, method: :post, params: { device_id: info.device_id, model: info.model, command: "zerar_hodometro", imei: info.imei }, class: "btn btn-primary btn-sm", data: { turbo_stream: true, action: "click->dialog#close" }  %>
+            </div>
+          </div>
+        </dialog>
+      </div>
+
+      <div contents data-controller="dialog">
+        <button type="button" class="btn" data-action="dialog#showModal">Zerar Horímetro</button>
+
+        <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc">
+          <div class="dialog__content">
+            <h2 class="text-lg font-semibold leading-none mbe-2" id="dialog_label">Tem certeza que deseja ZERAR o Horímetro?</h2>
+            <p class="text-lg text-subtle mbe-4" id="dialog_desc">
+              Esta ação não pode ser desfeita. Isso irá apagar permanentemente a contagem do Horímetro do seu veículo.
+            </p>
+
+            <div class="flex items-center justify-end gap">
+              <button type="button" class="btn" data-action="click->dialog#close">Cancelar</button>
+              <%= button_to "Confirmar",  home_odometro_path, method: :post, params: { device_id: info.device_id, model: info.model, command: "zerar_horimetro", imei: info.imei }, class: "btn btn-primary btn-sm", data: { turbo_stream: true, action: "click->dialog#close" }  %>
+            </div>
+          </div>
+        </dialog>
+      </div>
     </div>
     <br>
   <% end %>
   <div id="detail_<%= device_id %>" > <!-- Será substituida quando o evento de Status for enviado pelo rastreador -->
     <%= render 'details/information', info: info %>
   </div>
+
 <% end %>
