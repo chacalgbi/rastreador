@@ -9,6 +9,7 @@ class HomeController < ApplicationController
   def index
     @devices = Current.user.admin? ? devices_admin : devices_user
     return render partial: "indexpartial", locals: { devices: @devices } if turbo_frame_request?
+    @search_query = params[:query].present?
     @devices = Kaminari.paginate_array(@devices).page(params[:page]).per(10)
   end
 
