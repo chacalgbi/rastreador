@@ -4,7 +4,7 @@
   <% end %>
 
   <%= render "page_header_actions" do %>
-    <%= link_to "Filters", "#offcanvas_filters", "data-bs-toggle": "offcanvas", class: "btn btn-white" %>
+    <%= link_to "Filtros", "#offcanvas_filters", "data-bs-toggle": "offcanvas", class: "btn btn-white" %>
     <%= link_to "New detail", new_admin_detail_path, class: "btn btn-primary" %>
   <% end %>
 <% end %>
@@ -137,14 +137,44 @@
 
 <div id="offcanvas_filters" tabindex="-1" class="offcanvas offcanvas-end">
   <div class="offcanvas-header">
-    <h2 class="offcanvas-title">Filters</h2>
+    <h2 class="offcanvas-title">Filtros</h2>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
   </div>
   <%= search_form_for [:admin, @search], class: "offcanvas-body" do |f| %>
-    <%# f.label :name_cont, class: "form-label" %>
-    <%# f.text_field :name_cont, class: "form-control mb-3" %>
+    <%= f.label :device_name_cont, "Nome do Dispositivo", class: "form-label" %>
+    <%= f.text_field :device_name_cont, placeholder: "Digite o nome do dispositivo", class: "form-control mb-3" %>
 
-    <%= f.submit "Filter", class: "btn btn-primary" %>
-    <%= link_to "Clear Filter", admin_details_path, class: "btn btn-white" %>
+    <%= f.label :status_eq, "Status", class: "form-label" %>
+    <%= f.select :status_eq, 
+        options_for_select([
+          ['Todos', ''], 
+          ['Online', 'online'], 
+          ['Offline', 'offline']
+        ], f.object.status_eq), 
+        {}, 
+        { class: "form-select mb-3" } %>
+
+    <%= f.label :rele_state_eq, "Estado do Relé", class: "form-label" %>
+    <%= f.select :rele_state_eq, 
+        options_for_select([
+          ['Todos', ''], 
+          ['Ligado', 'on'], 
+          ['Desligado', 'off']
+        ], f.object.rele_state_eq), 
+        {}, 
+        { class: "form-select mb-3" } %>
+
+    <%= f.label :model_eq, "Modelo", class: "form-label" %>
+    <%= f.select :model_eq, 
+        options_for_select([
+          ['Todos', ''], 
+          ['XT40', 'xt40'], 
+          ['ST8310U', 'st8310u']
+        ], f.object.model_eq), 
+        {}, 
+        { class: "form-select mb-3" } %>
+
+    <%= f.submit "Filtrar", class: "btn btn-primary" %>
+    <%= link_to "Limpar Filtros", admin_details_path, class: "btn btn-white" %>
   <% end %>
 </div>
