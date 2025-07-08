@@ -6,11 +6,20 @@ class SessionsController < ApplicationController
   end
 
   def create
-    if user = User.authenticate_by(params.permit(:email_address, :password))
+    email_or_phone = params[:email_address]
+    password = params[:password]
+
+    user = User.authenticate_by(email_address: email_or_phone, password: password)
+
+    if user.nil?
+      user = User.find_by(phone: email_or_phone)&.authenticate(password)
+    end
+
+    if user
       start_new_session_for user
       redirect_to after_authentication_url, notice: "Login feito com sucesso!"
     else
-      redirect_to new_session_path, alert: "Email ou senha inválidos!"
+      redirect_to new_session_path, alert: "Email/telefone ou senha inválidos!"
     end
   end
 

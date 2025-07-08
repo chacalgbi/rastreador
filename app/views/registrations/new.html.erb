@@ -12,7 +12,7 @@
   <%= form.text_field :phone, required: true, placeholder: "Digite seu telefone", class: "input", id: "user_phone" %> <br> <br>
 
   <%= form.label :email_address, "E-mail" %> <br>
-  <%= form.email_field :email_address, required: true, placeholder: "Digite seu melhor e-mail", autofocus: true, value: params[:email_address], class: "input" %> <br> <br>
+  <%= form.email_field :email_address, placeholder: "Digite seu melhor e-mail", autofocus: true, value: params[:email_address], class: "input" %> <br> <br>
 
   <%= form.label :password, "Senha" %> <br>
   <%= form.password_field :password, required: true, placeholder: "Digite uma senha", maxlength: 72, class: "input" %> <br> <br>
