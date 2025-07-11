@@ -7,18 +7,20 @@ class RegistrationsController < ApplicationController
 
   def create
     @user = User.new(user_params)
+
+    @user.phone = @user.phone.gsub(/\D/, '') if @user.phone.present?
+
     if @user.save
       start_new_session_for @user
       redirect_to root_path, notice: 'Usuário inscrito com sucesso.'
     else
-      flash[:alert] = @user.errors.full_messages.join("\n")
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:email_address, :password, :password_confirmation, :name, :phone)
+    params.require(:user).permit(:password, :password_confirmation, :name, :phone)
   end
 end

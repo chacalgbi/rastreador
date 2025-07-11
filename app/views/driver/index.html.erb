@@ -5,9 +5,7 @@
     <tr>
       <th>N°</th>
       <th>Nome</th>
-      <th>Email</th>
       <th>Telefone</th>
-      <th>Ativo?</th>
       <th>Admin?</th>
       <th>Criado em</th>
       <th>Editar</th>
@@ -20,9 +18,7 @@
       <tr>
         <th><%= index %></th>
         <td><%= driver.name %></td>
-        <td><%= driver.email_address %></td>
         <td><%= driver.phone %></td>
-        <td><%= driver.active ? 'Sim' : 'Não' %></td>
         <td><%= driver.admin ? 'Sim' : 'Não' %></td>
         <td><%= driver.created_at.in_time_zone('America/Sao_Paulo').strftime('%d/%m/%Y %H:%M') %></td>
         <td>

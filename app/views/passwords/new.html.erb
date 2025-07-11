@@ -3,6 +3,6 @@
 <%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
 
 <%= form_with url: passwords_path do |form| %>
-  <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Insira o email que usou no cadastro", value: params[:email_address], class: 'input' %><br> <br>
-  <%= form.submit "Enviar instruções de recuperação de senha para o email", class: 'btn' %>
+  <%= form.text_field :phone, required: true, autofocus: true, autocomplete: "username", placeholder: "Insira o telefone que usou no cadastro", value: params[:phone], class: 'input' %><br> <br>
+  <%= form.submit "Enviar instruções de recuperação de senha para o telefone", class: 'btn' %>
 <% end %>

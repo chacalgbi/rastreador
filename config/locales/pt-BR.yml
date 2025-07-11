@@ -1,4 +1,19 @@
 pt-BR:
+  activerecord:
+    attributes:
+      user:
+        phone: "Telefone"
+        email_address: "Email"
+        name: "Nome"
+        password: "Senha"
+        password_confirmation: "Confirmação da senha"
+    errors:
+      messages:
+        taken: "já está em uso"
+        blank: "é obrigatório"
+        too_short: "é muito curto (mínimo de %{count} caracteres)"
+        too_long: "é muito longo (máximo de %{count} caracteres)"
+        invalid: "é inválido"
   helpers:
     page_entries_info:
       more_pages:

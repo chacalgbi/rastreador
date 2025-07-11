@@ -2,8 +2,8 @@
 
 <%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
 
-<%= form_with url: password_path(params[:token]), method: :put do |form| %>
-  <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Insira a nova senha", maxlength: 72 %><br>
-  <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Repita a nova senha", maxlength: 72 %><br>
-  <%= form.submit "Salvar" %>
+<%= form_with url: update_password_path(token: params[:token]), method: :patch do |form| %>
+  <%= form.password_field :password, required: true, autocomplete: "new-password", placeholder: "Insira a nova senha", maxlength: 72, class: 'input' %><br><br>
+  <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Repita a nova senha", maxlength: 72, class: 'input' %><br><br>
+  <%= form.submit "Salvar", class: 'btn' %>
 <% end %>

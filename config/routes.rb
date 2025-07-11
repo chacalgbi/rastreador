@@ -35,7 +35,9 @@ Rails.application.routes.draw do
       patch :update_settings
     end
   end
-  resources :passwords, param: :token
+  resources :passwords, only: [:new, :create]
+  get 'passwords/edit', to: 'passwords#edit', as: :edit_password
+  patch 'passwords/update', to: 'passwords#update', as: :update_password
   get "home/index"
   get "home/location"
   get "home/details"

@@ -6,22 +6,26 @@ class PasswordsController < ApplicationController
   end
 
   def create
-    if user = User.find_by(email_address: params[:email_address])
-      random_string = SecureRandom.alphanumeric(6)
-      titulo = "Redefinição de senha"
-      corpo = "Sua nova senha é:\n\n#{random_string}\n\nPor favor, faça login e altere sua senha."
+    clean_phone = params[:phone].gsub(/\D/, '') if params[:phone].present?
 
-      response = Notify.email(params[:email_address], titulo, corpo)
+    if user = User.find_by(phone: clean_phone)
+      user.update!(password_reset_sent_at: Time.current)
+      token = user.generate_token_for(:password_reset)
+
+      Rails.logger.info "DEBUG: Token gerado: #{token}"
+      Rails.logger.info "DEBUG: URL gerada: #{edit_password_url(token: token)}"
+
+      corpo = "Acesse o link para trocar a senha: #{edit_password_url(token: token)}"
+
+      response = Notify.whatsapp(clean_phone, corpo)
 
       if response["erroGeral"] == "nao"
-        user.password = random_string
-        user.save
-        redirect_to new_session_path, notice: "Instruções de redefinição de senha enviadas para o email: #{params[:email_address]}."
+        redirect_to new_session_path, notice: "Instruções de redefinição de senha enviadas para o telefone: #{clean_phone}."
       else
-        redirect_to new_session_path, alert: "Erro ao enviar mensagem para o email: #{params[:email_address]}. ERROR: #{response["msg"]}"
+        redirect_to new_session_path, alert: "Erro ao enviar mensagem para o telefone: #{clean_phone}. ERROR: #{response["msg"]}"
       end
     else
-      redirect_to new_session_path, alert: "Email não encontrado: #{params[:email_address]}"
+      redirect_to new_session_path, alert: "Telefone não encontrado: #{params[:phone]}"
     end
   end
 
@@ -30,16 +34,22 @@ class PasswordsController < ApplicationController
 
   def update
     if @user.update(params.permit(:password, :password_confirmation))
-      redirect_to new_session_path, notice: "A senha foi redefinida."
+      @user.reset_password!
+      redirect_to new_session_path, notice: "A senha foi redefinida com sucesso."
     else
-      redirect_to edit_password_path(params[:token]), alert: "As senhas não correspondem."
+      flash.now[:alert] = @user.errors.full_messages.join(", ")
+      render :edit, status: :unprocessable_entity
     end
   end
 
   private
-    def set_user_by_token
-      @user = User.find_by_password_reset_token!(params[:token])
-    rescue ActiveSupport::MessageVerifier::InvalidSignature
+  def set_user_by_token
+    Rails.logger.info "DEBUG: Token recebido da URL: #{params[:token]}"
+    @user = User.find_by_token_for(:password_reset, params[:token])
+    Rails.logger.info "DEBUG: Usuário encontrado: #{@user.present?}"
+
+    unless @user
       redirect_to new_password_path, alert: "O link de redefinição de senha é inválido ou expirou."
     end
+  end
 end

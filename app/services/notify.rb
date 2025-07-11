@@ -30,7 +30,7 @@ class Notify
       SaveLog.new('notify_error', "Notify.#{log_msg}").save
     end
 
-    true
+    data
   end
 
   def self.telegram(chat_id, corpo)
@@ -51,7 +51,7 @@ class Notify
         SaveLog.new('notify_error', "Notify.#{log_msg}").save
       end
 
-      true
+      resp
     rescue StandardError => e
       log("telegram ERRO | Exception: #{e.message}")
       SaveLog.new('notify_error', "Notify.telegram | Exception: #{e.message}").save
@@ -86,7 +86,7 @@ class Notify
         SaveLog.new('notify_error', "Notify.#{log_msg}").save
       end
 
-      true
+      data
     rescue StandardError => e
       log("whatsapp ERRO | Exception: #{e.message}")
       SaveLog.new('notify_error', "Notify.whatsapp | Exception: #{e.message}").save
