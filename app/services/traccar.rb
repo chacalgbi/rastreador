@@ -137,6 +137,37 @@ class Traccar
     response.code.to_i
   end
 
+  def self.update_contact(device_id, name, contact, imei)
+    log("update_contact #{device_id}")
+
+    payload = {
+      id: device_id.to_i,
+      name: name,
+      uniqueId: imei,
+      contact: contact,
+    }
+
+    uri = URI("#{ENV["TRACCAR_URL"]}/api/devices/#{device_id}")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Put.new(uri.path, { 'Content-Type' => 'application/json' })
+    request['Cookie'] = @@global_cookies if @@global_cookies
+    request.body = payload.to_json
+    response = http.request(request)
+
+    if response.is_a?(Net::HTTPSuccess)
+      log("update_contact SUCESSO | Response: #{response.code.to_i}")
+    elsif response.code.to_i == 401
+      log("update_contact ERRO | 401 Tentando autenticar novamente")
+      self.session
+      return self.update_contact(device_id, name, contact, imei) # Tenta novamente após autenticar
+    else
+      log("update_contact ERRO | #{response.code} #{response.body}")
+    end
+
+    response.code.to_i
+  end
+
   private
 
   def self.log(message)

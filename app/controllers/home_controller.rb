@@ -79,6 +79,8 @@ class HomeController < ApplicationController
     @detail.last_user = params[:action_type] == 'bloquear' ? '' : Current.user.name
     @detail.save
 
+    Traccar.update_contact(@detail.device_id, @detail.device_name, @detail.last_user, @detail.imei)
+
     notice = "Aguarde alguns segundos e o veículo será #{params[:action_type] == 'bloquear' ? 'BLOQUEADO' : 'DESBLOQUEADO'}."
     new_button_text = 'Aguarde...'
     new_button_class = 'btn'
