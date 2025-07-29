@@ -145,6 +145,7 @@ class Traccar
       name: name,
       uniqueId: imei,
       contact: contact,
+      category: 'car'
     }
 
     uri = URI("#{ENV["TRACCAR_URL"]}/api/devices/#{device_id}")

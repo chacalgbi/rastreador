@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     end
   end
   resource :session
-  resources :driver, only: [:index, :edit, :update, :destroy] do
+  resources :driver, only: [:index, :edit, :update, :destroy, :new, :create] do
     collection do
       get :cars
       post :cars_update

@@ -5,6 +5,24 @@ class DriverController < ApplicationController
     @drivers = User.all
   end
 
+  def new
+    @user = User.new
+  end
+
+  def create
+    user_params = params.require(:user).permit(:name, :phone, :password, :password_confirmation)
+    user_params[:phone] = user_params[:phone].gsub(/\D/, "") if user_params[:phone].present?
+
+    @user = User.new(user_params)
+
+    if @user.save
+      redirect_to driver_index_path, notice: "Motorista cadastrado com sucesso."
+    else
+      error_message = @user.errors.full_messages.join(", ")
+      redirect_to driver_index_path, alert: "Erro ao cadastrar motorista: #{error_message}"
+    end
+  end
+
   def edit
     @user = User.find_by(id: params[:id])
 
@@ -16,7 +34,10 @@ class DriverController < ApplicationController
   def update
     @user = User.find_by(id: params[:id])
 
-    if @user.update(params.require(:user).permit(:name, :email_address, :phone, :active, :admin))
+    user_params = params.require(:user).permit(:name, :email_address, :phone, :active, :admin)
+    user_params[:phone] = user_params[:phone].gsub(/\D/, "") if user_params[:phone].present?
+
+    if @user.update(user_params)
       redirect_to driver_index_path, notice: "Motorista atualizado com sucesso."
     else
       error_message = @user.errors.full_messages.join(", ")
