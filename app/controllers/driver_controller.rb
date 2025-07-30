@@ -2,7 +2,7 @@ class DriverController < ApplicationController
   before_action :check_main_user
 
   def index
-    @drivers = User.all
+    @drivers = User.order(:name)
   end
 
   def new
