@@ -18,8 +18,7 @@ class DriverController < ApplicationController
     if @user.save
       redirect_to driver_index_path, notice: "Motorista cadastrado com sucesso."
     else
-      error_message = @user.errors.full_messages.join(", ")
-      redirect_to driver_index_path, alert: "Erro ao cadastrar motorista: #{error_message}"
+      render :new, status: :unprocessable_entity
     end
   end
 
