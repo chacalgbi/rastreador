@@ -16,7 +16,8 @@ class DriverController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      redirect_to driver_index_path, notice: "Motorista cadastrado com sucesso."
+      flash[:notice] = "Motorista cadastrado com sucesso."
+      redirect_to driver_index_path
     else
       render :new, status: :unprocessable_entity
     end
@@ -26,7 +27,8 @@ class DriverController < ApplicationController
     @user = User.find_by(id: params[:id])
 
     if @user.nil?
-      redirect_to driver_index_path, alert: "Motorista não encontrado"
+      flash[:alert] = "Motorista não encontrado"
+      redirect_to driver_index_path
     end
   end
 
@@ -37,10 +39,12 @@ class DriverController < ApplicationController
     user_params[:phone] = user_params[:phone].gsub(/\D/, "") if user_params[:phone].present?
 
     if @user.update(user_params)
-      redirect_to driver_index_path, notice: "Motorista atualizado com sucesso."
+      flash[:notice] = "Motorista atualizado com sucesso."
+      redirect_to driver_index_path
     else
       error_message = @user.errors.full_messages.join(", ")
-      redirect_to driver_index_path, alert: "Erro ao atualizar motorista: #{error_message}"
+      flash[:alert] = "Erro ao atualizar motorista: #{error_message}"
+      redirect_to driver_index_path
     end
   end
 
@@ -48,12 +52,15 @@ class DriverController < ApplicationController
     @user = User.find_by(id: params[:id])
 
     if @user.id == Current.user.id
-      redirect_to driver_index_path, alert: "Você não pode apagar a si mesmo."
+      flash[:alert] = "Você não pode apagar a si mesmo."
+      redirect_to driver_index_path
     elsif @user.destroy
-      redirect_to driver_index_path, notice: "Usuário apagado com sucesso."
+      flash[:notice] = "Usuário apagado com sucesso."
+      redirect_to driver_index_path
     else
       error_message = @user.errors.full_messages.join(", ")
-      redirect_to driver_index_path, alert: "Erro ao apagar usuário: #{error_message}"
+      flash[:alert] = "Erro ao apagar usuário: #{error_message}"
+      redirect_to driver_index_path
     end
   end
 
@@ -64,19 +71,69 @@ class DriverController < ApplicationController
     @driver_id = params[:id]
     @driver_name = params[:name]
     @devices = Detail.all
-    redirect_to driver_index_path, alert: "Veículos não encontrados" if @devices.empty?
+    if @devices.empty?
+      flash[:alert] = "Veículos não encontrados"
+      redirect_to driver_index_path
+    end
   end
 
   def cars_update
     device_ids = params[:device_ids] || []
     user = User.find_by(id: params[:driver_id])
-    redirect_to driver_index_path, alert: "Motorista não encontrado" if user.nil?
+    if user.nil?
+      flash[:alert] = "Motorista não encontrado"
+      redirect_to driver_index_path
+      return
+    end
 
     device_ids_string = device_ids.join(",")
     user.update(cars: device_ids_string)
 
     msg = "O motorista #{params[:driver_name]} agora tem acesso a #{device_ids.count} veículos."
-    redirect_to driver_index_path, notice: msg
+    flash[:notice] = msg
+    redirect_to driver_index_path
+  end
+
+  def edit_password
+    @user = User.find_by(id: params[:id])
+
+    if @user.nil?
+      flash[:alert] = "Motorista não encontrado"
+      redirect_to driver_index_path
+    end
+  end
+
+  def update_password
+    @user = User.find_by(id: params[:id])
+
+    if @user.nil?
+      flash[:alert] = "Motorista não encontrado"
+      redirect_to driver_index_path
+      return
+    end
+
+    password_params = params.require(:user).permit(:password, :password_confirmation)
+
+    # Validação manual do comprimento da senha apenas se não estiver vazia
+    if password_params[:password].present? && password_params[:password].length < 5
+      @user.errors.add(:password, "deve ter pelo menos 5 caracteres")
+      render :edit_password, status: :unprocessable_entity
+      return
+    end
+
+    # O has_secure_password automaticamente valida a confirmação da senha
+    if @user.update(password_params)
+      flash[:notice] = "Senha do motorista #{@user.name} foi alterada com sucesso."
+      redirect_to driver_index_path
+    else
+      render :edit_password, status: :unprocessable_entity
+    end
+  end
+
+  # Ação temporária para testar flash messages
+  def test_flash
+    flash[:notice] = "Teste de mensagem de sucesso - Flash funcionando!"
+    redirect_to driver_index_path
   end
 
   private

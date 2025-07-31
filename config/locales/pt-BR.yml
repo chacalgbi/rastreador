@@ -14,6 +14,7 @@ pt-BR:
         too_short: "é muito curto (mínimo de %{count} caracteres)"
         too_long: "é muito longo (máximo de %{count} caracteres)"
         invalid: "é inválido"
+        confirmation: "As senhas não conferem"
   helpers:
     page_entries_info:
       more_pages:

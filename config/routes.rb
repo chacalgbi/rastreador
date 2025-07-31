@@ -28,6 +28,10 @@ Rails.application.routes.draw do
       get :cars
       post :cars_update
     end
+    member do
+      get :edit_password
+      patch :update_password
+    end
   end
   resources :details, only: [:index] do
     member do

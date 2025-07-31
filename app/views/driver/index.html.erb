@@ -15,6 +15,7 @@
       <th>Criado em</th>
       <th>Editar</th>
       <th>Permissões</th>
+      <th>Alterar Senha</th>
       <th>Apagar</th>
     </tr>
   </thead>
@@ -27,7 +28,7 @@
         <td><%= driver.admin ? 'Sim' : 'Não' %></td>
         <td><%= driver.created_at.in_time_zone('America/Sao_Paulo').strftime('%d/%m/%Y %H:%M') %></td>
         <td>
-          <%= link_to edit_driver_path(id: driver.id) do %>
+          <%= link_to edit_driver_path(id: driver.id), class: "btn btn--secondary" do %>
             <%= image_tag "user-round-pen.svg", size: 30, aria: { hidden: true }, class: "invertible" %>
           <% end %>
         </td>
@@ -37,7 +38,12 @@
           <% end %>
         </td>
         <td>
-          <%= button_to driver_path(driver), method: :delete, data: { turbo_confirm: "Tem certeza que deseja apagar o usuário: #{driver.name}?" } do %>
+          <%= link_to edit_password_driver_path(driver), class: "btn btn--secondary" do %>
+            <%= image_tag "key-square.svg", size: 30, aria: { hidden: true }, class: "invertible" %>
+          <% end %>
+        </td>
+        <td>
+          <%= button_to driver_path(driver), method: :delete, data: { turbo_confirm: "Tem certeza que deseja apagar o usuário: #{driver.name}?" }, class: "btn btn--secondary" do %>
             <%= image_tag "user-round-x.svg", size: 30, aria: { hidden: true }, class: "invertible" %>
           <% end %>
         </td>
