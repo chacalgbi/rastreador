@@ -1,0 +1,384 @@
+/* Estilos para página de checklists */
+.checklist-page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.checklist-page .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.checklist-page .card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.checklist-page .grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.checklist-page .grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.checklist-page .grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.checklist-page .grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.checklist-page .stats-card {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.checklist-page .stats-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.checklist-page .stats-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.checklist-page .table-container {
+  overflow-x: auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.checklist-page table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.checklist-page th,
+.checklist-page td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.checklist-page th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.checklist-page tr:hover {
+  background-color: #f9fafb;
+}
+
+.checklist-page .badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 9999px;
+}
+
+.checklist-page .badge-success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.checklist-page .badge-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.checklist-page .badge-danger {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.checklist-page .badge-info {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.checklist-page .progress-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checklist-page .progress-track {
+  width: 4rem;
+  height: 0.5rem;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.checklist-page .progress-fill {
+  height: 100%;
+  background-color: #10b981;
+  transition: width 0.3s ease;
+}
+
+.checklist-page .progress-fill.warning {
+  background-color: #f59e0b;
+}
+
+.checklist-page .progress-fill.danger {
+  background-color: #ef4444;
+}
+
+.checklist-page .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.checklist-page .btn-primary {
+  background-color: #2563eb;
+  color: white;
+}
+
+.checklist-page .btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.checklist-page .btn-secondary {
+  background-color: #6b7280;
+  color: white;
+}
+
+.checklist-page .btn-secondary:hover {
+  background-color: #4b5563;
+}
+
+.checklist-page .form-group {
+  margin-bottom: 1rem;
+}
+
+.checklist-page .form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.checklist-page .form-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.checklist-page .form-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.pagination a,
+.pagination span {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 0 2px;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  color: #007bff;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.pagination a:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.pagination .current {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.pagination .disabled {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+/* Print styles */
+@media print {
+  /* Configuração da página */
+  @page {
+    size: landscape;
+    margin: 0.5in;
+  }
+  
+  /* Ocultar elementos desnecessários na impressão */
+  .no-print,
+  .btn,
+  button,
+  #header,
+  .flex.justify-between.items-center.mb-6,
+  form,
+  hr {
+    display: none !important;
+  }
+  
+  /* Ocultar filtros especificamente */
+  h2:first-of-type,
+  form,
+  form + br,
+  form + br + hr {
+    display: none !important;
+  }
+  
+  /* Reduzir fontes */
+  body {
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+  }
+  
+  h1 {
+    font-size: 14px !important;
+    margin-bottom: 10px !important;
+  }
+  
+  h2 {
+    font-size: 12px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  table {
+    font-size: 8px !important;
+    width: 100% !important;
+  }
+  
+  th, td {
+    padding: 4px 6px !important;
+    font-size: 8px !important;
+  }
+  
+  /* Ajustar larguras das colunas para impressão */
+  th:nth-child(1), td:nth-child(1) { width: 8% !important; }   /* Data */
+  th:nth-child(2), td:nth-child(2) { width: 12% !important; }  /* Motorista */
+  th:nth-child(3), td:nth-child(3) { width: 12% !important; }  /* Veículo */
+  th:nth-child(4), td:nth-child(4) { width: 8% !important; }   /* Ação */
+  th:nth-child(5), td:nth-child(5) { width: 12% !important; }  /* Checklist */
+  th:nth-child(6), td:nth-child(6) { width: 8% !important; }   /* Status */
+  th:nth-child(7), td:nth-child(7) { width: 40% !important; }  /* Observações - mais espaço */
+  
+  /* Permitir quebra de linha nas observações */
+  td:nth-child(7) {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    max-width: none !important;
+  }
+  
+  /* Ajustar badges e elementos visuais */
+  .inline-flex {
+    font-size: 7px !important;
+    padding: 2px 4px !important;
+  }
+  
+  /* Ajustar barras de progresso */
+  .w-16 {
+    width: 30px !important;
+  }
+  
+  /* Remover cores de fundo para economia de tinta */
+  .bg-gray-50,
+  .bg-white,
+  .hover\\:bg-gray-50 {
+    background-color: transparent !important;
+  }
+  
+  /* Manter apenas bordas essenciais */
+  table, th, td {
+    border: 1px solid #000 !important;
+    border-collapse: collapse !important;
+  }
+  
+  /* Garantir que o texto seja preto */
+  * {
+    color: #000 !important;
+  }
+  
+  /* Mostrar título apenas na impressão */
+  .print-only {
+    display: block !important;
+  }
+  
+  /* Ajustar container para impressão */
+  .px-4 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .checklist-page .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .checklist-page .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .checklist-page table {
+    font-size: 0.75rem;
+  }
+  
+  .checklist-page th,
+  .checklist-page td {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .checklist-page .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .pagination {
+    flex-wrap: wrap;
+  }
+  
+  .pagination a,
+  .pagination span {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+}

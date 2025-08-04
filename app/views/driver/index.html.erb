@@ -12,7 +12,7 @@
       <th>Nome</th>
       <th>Telefone</th>
       <th>Admin?</th>
-      <th>Criado em</th>
+      <th>Manutenção?</th>
       <th>Editar</th>
       <th>Permissões</th>
       <th>Alterar Senha</th>
@@ -21,12 +21,12 @@
   </thead>
   <tbody>
     <% @drivers.each.with_index(1) do |driver, index| %>
-      <tr>
+      <tr style="<%= 'color: #000; background-color: #fff;' if driver.admin? %>">
         <th><%= index %></th>
         <td><%= driver.name %></td>
         <td><%= driver.phone %></td>
         <td><%= driver.admin ? 'Sim' : 'Não' %></td>
-        <td><%= driver.created_at.in_time_zone('America/Sao_Paulo').strftime('%d/%m/%Y %H:%M') %></td>
+        <td><%= driver.maintenance ? 'Sim' : 'Não' %></td>
         <td>
           <%= link_to edit_driver_path(id: driver.id), class: "btn btn--secondary" do %>
             <%= image_tag "user-round-pen.svg", size: 30, aria: { hidden: true }, class: "invertible" %>

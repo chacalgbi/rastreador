@@ -1,5 +1,8 @@
 <div class="car_container">
-  <div class="car_item"><h1 class="text-2xl">Gerenciar veículos disponíveis para '<%= @driver_name %>'</h1></div>
+  <div class="car_item">
+    <h1 class="text-2xl">Gerenciar veículos disponíveis para '<%= @driver_name %>'</h1>
+    <h2 class="text-lg">Selecione os veículos e clique em 'Atualizar'</h2>
+  </div>
 </div>
 
 
@@ -9,12 +12,6 @@
     <br><hr><br>
     <div class="car_container">
       <div class="car_item">
-        <div class="flex" role="alert">
-          <%= image_tag "message-circle-warning.svg", size: 20, aria: { hidden: true } %>
-          <h3 class="font-medium">  Selecione os veículos e clique em 'Atualizar'</h3>
-        </div>
-      </div>
-      <div class="car_item">
         <div class="flex items-center gap">
           <%= check_box_tag :check_all, class: "checkbox", data: { action: "check-all#check", check_all_target: "dependee" } %>
           <%= label_tag :check_all, "SELECIONAR TODOS" %>
@@ -22,6 +19,13 @@
       </div>
       <div class="car_item">
         <%= submit_tag 'Atualizar', class: 'btn btn-positive' %>
+      </div>
+      <div class="car_item">
+        <div class="button-container">
+          <%= link_to driver_index_path, class: "btn btn-primary" do %>
+            <%= image_tag "arrow-left.svg", size: 25, aria: { hidden: true } %>Voltar
+          <% end %>
+        </div>
       </div>
     </div>
     <br><hr><br>

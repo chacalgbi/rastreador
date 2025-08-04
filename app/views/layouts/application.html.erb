@@ -35,12 +35,21 @@
       </header>
 
       <main id="main">
-        <div class="container">
-          <div id="flash">
-            <%= render '/alert', flash: flash %>
+        <% if content_for?(:full_width) %>
+          <div style="width: 100%; max-width: 95%; margin: 0 auto;">
+            <div id="flash">
+              <%= render '/alert', flash: flash %>
+            </div>
+            <%= yield %>
           </div>
-          <%= yield %>
-        </div>
+        <% else %>
+          <div class="container">
+            <div id="flash">
+              <%= render '/alert', flash: flash %>
+            </div>
+            <%= yield %>
+          </div>
+        <% end %>
       </main>
     </div>
     <%= debugbar_body if defined? Debugbar %>

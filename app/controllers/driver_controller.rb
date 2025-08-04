@@ -10,7 +10,7 @@ class DriverController < ApplicationController
   end
 
   def create
-    user_params = params.require(:user).permit(:name, :phone, :password, :password_confirmation)
+    user_params = params.require(:user).permit(:name, :phone, :password, :password_confirmation, :maintenance)
     user_params[:phone] = user_params[:phone].gsub(/\D/, "") if user_params[:phone].present?
 
     @user = User.new(user_params)
@@ -35,7 +35,7 @@ class DriverController < ApplicationController
   def update
     @user = User.find_by(id: params[:id])
 
-    user_params = params.require(:user).permit(:name, :email_address, :phone, :active, :admin)
+    user_params = params.require(:user).permit(:name, :email_address, :phone, :active, :admin, :maintenance)
     user_params[:phone] = user_params[:phone].gsub(/\D/, "") if user_params[:phone].present?
 
     if @user.update(user_params)

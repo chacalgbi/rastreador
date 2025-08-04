@@ -1,0 +1,188 @@
+<% content_for :title, "Relatório de Checklists" %>
+<% content_for :full_width, true %>
+
+<div class="px-4 py-6">
+  <!-- Título para impressão -->
+  <div class="print-only" style="display: none;">
+    <h1 style="text-align: center; margin-bottom: 20px; font-size: 16px; font-weight: bold;">
+      Relatório de Checklists - <%= Date.current.strftime("%d/%m/%Y") %>
+    </h1>
+  </div>
+  <div class="flex justify-between items-center mb-6 no-print">
+    <h1 class="text-3xl font-bold text-gray-900">Relatório de Checklists</h1>
+    <div class="flex gap-2">
+      <button onclick="window.print()" class="btn btn-primary">🖨️ Imprimir</button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="no-print">
+    <h2 class="text-lg font-semibold mb-4" style="color: white;">Filtros</h2>
+
+    <%= form_with url: check_lists_path, method: :get, local: true do |f| %>
+      <!-- Primeira linha: Nome do Motorista e Nome do Veículo -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px;">
+        <div>
+          <%= f.label :driver_name, "Nome do Motorista", style: "display: block; font-size: 14px; font-weight: 500; color: white; margin-bottom: 4px;" %>
+          <%= f.text_field :driver_name, value: params[:driver_name], 
+                          placeholder: "Digite parte do nome...", 
+                          style: "width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;" %>
+        </div>
+        <div>
+          <%= f.label :car_name, "Nome do Veículo", style: "display: block; font-size: 14px; font-weight: 500; color: white; margin-bottom: 4px;" %>
+          <%= f.text_field :car_name, value: params[:car_name], 
+                          placeholder: "Digite parte do nome...", 
+                          style: "width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;" %>
+        </div>
+      </div>
+
+      <!-- Segunda linha: Data Inicial e Data Final -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px;">
+        <div>
+          <%= f.label :start_date, "Data Inicial", style: "display: block; font-size: 14px; font-weight: 500; color: white; margin-bottom: 4px;" %>
+          <%= f.date_field :start_date, value: params[:start_date], 
+                          style: "width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;" %>
+        </div>
+        <div>
+          <%= f.label :end_date, "Data Final", style: "display: block; font-size: 14px; font-weight: 500; color: white; margin-bottom: 4px;" %>
+          <%= f.date_field :end_date, value: params[:end_date], 
+                          style: "width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;" %>
+        </div>
+      </div>
+
+      <!-- Terceira linha: Checkbox e Botões -->
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+        <div style="display: flex; align-items: center;">
+          <%= f.check_box :with_observations, { checked: params[:with_observations] == 'true' }, "true", "" %>
+          <%= f.label :with_observations, "Apenas com observações (problemas)", style: "margin-left: 8px; font-size: 14px; color: white;" %>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <%= f.submit "🔍 Filtrar", class: "btn btn-primary" %>
+          <%= link_to "🗑️ Limpar Filtros", check_lists_path, class: "btn btn-secondary" %>
+        </div>
+      </div>
+    <% end %>
+    <br>
+    <hr>
+  </div>
+
+  <!-- Estatísticas -->
+  <table class="table bg-white divide-y divide-gray-200">
+    <thead>
+      <tr>
+        <th>Total de registros</th>
+        <th>Com observações</th>
+        <th>Bloqueios</th>
+        <th>Desbloqueios</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><%= @check_lists.respond_to?(:total_count) ? @check_lists.total_count : @check_lists.count %></td>
+          <td><%= CheckList.where.not(obs: [nil, '']).count %></td>
+          <td><%= CheckList.where(type: 'bloquear').count %></td>
+          <td><%= CheckList.where(type: 'desbloquear').count %></td>
+        </tr>
+    </tbody>
+  </table> 
+  <br>
+
+
+  <!-- Tabela -->
+  <h2 class="text-lg font-semibold mb-4" style="color: white;">Informações</h2>
+  <div class="rounded-lg overflow-hidden" style="width: 100%;">
+    <div class="overflow-x-auto">
+      <table class="table" style="width: 100%; min-width: 100%;">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 12%;">Data/Hora</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 15%;">Motorista</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 15%;">Veículo</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 10%;">Ação</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 15%;">Checklist</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 10%;">Status</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 23%;">Observações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @check_lists.each do |checklist| %>
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                <%= checklist.created_at.strftime("%d/%m/%Y %H:%M") %>
+              </td>
+              <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                <%= checklist.driver_name %>
+              </td>
+              <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                <%= checklist.car_name %>
+              </td>
+              <td class="px-4 py-4 whitespace-nowrap">
+                <% if checklist.type == 'bloquear' %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    🔒 Bloquear
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    🔓 Desbloquear
+                  </span>
+                <% end %>
+              </td>
+              <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
+                <div class="flex items-center">
+                  <div class="text-sm font-medium"><%= checklist.checked_items_count %>/<%= checklist.total_items_count %></div>
+                  <div class="ml-2 w-16 bg-gray-200 rounded-full h-2">
+                    <div class="bg-<%= checklist.completion_percentage > 80 ? 'green' : checklist.completion_percentage > 50 ? 'yellow' : 'red' %>-500 h-2 rounded-full" 
+                         style="width: <%= checklist.completion_percentage %>%"></div>
+                  </div>
+                  <span class="ml-1 text-xs text-gray-500"> - <%= checklist.completion_percentage %>%</span>
+                </div>
+              </td>
+              <td class="px-4 py-4 whitespace-nowrap">
+                <% if checklist.has_issues? %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    ⚠️ Com Problemas
+                  </span>
+                <% else %>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    ✅ OK
+                  </span>
+                <% end %>
+              </td>
+              <td class="px-4 py-4 text-sm text-gray-900" style="max-width: none; word-wrap: break-word;">
+                <% unchecked_text = checklist.unchecked_items_text %>
+                <% if checklist.obs.present? %>
+                  <div title="<%= unchecked_text %> <%= checklist.obs %>">
+                    <% if unchecked_text.present? %>
+                      <span class="text-red-600 font-medium"><%= unchecked_text %></span>
+                      <br>
+                    <% end %>
+                    <%= checklist.obs %>
+                  </div>
+                <% elsif unchecked_text.present? %>
+                  <div title="<%= unchecked_text %>">
+                    <span class="text-red-600 font-medium"><%= unchecked_text %></span>
+                  </div>
+                <% else %>
+                  <span class="text-gray-400">-</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginação -->
+    <div class="no-print bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+      <%= paginate @check_lists %>
+    </div>
+  </div>
+
+  <!-- Mensagem quando não há registros -->
+  <% if @check_lists.empty? %>
+    <div class="text-center py-12">
+      <div class="text-gray-500 text-lg">📋 Nenhum checklist encontrado</div>
+      <p class="text-gray-400 mt-2">Tente ajustar os filtros ou verificar se há checklists cadastrados.</p>
+    </div>
+  <% end %>
+</div>

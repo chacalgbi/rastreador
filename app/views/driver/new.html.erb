@@ -32,6 +32,11 @@
     <%= form.password_field :password_confirmation, class: "input", placeholder: "Confirme a senha" %><br><br>
   </div>
 
+  <div class="form-group">
+    <%= form.label :maintenance, "Manutenção", class: "text-sm font-medium" %><br>
+    <%= form.select :maintenance, [['Não', false], ['Sim', true]], {}, class: "input", style: "color: #000; background-color: #fff;" %><br><br>
+  </div>
+
   <div class="flex items-center justify-between">
     <%= form.submit "Cadastrar Motorista", class: "btn btn-primary" %>
     <div class="button-container">

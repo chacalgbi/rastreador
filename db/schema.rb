@@ -10,13 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_11_175037) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_03_013637) do
   create_table "admin_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", null: false
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
+  end
+
+  create_table "check_lists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "user_id"
+    t.string "detail_id"
+    t.string "type"
+    t.boolean "freios", default: false
+    t.boolean "luzes", default: false
+    t.boolean "pneus", default: false
+    t.boolean "estepe", default: false
+    t.boolean "oleo", default: false
+    t.boolean "buzina", default: false
+    t.boolean "painel", default: false
+    t.boolean "doc", default: false
+    t.boolean "retrovisor", default: false
+    t.boolean "parabrisa", default: false
+    t.boolean "limpador", default: false
+    t.boolean "macaco", default: false
+    t.boolean "lataria", default: false
+    t.text "obs"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "commands", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -112,6 +134,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_11_175037) do
     t.boolean "admin", default: false, null: false
     t.text "cars"
     t.datetime "password_reset_sent_at"
+    t.boolean "maintenance", default: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 

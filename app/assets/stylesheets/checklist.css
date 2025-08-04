@@ -1,0 +1,79 @@
+/* Estilos para o checklist */
+.checklist-form {
+  padding: 1rem;
+}
+
+.checklist-form .grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.checklist-form .grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.checklist-form .col-span-2 {
+  grid-column: span 2;
+}
+
+.checklist-form .flex {
+  display: flex;
+}
+
+.checklist-form .items-center {
+  align-items: center;
+}
+
+.checklist-form input[type="checkbox"] {
+  margin-right: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  accent-color: #059669;
+}
+
+.checklist-form label {
+  font-size: 0.875rem;
+  color: #374151;
+  cursor: pointer;
+}
+
+.checklist-form textarea.input {
+  min-height: 4rem;
+  resize: vertical;
+}
+
+.checklist-form .obs-warning {
+  color: #d97706;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+/* Container para o campo de observações com transição */
+.checklist-form .obs-container {
+  transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out, margin 0.3s ease-in-out;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+/* Estilo para o diálogo do checklist */
+.dialog[style*="max-width: 600px"] {
+  width: 90vw;
+  max-width: 600px;
+}
+
+.dialog[style*="max-height: 80vh"] {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Responsividade para telas pequenas */
+@media (max-width: 640px) {
+  .checklist-form .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .checklist-form .col-span-2 {
+    grid-column: span 1;
+  }
+}

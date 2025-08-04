@@ -43,7 +43,7 @@ class HomeController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
-          turbo_stream.replace("details_#{device_id}", partial: "home/details", locals: {status: params[:status], info: info, msg: msg, device_id: device_id, state: state, events_count: @events_last_x_hours}),
+          turbo_stream.replace("details_#{device_id}", partial: "home/details", locals: {status: params[:status], info: info, msg: msg, device_id: device_id, state: state, events_count: @events_last_x_hours, user_maintenance: Current.user.maintenance?}),
           turbo_stream.replace("details_button_#{device_id}", partial: "home/details_button", locals: { device_id: device_id, show_details: true, status_car: @event.status })
         ]
       end
@@ -64,6 +64,49 @@ class HomeController < ApplicationController
   end
 
   def block_and_desblock
+    if Current.user.maintenance?
+      # Vai direto para o comando sem salvar checklist
+    else
+      checklist_params = params.permit(
+        :freios, :luzes, :pneus, :estepe, :oleo, :buzina,
+        :painel, :doc, :retrovisor, :parabrisa, :limpador,
+        :macaco, :lataria, :obs
+      )
+
+      boolean_fields = %w[freios luzes pneus estepe oleo buzina painel doc retrovisor parabrisa limpador macaco lataria]
+      unchecked_fields = boolean_fields.select { |field| checklist_params[field] != 'true' }
+
+      if unchecked_fields.any? && checklist_params[:obs].blank?
+        redirect_to root_path, alert: "É obrigatório preencher o campo 'Observações' quando algum item do checklist não for verificado."
+        return
+      end
+
+      checklist = CheckList.new(
+        user_id: Current.user.id.to_s,
+        detail_id: params[:id],
+        type: params[:action_type],
+        freios: checklist_params[:freios] == 'true',
+        luzes: checklist_params[:luzes] == 'true',
+        pneus: checklist_params[:pneus] == 'true',
+        estepe: checklist_params[:estepe] == 'true',
+        oleo: checklist_params[:oleo] == 'true',
+        buzina: checklist_params[:buzina] == 'true',
+        painel: checklist_params[:painel] == 'true',
+        doc: checklist_params[:doc] == 'true',
+        retrovisor: checklist_params[:retrovisor] == 'true',
+        parabrisa: checklist_params[:parabrisa] == 'true',
+        limpador: checklist_params[:limpador] == 'true',
+        macaco: checklist_params[:macaco] == 'true',
+        lataria: checklist_params[:lataria] == 'true',
+        obs: checklist_params[:obs]
+      )
+
+      unless checklist.save
+        redirect_to root_path, alert: "Erro ao salvar checklist: #{checklist.errors.full_messages.join(', ')}"
+        return
+      end
+    end
+
     command_name = params[:action_type] == 'bloquear' ? 'rele_on' : 'rele_off'
     command = Command.find_by(type_device: params[:model], name: command_name)
     send_command = command.type_device == 'st8310u' ? command.command.gsub('XXXX', params[:imei]) : command.command

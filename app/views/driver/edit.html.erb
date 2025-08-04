@@ -28,6 +28,11 @@
   </div>
 
   <div class="form-group">
+    <%= f.label :maintenance, "Manutenção", class: "text-sm font-medium" %><br>
+    <%= f.select :maintenance, [['Não', false], ['Sim', true]], {}, class: "input", style: "color: #000; background-color: #fff;" %><br><br>
+  </div>
+
+  <div class="form-group">
     <%= f.submit "Atualizar Motorista", class: "btn btn-primary" %>
     <div class="button-container">
       <%= link_to driver_index_path, class: "btn btn-primary align-right" do %>
