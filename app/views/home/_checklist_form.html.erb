@@ -1,61 +1,61 @@
 <div class="checklist-form" data-controller="checklist">
-  <h3 class="text-lg font-semibold mb-3">Checklist de Verificação</h3>
+  <h3 class="text-lg font-semibold mb-3" style="color: var(--color-text);">Checklist de Verificação</h3>
   <div class="grid grid-cols-2 gap-2 mb-4">
     <div class="flex items-center">
       <input type="checkbox" name="freios" value="true" id="checklist_freios_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_freios_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Freios</label>
+      <label for="checklist_freios_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Freios</label>
     </div>
     <div class="flex items-center">
       <input type="checkbox" name="luzes" value="true" id="checklist_luzes_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_luzes_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Sinal/Luzes/Giroflex</label>
+      <label for="checklist_luzes_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Sinal/Luzes/Giroflex</label>
     </div>
     <div class="flex items-center">
       <input type="checkbox" name="pneus" value="true" id="checklist_pneus_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_pneus_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Pneus</label>
+      <label for="checklist_pneus_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Pneus</label>
     </div>
     <div class="flex items-center">
       <input type="checkbox" name="estepe" value="true" id="checklist_estepe_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_estepe_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Estepe/calotas</label>
+      <label for="checklist_estepe_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Estepe/calotas</label>
     </div>
     <div class="flex items-center">
       <input type="checkbox" name="oleo" value="true" id="checklist_oleo_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_oleo_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Água/Óleo motor/Óleo freio</label>
+      <label for="checklist_oleo_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Água/Óleo motor/Óleo freio</label>
     </div>
     <div class="flex items-center">
       <input type="checkbox" name="buzina" value="true" id="checklist_buzina_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_buzina_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Buzina</label>
+      <label for="checklist_buzina_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Buzina</label>
     </div>
     <div class="flex items-center">
       <input type="checkbox" name="painel" value="true" id="checklist_painel_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_painel_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Instrumentos do painel</label>
+      <label for="checklist_painel_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Instrumentos do painel</label>
     </div>
     <div class="flex items-center">
       <input type="checkbox" name="doc" value="true" id="checklist_doc_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_doc_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Documentação</label>
+      <label for="checklist_doc_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Documentação</label>
     </div>
     <div class="flex items-center">
       <input type="checkbox" name="retrovisor" value="true" id="checklist_retrovisor_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_retrovisor_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Vidros/Retrovisores/Maçanetas</label>
+      <label for="checklist_retrovisor_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Vidros/Retrovisores/Maçanetas</label>
     </div>
     <div class="flex items-center">
       <input type="checkbox" name="parabrisa" value="true" id="checklist_parabrisa_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_parabrisa_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Para-brisa</label>
+      <label for="checklist_parabrisa_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Para-brisa</label>
     </div>
     <div class="flex items-center">
       <input type="checkbox" name="limpador" value="true" id="checklist_limpador_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_limpador_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Limpador de para-brisa</label>
+      <label for="checklist_limpador_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Limpador de para-brisa</label>
     </div>
     <div class="flex items-center">
       <input type="checkbox" name="macaco" value="true" id="checklist_macaco_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_macaco_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Chave de rodas/Macaco/Triângulo</label>
+      <label for="checklist_macaco_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Chave de rodas/Macaco/Triângulo</label>
     </div>
     <div class="flex items-center col-span-2">
       <input type="checkbox" name="lataria" value="true" id="checklist_lataria_<%= device_id %>_<%= action_type %>" class="mr-2" data-checklist-target="checkbox" data-action="change->checklist#checkboxChanged">
-      <label for="checklist_lataria_<%= device_id %>_<%= action_type %>" class="text-sm" style="color:rgb(255, 255, 255);">Lataria/Para-choques</label>
+      <label for="checklist_lataria_<%= device_id %>_<%= action_type %>" class="text-sm" style="color: var(--color-text);">Lataria/Para-choques</label>
     </div>
   </div>
   <div class="mb-4 obs-container">
-    <label for="checklist_obs_<%= device_id %>_<%= action_type %>" class="text-sm font-medium block mb-2" style="color:rgb(255, 255, 255);">
+    <label for="checklist_obs_<%= device_id %>_<%= action_type %>" class="text-sm font-medium block mb-2" style="color: var(--color-text);">
       Observações (Quando um ítem NÃO for marcado, o condutor deverá comunicar a gerência da garagem):
     </label>
     <textarea name="obs" id="checklist_obs_<%= device_id %>_<%= action_type %>" 

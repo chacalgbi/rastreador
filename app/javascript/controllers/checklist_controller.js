@@ -35,7 +35,7 @@ export default class extends Controller {
     if (container) {
       container.style.display = "block"
       container.style.opacity = "1"
-      container.style.maxHeight = "200px"
+      container.style.maxHeight = "300px"
     }
   }
 

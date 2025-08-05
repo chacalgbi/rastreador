@@ -11,3 +11,34 @@
 
 /*= require checklist */
 /*= require check_lists */
+
+/* Correção específica para ícones em tabelas de motoristas em dispositivos móveis */
+@media (max-width: 768px) {
+  .table .btn img.invertible {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Garantir que todos os botões na tabela tenham o mesmo tamanho */
+  .table .btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 7px;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+/* Estilo geral para garantir consistência */
+.table .btn img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}

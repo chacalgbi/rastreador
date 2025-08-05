@@ -34,4 +34,44 @@
     border-block-start-width: var(--border);
     font-weight: var(--font-medium);
   }
+
+  /* Estilos para ícones em botões dentro da tabela */
+  .btn img {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px;
+    min-height: 30px;
+    flex-shrink: 0;
+  }
+}
+
+/* Media query específica para dispositivos móveis */
+@media (max-width: 768px) {
+  :where(.table) {
+    .btn img {
+      width: 30px !important;
+      height: 30px !important;
+      min-width: 30px !important;
+      min-height: 30px !important;
+      max-width: 30px !important;
+      max-height: 30px !important;
+      flex-shrink: 0 !important;
+      display: block !important;
+    }
+    
+    /* Garantir que os botões tenham tamanho suficiente */
+    .btn {
+      min-width: 40px;
+      min-height: 40px;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Ajustar padding das células da tabela em dispositivos móveis */
+    th, td {
+      padding: var(--size-1);
+    }
+  }
 }

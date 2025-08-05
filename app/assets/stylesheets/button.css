@@ -98,3 +98,27 @@
     position: absolute;
   }
 }
+
+/* Garantir tamanho consistente de ícones em botões */
+.btn img {
+  width: auto !important;
+  height: auto !important;
+  flex-shrink: 0;
+}
+
+/* Estilos específicos para dispositivos móveis */
+@media (max-width: 768px) {
+  .btn img {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
+  }
+  
+  .btn--secondary img {
+    width: 30px !important;
+    height: 30px !important;
+  }
+}
