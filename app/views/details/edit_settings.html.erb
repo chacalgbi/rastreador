@@ -1,10 +1,10 @@
 <div class="container">
-  <h1 class="text-2xl header-section-details" style="color: #FFFFFF;">Configurações do veículo: <%= @detail.device_name || @detail.device_id %></h1>
+  <h1 class="text-2xl header-section-details" style="color: var(--color-text);">Configurações do veículo: <%= @detail.device_name || @detail.device_id %></h1>
   
   <%= form_with model: @detail, url: update_settings_detail_path(@detail), method: :patch, local: true, class: "settings-form" do |form| %>
     
     <div class="settings-section">
-      <h3 style="color: #FFFFFF;">Canais de Alerta</h3>
+      <h3 style="color: var(--color-text);">Canais de Alerta</h3>
       
       <div class="form-group">
         <%= form.check_box :alert_whatsApp, class: "form-check-input" %>
@@ -23,7 +23,7 @@
     </div>
 
     <div class="settings-section">
-      <h3 style="color: #FFFFFF;">Tipos de Notificações</h3>
+      <h3 style="color: var(--color-text);">Tipos de Notificações</h3>
 
       <div class="form-group">
         <%= form.check_box :send_battery, class: "form-check-input" %>

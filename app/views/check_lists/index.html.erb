@@ -23,13 +23,13 @@
       <!-- Primeira linha: Nome do Motorista e Nome do Veículo -->
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px;">
         <div>
-          <%= f.label :driver_name, "Nome do Motorista", style: "display: block; font-size: 14px; font-weight: 500; color: white; margin-bottom: 4px;" %>
+          <%= f.label :driver_name, "Nome do Motorista", style: "display: block; font-size: 14px; font-weight: 500; color: var(--color-text); margin-bottom: 4px;" %>
           <%= f.text_field :driver_name, value: params[:driver_name], 
                           placeholder: "Digite parte do nome...", 
                           style: "width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;" %>
         </div>
         <div>
-          <%= f.label :car_name, "Nome do Veículo", style: "display: block; font-size: 14px; font-weight: 500; color: white; margin-bottom: 4px;" %>
+          <%= f.label :car_name, "Nome do Veículo", style: "display: block; font-size: 14px; font-weight: 500; color: var(--color-text); margin-bottom: 4px;" %>
           <%= f.text_field :car_name, value: params[:car_name], 
                           placeholder: "Digite parte do nome...", 
                           style: "width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;" %>
@@ -39,12 +39,12 @@
       <!-- Segunda linha: Data Inicial e Data Final -->
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px;">
         <div>
-          <%= f.label :start_date, "Data Inicial", style: "display: block; font-size: 14px; font-weight: 500; color: white; margin-bottom: 4px;" %>
+          <%= f.label :start_date, "Data Inicial", style: "display: block; font-size: 14px; font-weight: 500; color: var(--color-text); margin-bottom: 4px;" %>
           <%= f.date_field :start_date, value: params[:start_date], 
                           style: "width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;" %>
         </div>
         <div>
-          <%= f.label :end_date, "Data Final", style: "display: block; font-size: 14px; font-weight: 500; color: white; margin-bottom: 4px;" %>
+          <%= f.label :end_date, "Data Final", style: "display: block; font-size: 14px; font-weight: 500; color: var(--color-text); margin-bottom: 4px;" %>
           <%= f.date_field :end_date, value: params[:end_date], 
                           style: "width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;" %>
         </div>
@@ -54,7 +54,7 @@
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px;">
         <div style="display: flex; align-items: center;">
           <%= f.check_box :with_observations, { checked: params[:with_observations] == 'true' }, "true", "" %>
-          <%= f.label :with_observations, "Apenas com observações (problemas)", style: "margin-left: 8px; font-size: 14px; color: white;" %>
+          <%= f.label :with_observations, "Apenas com problemas", style: "margin-left: 8px; font-size: 14px; color: var(--color-text);" %>
         </div>
         <div style="display: flex; gap: 8px;">
           <%= f.submit "🔍 Filtrar", class: "btn btn-primary" %>
