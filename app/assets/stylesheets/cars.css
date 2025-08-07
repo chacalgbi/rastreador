@@ -17,3 +17,49 @@
 .align-right {
   display: inline-block;
 }
+
+.car_item_list {
+  flex: 1;
+  min-width: 200px;
+  text-align: left;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.car_item_list .items-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.car_item_list .checkbox {
+  margin: 0;
+  pointer-events: none;
+}
+
+.car_item_list label {
+  margin: 0;
+  font-weight: 500;
+  cursor: pointer;
+  flex: 1;
+  padding: 4px 0;
+}
+
+.car_item_list:hover {
+  border-color: #3b82f6;
+  transform: translateY(-1px);
+}
+
+.car_item_list.checked {
+  border-color: #10b981;
+}
+
+/* Estilos específicos para containers de veículos na lista */
+.car_container:has(.car_item_list .checkbox) {
+  margin-bottom: 8px;
+}

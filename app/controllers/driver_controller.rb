@@ -70,7 +70,7 @@ class DriverController < ApplicationController
     @array_devices = user&.cars.present? ? user.cars.split(",") : []
     @driver_id = params[:id]
     @driver_name = params[:name]
-    @devices = Detail.all
+    @devices = Detail.order(:device_name)
     if @devices.empty?
       flash[:alert] = "Veículos não encontrados"
       redirect_to driver_index_path

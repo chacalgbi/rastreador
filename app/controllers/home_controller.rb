@@ -232,7 +232,7 @@ class HomeController < ApplicationController
     return "Veículo off-line" if status == 'offline'
     return "Veículo sem histórico. Você pode bloquear/desbloquear." if event.nil?
     return "Em uso por #{event.last_user}." if event.rele_state == 'off'
-    "#{event.device_name} disponível."
+    "Veículo disponível."
   end
 
   def define_state(event)

@@ -33,8 +33,8 @@
     <% @devices.each_slice(4).with_index do |device_slice, slice_index| %>
       <div class="car_container">
         <% device_slice.each do |device| %>
-          <div class="car_item">
-            <div class="items-center gap">
+          <div class="car_item_list" onclick="toggleCheckbox(this)">
+            <div class="items-center">
               <% is_checked = @array_devices.include?(device.device_id.to_s) %>
               <%= check_box_tag 'device_ids[]', device.device_id, is_checked, class: "checkbox", data: { action: "check-all#check", check_all_target: "dependant" } %>
               <%= label_tag "label_car_#{device.device_id}", device.device_name, class: "text-sm" %>
@@ -48,3 +48,63 @@
     <%= hidden_field_tag :driver_name, @driver_name %>
   <% end %>
 </fieldset>
+
+<script>
+function toggleCheckbox(element) {
+  const checkbox = element.querySelector('input[type="checkbox"]');
+  if (checkbox) {
+    checkbox.checked = !checkbox.checked;
+    
+    // Disparar o evento de mudança para manter a funcionalidade do check-all
+    const event = new Event('change', { bubbles: true });
+    checkbox.dispatchEvent(event);
+    
+    // Adicionar/remover classe visual
+    updateVisualState(element, checkbox.checked);
+  }
+}
+
+function updateVisualState(element, isChecked) {
+  if (isChecked) {
+    element.classList.add('checked');
+  } else {
+    element.classList.remove('checked');
+  }
+}
+
+function initializeCheckboxStates() {
+  document.querySelectorAll('.car_item_list').forEach(function(element) {
+    const checkbox = element.querySelector('input[type="checkbox"]');
+    if (checkbox) {
+      updateVisualState(element, checkbox.checked);
+      
+      // Adicionar listener para mudanças diretas no checkbox
+      checkbox.addEventListener('change', function() {
+        updateVisualState(element, this.checked);
+      });
+    }
+  });
+}
+
+// Múltiplas tentativas para garantir que os checkboxes sejam inicializados
+document.addEventListener('DOMContentLoaded', initializeCheckboxStates);
+
+// Aguardar um pouco mais caso o Rails ainda esteja carregando
+setTimeout(initializeCheckboxStates, 100);
+
+// Observer para mudanças no DOM (caso os checkboxes sejam carregados dinamicamente)
+if (window.MutationObserver) {
+  const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.type === 'childList') {
+        initializeCheckboxStates();
+      }
+    });
+  });
+  
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+}
+</script>
