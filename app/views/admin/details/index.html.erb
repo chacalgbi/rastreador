@@ -83,9 +83,7 @@
                 <td><%= button_to "#{detail.odometro } Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_hodometro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Hodômetro?" }  %></td>
                 <td><%= button_to "#{detail.horimetro} Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_horimetro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Horímetro?" }  %></td>
                 <td><%= detail.battery %></td>
-                <td>
-                  <%= link_to detail.url, detail.url, target: "_blank", rel: "noopener noreferrer" if detail.url.present? %>
-                </td>
+                <td><%= link_to detail.url, target: "_blank", rel: "noopener noreferrer", class: "btn btn-primary btn-sm" do %>📍 Ver no Mapa <% end %></td>
                 <td><%= detail.velo_max %></td>
                 <td><%= detail.bat_bck %></td>
                 <td><%= detail.cercas %></td>

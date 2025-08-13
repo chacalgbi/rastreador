@@ -6,7 +6,7 @@ class Admin::User < Admin::ApplicationRecord
   end
 
   validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :password, allow_nil: true, length: { minimum: 12 }, format: { with: /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/ }
+  validates :password, allow_nil: true, length: { minimum: 6 }
 
   normalizes :email, with: -> { _1.strip.downcase }
 
