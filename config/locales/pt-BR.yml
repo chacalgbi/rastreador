@@ -15,6 +15,7 @@ pt-BR:
         too_long: "é muito longo (máximo de %{count} caracteres)"
         invalid: "é inválido"
         confirmation: "As senhas não conferem"
+        record_invalid: "A validação falhou: %{errors}"
   helpers:
     page_entries_info:
       more_pages:
