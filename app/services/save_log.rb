@@ -40,7 +40,7 @@ class SaveLog
 
   def event_car
     return nil if @log.dig(:device, :id).nil? || @log.dig(:device, :name).nil?
-    device_name = "#{@log.dig(:device, :id)}_#{@log.dig(:device, :name)}".downcase.gsub(' ', '_')
+    device_name = "#{@log.dig(:device, :id)}_#{@log.dig(:device, :name)}".downcase.gsub(/[^a-z0-9]/, '_')
     path = Rails.root.join('log', 'carros')
     file = File.join(path, "#{device_name}.log")
 
