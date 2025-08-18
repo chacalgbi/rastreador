@@ -2,8 +2,8 @@ class Admin::EventsController < Admin::BaseController
   before_action :set_event, only: %i[ show edit update destroy ]
 
   def index
-    params[:q] ||= { s: 'created_at desc' }
     @search = Event.all.ransack(params[:q])
+    @search.sorts = 'updated_at desc' if @search.sorts.empty?
 
     respond_to do |format|
       format.html { @pagy, @events = pagy(@search.result) }

@@ -18,6 +18,7 @@
             <tr>
               <th><%= sort_link @search, :id %></th>
               <th><%= sort_link @search, :car_id %></th>
+              <th><%= sort_link @search, :updated_at %></th>
               <th><%= sort_link @search, :car_name %></th>
               <th><%= sort_link @search, :driver_id %></th>
               <th><%= sort_link @search, :driver_name %></th>
@@ -25,7 +26,6 @@
               <th><%= sort_link @search, :event_name %></th>
               <th><%= sort_link @search, :message %></th>
               <th><%= sort_link @search, :created_at %></th>
-              <th><%= sort_link @search, :updated_at %></th>
               <th class="w-1"></th>
             </tr>
           </thead>
@@ -34,6 +34,14 @@
               <tr>
                 <td><%= event.id %></td>
                 <td><%= event.car_id %></td>
+                <td>
+                  <%= event.updated_at.strftime("%H:%M:%S %d/%m/%Y") %>
+                  <% if event.updated_at.to_date == Date.today %>
+                  Hoje
+                  <% elsif event.updated_at.to_date == Date.yesterday %>
+                  Ontem
+                  <% end %>
+                </td>
                 <td><%= event.car_name %></td>
                 <td><%= event.driver_id %></td>
                 <td><%= event.driver_name %></td>
@@ -41,7 +49,6 @@
                 <td><%= event.event_name %></td>
                 <td><%= event.message %></td>
                 <td><%= event.created_at %></td>
-                <td><%= event.updated_at %></td>
                 <td>
                   <%= link_to "View", [:admin, event], class: "btn btn-white btn-sm" %>
                   <%= link_to "Edit", edit_admin_event_path(event), class: "btn btn-white btn-sm" %>
@@ -67,14 +74,45 @@
 
 <div id="offcanvas_filters" tabindex="-1" class="offcanvas offcanvas-end">
   <div class="offcanvas-header">
-    <h2 class="offcanvas-title">Filters</h2>
+    <h2 class="offcanvas-title">Filtros</h2>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
   </div>
   <%= search_form_for [:admin, @search], class: "offcanvas-body" do |f| %>
-    <%# f.label :name_cont, class: "form-label" %>
-    <%# f.text_field :name_cont, class: "form-control mb-3" %>
+    <%= f.label :car_name_cont, "Nome do Carro", class: "form-label" %>
+    <%= f.text_field :car_name_cont, placeholder: "Digite o nome do carro", class: "form-control mb-3" %>
 
-    <%= f.submit "Filter", class: "btn btn-primary" %>
-    <%= link_to "Clear Filter", admin_events_path, class: "btn btn-white" %>
+    <%= f.label :car_id_eq, "ID do Carro", class: "form-label" %>
+    <%= f.text_field :car_id_eq, placeholder: "Digite o ID do carro", class: "form-control mb-3" %>
+
+    <%= f.label :event_type_eq, "Tipo de evento", class: "form-label" %>
+        <%= f.select :event_type_eq, 
+        options_for_select([
+          ['Todos', ''], 
+          ['alarm', 'alarm'], 
+          ['commandResult', 'commandResult'],
+          ['deviceOffline', 'deviceOffline'], 
+          ['deviceOverspeed', 'deviceOverspeed'], 
+          ['geofenceEnter', 'geofenceEnter'], 
+          ['geofenceExit', 'geofenceExit']
+        ], f.object.event_type_eq), 
+        {}, 
+        { class: "form-select mb-3" } %>
+
+    <%= f.label :event_name_eq, "Nome do evento", class: "form-label" %>
+        <%= f.select :event_name_eq, 
+        options_for_select([
+          ['Todos', ''], 
+          ['powerCut', 'powerCut'], 
+          ['lowBattery', 'lowBattery'],
+          ['cerca', 'cerca'], 
+          ['rele', 'rele'], 
+          ['resposta', 'resposta'], 
+          ['velocidade', 'velocidade']
+        ], f.object.event_name_eq), 
+        {}, 
+        { class: "form-select mb-3" } %>
+
+    <%= f.submit "Filtrar", class: "btn btn-primary" %>
+    <%= link_to "Limpar Filtro", admin_events_path, class: "btn btn-white" %>
   <% end %>
 </div>

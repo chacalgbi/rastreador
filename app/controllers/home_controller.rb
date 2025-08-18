@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  HOURS_LAST_EVENTS = 48
+  HOURS_LAST_EVENTS = 96
   before_action :set_global_variables
 
   def set_global_variables
