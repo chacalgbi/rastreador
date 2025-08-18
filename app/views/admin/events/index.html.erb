@@ -20,11 +20,11 @@
               <th><%= sort_link @search, :car_id %></th>
               <th><%= sort_link @search, :updated_at %></th>
               <th><%= sort_link @search, :car_name %></th>
-              <th><%= sort_link @search, :driver_id %></th>
-              <th><%= sort_link @search, :driver_name %></th>
               <th><%= sort_link @search, :event_type %></th>
               <th><%= sort_link @search, :event_name %></th>
               <th><%= sort_link @search, :message %></th>
+              <th><%= sort_link @search, :driver_id %></th>
+              <th><%= sort_link @search, :driver_name %></th>
               <th><%= sort_link @search, :created_at %></th>
               <th class="w-1"></th>
             </tr>
@@ -43,11 +43,11 @@
                   <% end %>
                 </td>
                 <td><%= event.car_name %></td>
-                <td><%= event.driver_id %></td>
-                <td><%= event.driver_name %></td>
                 <td><%= event.event_type %></td>
                 <td><%= event.event_name %></td>
                 <td><%= event.message %></td>
+                <td><%= event.driver_id %></td>
+                <td><%= event.driver_name %></td>
                 <td><%= event.created_at %></td>
                 <td>
                   <%= link_to "View", [:admin, event], class: "btn btn-white btn-sm" %>
