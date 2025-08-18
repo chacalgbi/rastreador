@@ -8,6 +8,7 @@ class TraccarUpdateDevice
     update_detail
     update_view
     update_admin_view
+    recover_level_battery if @params&.[](:alarme_type) == 'lowBattery'
   end
 
   private
@@ -84,5 +85,16 @@ class TraccarUpdateDevice
     end
 
     changed
+  end
+
+  def recover_level_battery
+    # Caso receba um alarme de bateria baixa, enviar um comando para recuperar e guardar o valor da bateria do carro
+    # e da bateria de backUp.
+    command = Command.find_by(type_device: @detail.model, name: 'Status')
+    send_command = command.present? ? command.command : nil
+    return if send_command.nil?
+    send_command = send_command.gsub('XXXX', @detail.imei) if @detail.model == 'st8310u'
+
+    Traccar.command(@detail.device_id, send_command)
   end
 end
