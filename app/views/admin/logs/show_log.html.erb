@@ -28,9 +28,35 @@
     <% else %>
       <p>Exibindo as últimas <%= Admin::LogsController::LINES_TO_SHOW %> linhas:</p>
     <% end %>
-    <pre style="background-color:rgb(56, 56, 57); border: 1px solid #dee2e6; padding: 1rem; white-space: pre-wrap; word-wrap: break-word; font-size: 1rem;">
+    <pre id="log-content" style="background-color:rgb(56, 56, 57); border: 1px solid #dee2e6; padding: 1rem; white-space: pre-wrap; word-wrap: break-word; font-size: 1rem; color: #fff;">
       <%= @log_content %>
     </pre>
+
+    <style>
+      .log-timestamp {
+        background-color: rgba(17, 116, 223, 0.42) !important;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+    </style>
+
+    <script>
+      function highlightLogTimestamps() {
+        const logContent = document.getElementById('log-content');
+        if (logContent && !logContent.dataset.highlighted) {
+          const timestampPattern = /(I, \[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+ #\d+\])/g;
+
+          let content = logContent.innerHTML;
+          content = content.replace(timestampPattern, '<span class="log-timestamp">$1</span>');
+          logContent.innerHTML = content;
+          logContent.dataset.highlighted = 'true';
+        }
+      }
+      document.addEventListener('turbo:load', highlightLogTimestamps);
+      document.addEventListener('turbo:render', highlightLogTimestamps);
+      document.addEventListener('DOMContentLoaded', highlightLogTimestamps);
+    </script>
   </div>
 </div>
 

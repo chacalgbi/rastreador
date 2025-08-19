@@ -8,7 +8,7 @@ class TraccarUpdateDevice
     update_detail
     update_view
     update_admin_view
-    recover_level_battery if @params&.[](:alarme_type) == 'lowBattery'
+    recover_level_battery if @params&.[](:alarme_type) == 'lowBattery' || @params&.[](:alarme_type) == 'powerCut'
   end
 
   private

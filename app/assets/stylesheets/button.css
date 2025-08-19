@@ -70,6 +70,13 @@
   --btn-icon-color: invert(1);
 }
 
+.btn--danger {
+  --btn-background: #dc3545;
+  --btn-border-color: transparent;
+  --btn-color: white;
+  --btn-icon-color: invert(1);
+}
+
 .btn--plain {
   --btn-background: transparent;
   --btn-border-color: transparent;

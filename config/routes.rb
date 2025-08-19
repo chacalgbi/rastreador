@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     post 'details/rele'
     post 'details/send_command'
     post 'commands/send_command'
+    post 'commands/send_command_to_all'
     resources :events
     resources :commands
     resource  :password_reset

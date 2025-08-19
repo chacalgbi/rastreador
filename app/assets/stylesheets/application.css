@@ -12,6 +12,22 @@
 /*= require checklist */
 /*= require check_lists */
 
+.text-warning {
+  color: #856404 !important;
+  background-color: #fff3cd;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #ffeaa7;
+}
+
+.text-info {
+  color: #07166d !important;
+  background-color: #fff3cd;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #ffeaa7;
+}
+
 /* Correção específica para ícones em tabelas de motoristas em dispositivos móveis */
 @media (max-width: 768px) {
   .table .btn img.invertible {

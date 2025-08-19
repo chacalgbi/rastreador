@@ -2,9 +2,24 @@
   <div class="flex flex-col gap mb-2">
     <div class="flex flex-col gap-half">
       <%= form.text_field :comando, placeholder: "Digite o comando", class: "input" %>
-      <%= form.text_field :deviceid, placeholder: "Id do device", class: "input" %>
-      <%= form.submit "Enviar", class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar este comando?" } %>
+      <%= form.text_field :deviceid, placeholder: "Id do device (ou múltiplos IDs separados por vírgula)", class: "input" %>
+      <%= form.submit "Enviar para veículo(s)", class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar este comando?" } %>
     </div>
-    O comando será enviado sem tratamento, portanto, tenha certeza de que o comando está correto.
+    <div class="text-info">
+      💬 <strong>INFORMAÇÃO:</strong> O comando será enviado sem tratamento, portanto, tenha certeza de que o comando está correto.<br>
+      📝 <strong>Dica:</strong> Para enviar para múltiplos veículos, separe os IDs por vírgula (ex: 123, 456, 789).
+    </div>
+  </div>
+<% end %>
+
+<%= form_with url: admin_commands_send_command_to_all_path, class: "card flex flex-col gap" do |form| %>
+  <div class="flex flex-col gap mb-2">
+    <div class="flex flex-col gap-half">
+      <%= form.text_field :comando, placeholder: "Digite o comando para todos os veículos", class: "input" %>
+      <%= form.submit "Enviar para TODOS os veículos", class: "btn btn--danger", data: { turbo_confirm: "ATENÇÃO: Este comando será enviado para TODOS os veículos cadastrados. Você tem certeza?" } %>
+    </div>
+    <div class="text-warning">
+      ⚠️ <strong>ATENÇÃO:</strong> Este comando será enviado para TODOS os veículos cadastrados no sistema. Use com extrema cautela.
+    </div>
   </div>
 <% end %>

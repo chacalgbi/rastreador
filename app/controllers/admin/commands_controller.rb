@@ -44,8 +44,78 @@ class Admin::CommandsController < Admin::BaseController
   end
 
   def send_command
-    response = Traccar.command(params[:deviceid], params[:comando])
-    redirect_to admin_commands_path, notice: "Comando enviado com sucesso! #{response}"
+    comando = params[:comando]
+    device_ids_param = params[:deviceid]
+
+    if comando.blank?
+      redirect_to admin_commands_path, alert: "Comando não pode estar vazio."
+      return
+    end
+
+    if device_ids_param.blank?
+      redirect_to admin_commands_path, alert: "Device ID não pode estar vazio."
+      return
+    end
+
+    device_ids = device_ids_param.split(',').map(&:strip).reject(&:blank?)
+
+    if device_ids.empty?
+      redirect_to admin_commands_path, alert: "Nenhum Device ID válido fornecido."
+      return
+    end
+
+    results = []
+
+    device_ids.each do |device_id|
+      begin
+        response = Traccar.command(device_id, comando)
+        results << "(#{device_id}, #{response})"
+      rescue => e
+        results << "(#{device_id}, ERRO: #{e.message})"
+        SaveLog.new('error', "Erro ao enviar comando para device #{device_id}: #{e.message}").save
+      end
+    end
+
+    if device_ids.size == 1
+      message = "Comando enviado para o veículo #{device_ids.first}: #{results.first}"
+    else
+      message = "Comandos enviados para #{device_ids.size} veículos: #{results.join(', ')}"
+    end
+
+    SaveLog.new('info', message).save
+    redirect_to admin_commands_path, notice: message
+  end
+
+  def send_command_to_all
+    comando = params[:comando]
+
+    if comando.blank?
+      redirect_to admin_commands_path, alert: "Comando não pode estar vazio."
+      return
+    end
+
+    device_ids = Detail.pluck(:device_id)
+
+    if device_ids.empty?
+      redirect_to admin_commands_path, alert: "Nenhum veículo encontrado."
+      return
+    end
+
+    results = []
+
+    device_ids.each do |device_id|
+      begin
+        response = Traccar.command(device_id, comando)
+        results << "(#{device_id}, #{response})"
+      rescue => e
+        results << "(#{device_id}, ERRO: #{e.message})"
+        SaveLog.new('error', "Erro ao enviar comando para device #{device_id}: #{e.message}").save
+      end
+    end
+
+    message = "Comandos enviados para todos os veículos: #{results.join(', ')}"
+    SaveLog.new('info', message).save
+    redirect_to admin_commands_path, notice: message
   end
 
   private
