@@ -49,7 +49,7 @@ class SaveLog
     FileUtils.touch(file)
 
     logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
-    logger.info("PARAMETROS: #{@log}\nPADRONIZADO: #{@log2 || 'Sem padronização'}\nALERTA: #{@log3 || 'Sem alertas'}\n")
+    logger.info("\nPARAMETROS: #{@log}\nPADRONIZADO: #{@log2 || 'Sem padronização'}\nALERTA: #{@log3 || 'Sem alertas'}\n")
   end
 
   def info

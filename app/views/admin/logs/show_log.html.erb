@@ -39,23 +39,51 @@
         border-radius: 3px;
         font-weight: bold;
       }
+      .log-parametros {
+        background-color: rgba(255, 193, 7, 0.5) !important;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-weight: bold;
+        color: #000000ff !important;
+      }
+      .log-padronizado {
+        background-color: rgba(40, 167, 69, 0.5) !important;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-weight: bold;
+        color: #000000ff !important;
+      }
+      .log-alerta {
+        background-color: rgba(220, 53, 69, 0.5) !important;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-weight: bold;
+        color: #000000ff !important;
+      }
     </style>
 
     <script>
-      function highlightLogTimestamps() {
+      function highlightLogContent() {
         const logContent = document.getElementById('log-content');
         if (logContent && !logContent.dataset.highlighted) {
-          const timestampPattern = /(I, \[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+ #\d+\])/g;
-
           let content = logContent.innerHTML;
+          
+          // Destaque do timestamp
+          const timestampPattern = /(I, \[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+ #\d+\])/g;
           content = content.replace(timestampPattern, '<span class="log-timestamp">$1</span>');
+          
+          // Destaque das palavras específicas
+          content = content.replace(/(PARAMETROS:\s*)/g, '<span class="log-parametros">$1</span>');
+          content = content.replace(/(PADRONIZADO:\s*)/g, '<span class="log-padronizado">$1</span>');
+          content = content.replace(/(ALERTA:\s*)/g, '<span class="log-alerta">$1</span>');
+          
           logContent.innerHTML = content;
           logContent.dataset.highlighted = 'true';
         }
       }
-      document.addEventListener('turbo:load', highlightLogTimestamps);
-      document.addEventListener('turbo:render', highlightLogTimestamps);
-      document.addEventListener('DOMContentLoaded', highlightLogTimestamps);
+      document.addEventListener('turbo:load', highlightLogContent);
+      document.addEventListener('turbo:render', highlightLogContent);
+      document.addEventListener('DOMContentLoaded', highlightLogContent);
     </script>
   </div>
 </div>

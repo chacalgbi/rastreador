@@ -77,9 +77,9 @@ class Admin::CommandsController < Admin::BaseController
     end
 
     if device_ids.size == 1
-      message = "Comando enviado para o veículo #{device_ids.first}: #{results.first}"
+      message = "O comando '#{comando}' foi enviado para o veículo #{device_ids.first}: #{results.first}"
     else
-      message = "Comandos enviados para #{device_ids.size} veículos: #{results.join(', ')}"
+      message = "O comando '#{comando}' foi enviado para #{device_ids.size} veículos: #{results.join(', ')}"
     end
 
     SaveLog.new('info', message).save
