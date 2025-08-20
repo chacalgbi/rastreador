@@ -11,6 +11,7 @@
 
 /*= require checklist */
 /*= require check_lists */
+/*= require sweetalert2 */
 
 .text-warning {
   color: #856404 !important;

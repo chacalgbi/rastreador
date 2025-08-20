@@ -3,5 +3,6 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import "jquery"
 import "notify"
+import "sweetalert2"
 
 window.jQuery = window.$ = jQuery;

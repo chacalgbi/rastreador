@@ -15,7 +15,20 @@ class HomeController < ApplicationController
 
   def location
     @location_url = params[:url]
-    redirect_to root_path, alert: "Erro ao buscar a posição do veículo." if @location_url.empty?
+
+    if @location_url.empty?
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.append(
+            "flash",
+            partial: "shared/flash_popup",
+            locals: { alert_message: "Erro ao buscar a posição do veículo." }
+          )
+        end
+        format.html { redirect_to root_path, alert: "Erro ao buscar a posição do veículo." }
+      end
+      return
+    end
 
     respond_to do |format|
       format.turbo_stream do
@@ -77,7 +90,16 @@ class HomeController < ApplicationController
       unchecked_fields = boolean_fields.select { |field| checklist_params[field] != 'true' }
 
       if unchecked_fields.any? && checklist_params[:obs].blank?
-        redirect_to root_path, alert: "É obrigatório preencher o campo 'Observações' quando algum item do checklist não for verificado."
+        respond_to do |format|
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.append(
+              "flash",
+              partial: "shared/flash_popup",
+              locals: { alert_message: "É obrigatório preencher o campo 'Observações' quando algum item do checklist não for verificado." }
+            )
+          end
+          format.html { redirect_to root_path, alert: "É obrigatório preencher o campo 'Observações' quando algum item do checklist não for verificado." }
+        end
         return
       end
 
@@ -102,7 +124,16 @@ class HomeController < ApplicationController
       )
 
       unless checklist.save
-        redirect_to root_path, alert: "Erro ao salvar checklist: #{checklist.errors.full_messages.join(', ')}"
+        respond_to do |format|
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.append(
+              "flash",
+              partial: "shared/flash_popup",
+              locals: { alert_message: "Erro ao salvar checklist: #{checklist.errors.full_messages.join(', ')}" }
+            )
+          end
+          format.html { redirect_to root_path, alert: "Erro ao salvar checklist: #{checklist.errors.full_messages.join(', ')}" }
+        end
         return
       end
     end
@@ -114,7 +145,16 @@ class HomeController < ApplicationController
     response = Traccar.command(params[:id], send_command)
 
     if response != 200
-      redirect_to root_path, alert: "Erro ao enviar o comando: #{params[:action_type]}."
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.append(
+            "flash",
+            partial: "shared/flash_popup",
+            locals: { alert_message: "Erro ao enviar o comando: #{params[:action_type]}." }
+          )
+        end
+        format.html { redirect_to root_path, alert: "Erro ao enviar o comando: #{params[:action_type]}." }
+      end
       return
     end
 
@@ -135,7 +175,8 @@ class HomeController < ApplicationController
       format.turbo_stream do
         render turbo_stream: [
           turbo_stream.replace("button_#{params[:id]}", partial: "home/button", locals: { button_text: new_button_text, button_class: new_button_class }),
-          turbo_stream.append("flash", partial: "/alert", locals: { notice: notice })
+          turbo_stream.append("flash", partial: "/alert", locals: { notice: notice }),
+          turbo_stream.append("flash", partial: "shared/flash_popup", locals: { notice_message: notice, redirect_on_success: true })
         ]
       end
     end
@@ -191,11 +232,10 @@ class HomeController < ApplicationController
 
     respond_to do |format|
       format.turbo_stream do
-        render turbo_stream: turbo_stream.append(
-          "flash",
-          partial: "/alert",
-          locals: { notice: response }
-        )
+        render turbo_stream: [
+          turbo_stream.append("flash", partial: "/alert", locals: { notice: response }),
+          turbo_stream.append("flash", partial: "shared/flash_popup", locals: { notice_message: response })
+        ]
       end
       format.html { redirect_to root_path, notice: response }
     end
@@ -246,7 +286,20 @@ class HomeController < ApplicationController
 
   def get_info_device
     response = Traccar.get_info_device(params[:device_id])
-    redirect_to root_path, alert: "Erro ao buscar informações do veículo." if response.empty?
+
+    if response.empty?
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.append(
+            "flash",
+            partial: "shared/flash_popup",
+            locals: { alert_message: "Erro ao buscar informações do veículo." }
+          )
+        end
+        format.html { redirect_to root_path, alert: "Erro ao buscar informações do veículo." }
+      end
+      return
+    end
 
     response
   end

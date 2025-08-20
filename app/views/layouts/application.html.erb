@@ -26,6 +26,12 @@
   </head>
 
   <body>
+    <!-- Flash Controller para SweetAlert2 -->
+    <div data-controller="flash" 
+         data-flash-alert-value="<%= flash[:alert] %>" 
+         data-flash-notice-value="<%= flash[:notice] %>">
+    </div>
+    
     <div class="header-layout">
       <header id="header">
         <div class="flex justify-between container">

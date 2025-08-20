@@ -4,7 +4,7 @@ class EventController < PublicController
     @detail = Detail.find_by(device_id: params[:device][:id])
 
     if @detail.nil?
-      return render json: { msg: "detail not found" }, status: :not_found
+      return render json: { msg: "veiculo não encontrado: #{params[:device][:id]}" }, status: :not_found
     else
       build_events
       render json: { msg: "ok" }, status: :ok
