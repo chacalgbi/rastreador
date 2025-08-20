@@ -6,7 +6,7 @@
 
   <%= render "page_header_actions" do %>
     <%= link_to "Edit detail", edit_admin_detail_path(@detail), class: "btn btn-primary" %>
-    <%= link_to "Delete detail", [:admin, @detail], class: "btn btn-white", data: { method: :delete, confirm: "Are you sure?" } %>
+    <%= link_to "Delete detail", [:admin, @detail], class: "btn btn-white", data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja deletar este veículo?" } %>
   <% end %>
 <% end %>
 
