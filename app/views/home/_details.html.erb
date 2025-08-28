@@ -91,15 +91,20 @@
   <br>
   <div class="car_container">
     <div class="car_item">
+      <%= button_to home_battery_history_path(car_id: device_id), method: :post, class: "btn", data: { turbo_stream: true } do %>
+        Bateria
+      <% end %>
+    </div>
+    <div class="car_item">
       <%= link_to home_location_path(car_id: device_id, url: info.url), class: "btn", data: { turbo_stream: true, turbo_prefetch: false } do %>
-        Localização atual
+        Localização
       <% end %>
     </div>
     <div class="car_item">
       <% if events_count != 0 %>
         <%= button_to home_last_events_path(device_id: device_id, open: 'true'), method: :post, class: "btn btn--borderless", data: { turbo_stream: true } do %>
           <%= image_tag "select-arrow.svg", size: 25, aria: { hidden: true } %>
-          <span>Últimos Eventos: <%= events_count %></span>
+          <span>Eventos: <%= events_count %></span>
         <% end %>
       <% else %>
         <%= button_tag "Sem eventos", class: "btn btn--borderless", disabled: true %>

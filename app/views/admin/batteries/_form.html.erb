@@ -1,0 +1,70 @@
+<%= form_with(model: [:admin, battery]) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :device_id, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :device_id, class: "form-control" %>
+      <%= tag.div battery.errors[:device_id].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :device_name, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :device_name, class: "form-control" %>
+      <%= tag.div battery.errors[:device_name].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :user_id, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :user_id, class: "form-control" %>
+      <%= tag.div battery.errors[:user_id].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :user_name, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :user_name, class: "form-control" %>
+      <%= tag.div battery.errors[:user_name].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :bat, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :bat, class: "form-control" %>
+      <%= tag.div battery.errors[:bat].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :bkp, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :bkp, class: "form-control" %>
+      <%= tag.div battery.errors[:bkp].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :created_at, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.datetime_field :created_at, class: "form-control" %>
+      <%= tag.div battery.errors[:created_at].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :updated_at, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.datetime_field :updated_at, class: "form-control" %>
+      <%= tag.div battery.errors[:updated_at].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancelar", admin_batteries_path, class: "btn btn-white" %>
+  </div>
+<% end %>

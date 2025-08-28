@@ -241,6 +241,45 @@ class HomeController < ApplicationController
     end
   end
 
+  def battery_history
+    @device_id = params[:car_id]
+    @detail = Detail.find_by(device_id: @device_id)
+
+    if @detail.nil?
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.append(
+            "flash",
+            partial: "shared/flash_popup",
+            locals: { alert_message: "Dispositivo não encontrado." }
+          )
+        end
+      end
+      return
+    end
+    start_time = 4.days.ago
+
+    @bat = Battery.where(device_id: @device_id, created_at: start_time..Time.current)
+            .order(created_at: :asc)
+            .pluck(:created_at, :bat)
+            .map { |date, bat| [date.strftime("%H:%M:%S %d/%m/%Y"), bat.to_f] }
+
+    @bkp = Battery.where(device_id: @device_id, created_at: start_time..Time.current)
+            .order(created_at: :asc)
+            .pluck(:created_at, :bkp)
+            .map { |date, bkp| [date.strftime("%H:%M:%S %d/%m/%Y"), bkp.to_f] }
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "battery_history_modal",
+          partial: "home/battery_history_modal",
+          locals: { device_name: @detail.device_name, bat: @bat, bkp: @bkp }
+        )
+      end
+    end
+  end
+
   private
 
   def devices_admin

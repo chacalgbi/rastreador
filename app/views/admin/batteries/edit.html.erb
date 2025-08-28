@@ -1,0 +1,17 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Editing battery" do %>
+  <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+  <li class="breadcrumb-item"><%= link_to "Baterias", admin_batteries_path %></li>
+  <li class="breadcrumb-item"><%= link_to "Exibir essa bateria", [:admin, @battery] %></li>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="card">
+      <div class="card-body">
+        <%= render "form", battery: @battery %>
+      </div>
+    </div>
+  </div>
+</div>

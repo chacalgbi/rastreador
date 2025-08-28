@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     post 'commands/send_command_to_all'
     resources :events
     resources :commands
+    resources :batteries
     resource  :password_reset
 
     resources :logs, only: [:index] do
@@ -48,6 +49,8 @@ Rails.application.routes.draw do
   get "home/location"
   get "home/details"
   get "home/hide_details"
+  get "home/battery_history"
+  post "home/battery_history"
   post "home/last_events"
   post "home/odometro"
   post "home/block_and_desblock"

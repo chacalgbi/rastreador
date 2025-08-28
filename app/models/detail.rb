@@ -1,5 +1,6 @@
 class Detail < ApplicationRecord
   before_validation :set_default_values
+  after_update :create_battery_record, if: :battery_changed?
 
   def self.ransackable_associations(auth_object = nil)
     %w[device_id device_name model ignition rele_state url velo_max battery bat_bck horimetro odometro cercas satelites version imei bat_nivel signal_gps signal_gsm acc acc_virtual charge heartbeat obs status network params last_event_type last_user apn ip_and_port alert_whatsApp alert_telegram alert_email send_exit_cerca send_battery send_moving send_velo_max send_rele created_at updated_at]
@@ -11,13 +12,26 @@ class Detail < ApplicationRecord
 
   private
 
-def set_default_values
-  # Rails.logger.debug ">>> Executando set_default_values para Detail #{id}"
+  def set_default_values
+    self.model = "xt40" if model.blank?
+    self.ignition = "off" if ignition.blank?
+    self.rele_state = "off" if rele_state.blank?
+    self.status = "online" if status.blank?
+    # self.last_user = "System" if last_user.blank?
+  end
 
-  self.model = "xt40" if model.blank?
-  self.ignition = "off" if ignition.blank?
-  self.rele_state = "off" if rele_state.blank?
-  self.status = "online" if status.blank?
-  # self.last_user = "System" if last_user.blank?
-end
+  def battery_changed?
+    saved_change_to_battery? || saved_change_to_bat_bck?
+  end
+
+  def create_battery_record
+    Battery.create(
+      device_id: device_id,
+      device_name: device_name,
+      user_id: nil,
+      user_name: last_user.present? ? last_user : 'System',
+      bat: battery.to_f,
+      bkp: bat_bck.to_f
+    )
+  end
 end

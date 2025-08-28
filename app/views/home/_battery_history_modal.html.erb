@@ -1,0 +1,145 @@
+<%= turbo_frame_tag "battery_history_modal", data: { action: "turbo:frame-load->dialog#showModal" } do %>
+
+  <div contents data-controller="dialog">
+    <dialog id="battery_history_dialog" class="dialog" role="dialog" aria-labelledby="dialog_label" data-dialog-target="menu" data-action="click->dialog#closeOnClickOutside">
+      <div class="dialog__content" style="background: white;">
+
+        <button type="button" class="btn" onclick="document.getElementById('battery_history_dialog').close()">Fechar</button>
+
+        <%= line_chart bat,
+          class: 'box',
+          options: {
+            title: {
+              text: "Tensão da bateria",
+              left: 'center'
+            },
+            xAxis: {
+              boundaryGap: false,
+            },
+            tooltip: {
+              show: true,
+              trigger: 'axis',
+              axisPointer: {
+                type: 'cross',
+                label: {
+                  precision: 0
+                }
+              },
+            },
+            series: {
+              label: {
+                show: false,
+                position: 'bottom',
+                textStyle: {
+                  fontSize: 12
+                }
+              },
+              itemStyle: {
+                color: '#08a71dff'
+              },
+              areaStyle: {
+                color: RailsCharts.js(%Q{new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: '#45ca07ff'
+                  },
+                  {
+                    offset: 1,
+                    color: '#ffffffff'
+                  }
+                ])}
+                )
+              }
+            }
+          }
+        %>
+
+        <%= line_chart bkp,
+          class: 'box',
+          options: {
+            title: {
+              text: "Tensão de backup",
+              left: 'center'
+            },
+            xAxis: {
+              boundaryGap: false,
+            },
+            tooltip: {
+              show: true,
+              trigger: 'axis',
+              axisPointer: {
+                type: 'cross',
+                label: {
+                  precision: 0
+                }
+              },
+            },
+            series: {
+              label: {
+                show: false,
+                position: 'bottom',
+                textStyle: {
+                  fontSize: 12
+                }
+              },
+              itemStyle: {
+                color: '#0a3badff'
+              },
+              areaStyle: {
+                color: RailsCharts.js(%Q{new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: '#116cb8ff'
+                  },
+                  {
+                    offset: 1,
+                    color: '#ffffffff'
+                  }
+                ])}
+                )
+              }
+            }
+          }
+        %>
+
+      </div>
+    </dialog>
+  </div>
+
+  <script>
+    setTimeout(function() {
+      var dlg = document.getElementById('battery_history_dialog');
+      if (!dlg) return;
+
+      if (typeof dlg.showModal === 'function') {
+        try { dlg.showModal(); } catch(e) {}
+      }
+
+      try {
+        var scripts = dlg.querySelectorAll('script:not([data-evaluated])');
+        scripts.forEach(function(s) {
+          var newScript = document.createElement('script');
+          if (s.src) { newScript.src = s.src; } else { newScript.text = s.textContent; }
+          newScript.dataset.evaluated = 'true';
+          document.body.appendChild(newScript);
+          newScript.parentNode.removeChild(newScript);
+          s.dataset.evaluated = 'true';
+        });
+      } catch (e) { /* noop */ }
+
+      try {
+        var containers = dlg.querySelectorAll('[id^="rails_charts_"]');
+        containers.forEach(function(el){
+          var fnName = 'init_' + el.id;
+          var fn = window[fnName];
+          if (typeof fn === 'function') {
+            try { fn(); } catch (e) { /* noop */ }
+          }
+        });
+      } catch (e) { /* noop */ }
+
+      setTimeout(function(){ window.dispatchEvent(new Event('resize')); }, 50);
+    }, 0);
+  </script>
+
+<% end %>
