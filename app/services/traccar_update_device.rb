@@ -8,7 +8,7 @@ class TraccarUpdateDevice
     update_detail
     update_view
     update_admin_view
-    recover_level_battery if @params&.[](:alarme_type) == 'lowBattery' || @params&.[](:alarme_type) == 'powerCut'
+    recover_level_battery if criteria_for_obtaining_battery_voltage
   end
 
   private
@@ -88,13 +88,21 @@ class TraccarUpdateDevice
   end
 
   def recover_level_battery
-    # Caso receba um alarme de bateria baixa, enviar um comando para recuperar e guardar o valor da bateria do carro
-    # e da bateria de backUp.
     command = Command.find_by(type_device: @detail.model, name: 'Status')
     send_command = command.present? ? command.command : nil
     return if send_command.nil?
     send_command = send_command.gsub('XXXX', @detail.imei) if @detail.model == 'st8310u'
 
     Traccar.command(@detail.device_id, send_command)
+  end
+
+  def criteria_for_obtaining_battery_voltage
+    # Caso receba um alarme de 'bateria baixa', 'corte de energia', 'carro em movimento' ou 'carro parado'.
+    # Enviar um comando para recuperar e guardar o valor da bateria do carro e da bateria de backUp.
+    # Isso serve para alimentar o gráfico e saber se a bateria não está segurando carga.
+    @params&.[](:alarme_type) == 'lowBattery' ||
+    @params&.[](:alarme_type) == 'powerCut' ||
+    @params&.[](:last_event_type) == 'deviceMoving' ||
+    @params&.[](:last_event_type) == 'deviceStopped'
   end
 end

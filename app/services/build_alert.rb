@@ -1,5 +1,5 @@
 class BuildAlert
-  IGNORED_EVENT_TYPES = ['deviceOffline', 'deviceOnline', 'ignitionOn', 'ignitionOff', 'deviceMoving', 'deviceStopped'].freeze
+  IGNORED_EVENT_TYPES = ['deviceOffline', 'deviceOnline', 'ignitionOn', 'ignitionOff'].freeze
 
   def initialize(payload, detail)
     # '🚙🚗🚘🚨⚠️✅📣📢🪫📡⌛🔋🔓🔒💬🔴🟠🟡🟢🗺️'
