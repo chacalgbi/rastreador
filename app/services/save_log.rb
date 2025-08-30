@@ -27,6 +27,8 @@ class SaveLog
         alert_job
       when 'notify_error'
         notify_error
+      when 'payload_desconhecido'
+        payload_desconhecido
       else
         nil
       end
@@ -127,6 +129,18 @@ class SaveLog
   def params
     path = Rails.root.join('log', 'informacao')
     file = File.join(path, "params.log")
+
+    FileUtils.mkdir_p(path) unless File.directory?(path)
+
+    FileUtils.touch(file)
+
+    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger.info("#{@log}\n")
+  end
+
+  def payload_desconhecido
+    path = Rails.root.join('log', 'informacao')
+    file = File.join(path, "payload_desconhecido.log")
 
     FileUtils.mkdir_p(path) unless File.directory?(path)
 

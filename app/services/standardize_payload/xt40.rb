@@ -34,6 +34,7 @@ class StandardizePayload::Xt40
       when 'alarm'
         alarm
       else
+        SaveLog.new('payload_desconhecido', @payload).save
         nil
       end
     rescue StandardError => e
@@ -163,9 +164,18 @@ class StandardizePayload::Xt40
       commandResult_params
     elsif commandResult_type.start_with?('NetworkMode')
       commandResult_network
+    elsif commandResult_type.start_with?('SPEEDCHECK set OK!')
+      commandResult_speedcheck
     else
+      SaveLog.new('payload_desconhecido', @payload).save
       nil
     end
+  end
+
+  def commandResult_speedcheck
+    {
+      **atributos_comuns
+    }
   end
 
   def commandResult_releOn
