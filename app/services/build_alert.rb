@@ -212,8 +212,10 @@ class BuildAlert
       '🔋Energia restaurada'
     when 'accident'
       'Acidente'
+    when 'hardAcceleration'
+      '🚀Aceleração brusca'
     else
-      'Alarme desconhecido'
+      alarme_type
     end
   end
 end
