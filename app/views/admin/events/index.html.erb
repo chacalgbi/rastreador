@@ -87,13 +87,18 @@
     <%= f.label :event_type_eq, "Tipo de evento", class: "form-label" %>
         <%= f.select :event_type_eq, 
         options_for_select([
-          ['Todos', ''], 
-          ['alarm', 'alarm'], 
+          ['Todos', ''],
+          ['alarm', 'alarm'],
           ['commandResult', 'commandResult'],
-          ['deviceOffline', 'deviceOffline'], 
-          ['deviceOverspeed', 'deviceOverspeed'], 
-          ['geofenceEnter', 'geofenceEnter'], 
-          ['geofenceExit', 'geofenceExit']
+          ['deviceOffline', 'deviceOffline'],
+          ['deviceOnline', 'deviceOnline'],
+          ['deviceMoving', 'deviceMoving'],
+          ['deviceStopped', 'deviceStopped'],
+          ['deviceOverspeed', 'deviceOverspeed'],
+          ['geofenceEnter', 'geofenceEnter'],
+          ['geofenceExit', 'geofenceExit'],
+          ['ignitionOn', 'ignitionOn'],
+          ['ignitionOff', 'ignitionOff']
         ], f.object.event_type_eq), 
         {}, 
         { class: "form-select mb-3" } %>
@@ -101,14 +106,25 @@
     <%= f.label :event_name_eq, "Nome do evento", class: "form-label" %>
         <%= f.select :event_name_eq, 
         options_for_select([
-          ['Todos', ''], 
-          ['powerCut', 'powerCut'], 
+          ['Todos', ''],
+          ['accident', 'accident'],
+          ['cerca', 'cerca'],
+          ['desligado', 'desligado'],
+          ['hardAcceleration', 'hardAcceleration'],
+          ['jamming', 'jamming'],
+          ['ligado', 'ligado'],
           ['lowBattery', 'lowBattery'],
-          ['cerca', 'cerca'], 
-          ['rele', 'rele'], 
-          ['resposta', 'resposta'], 
+          ['movendo', 'movendo'],
+          ['Off-Line', 'Off-Line'],
+          ['On-Line', 'On-Line'],
+          ['parado', 'parado'],
+          ['powerCut', 'powerCut'],
+          ['powerRestored', 'powerRestored'],
+          ['rele', 'rele'],
+          ['resposta', 'resposta'],
+          ['sos', 'sos'],
           ['velocidade', 'velocidade']
-        ], f.object.event_name_eq), 
+        ], f.object.event_name_eq),
         {}, 
         { class: "form-select mb-3" } %>
 

@@ -1,5 +1,4 @@
 class BuildAlert
-  IGNORED_EVENT_TYPES = ['deviceOffline', 'deviceOnline', 'ignitionOn', 'ignitionOff', 'deviceStopped'].freeze
 
   def initialize(payload, detail)
     # '🚙🚗🚘🚨⚠️✅📣📢🪫📡⌛🔋🔓🔒💬🔴🟠🟡🟢🗺️'
@@ -175,8 +174,6 @@ class BuildAlert
   # ========== HELPERS ==========
 
   def events(event_type, event_name, msg1)
-    return if IGNORED_EVENT_TYPES.include?(event_type)
-
     Event.create(
       car_id: @detail.device_id,
       car_name: @veiculo,
@@ -214,6 +211,8 @@ class BuildAlert
       'Acidente'
     when 'hardAcceleration'
       '🚀Aceleração brusca'
+    when 'jamming'
+      '📡Interferência'
     else
       alarme_type
     end

@@ -1,4 +1,13 @@
 class HomeController < ApplicationController
+  # event_type
+  # ignitionOn ignitionOff deviceOffline deviceOnline deviceMoving deviceStopped geofenceExit geofenceEnter deviceOverspeed alarm commandResult
+
+  # event_name
+  # 'rele' 'resposta' 'ligado' 'desligado' 'movendo' 'parado' 'cerca' 'velocidade' 'Off-Line' 'On-Line' 'lowBattery' 'powerCut'
+  # 'sos' 'powerRestored' 'Acidente' 'hardAcceleration' 'jamming'
+
+  IGNORED_EVENT_TYPES = ['deviceOffline', 'deviceOnline', 'ignitionOn', 'ignitionOff', 'deviceStopped', 'deviceMoving'].freeze
+  IGNORED_EVENT_NAMES = ['resposta'].freeze
   HOURS_LAST_EVENTS = 96
   before_action :set_global_variables
 
@@ -44,7 +53,7 @@ class HomeController < ApplicationController
   def details
     device_id = params[:device_id]
     @event = Detail.find_by(device_id: device_id)
-    @events_last_x_hours = Event.where(car_id: device_id, created_at: HOURS_LAST_EVENTS.hours.ago..Time.current).where.not(event_name: 'resposta').count
+    @events_last_x_hours = query_events(device_id).count
 
     send_command('Status')
     send_command('network')
@@ -186,7 +195,7 @@ class HomeController < ApplicationController
     device_id = params[:device_id]
 
     if params[:open] == 'true'
-      @events = Event.where(car_id: device_id, created_at: HOURS_LAST_EVENTS.hours.ago..Time.current).where.not(event_name: 'resposta').order(created_at: :desc)
+      @events = query_events(device_id)
 
       respond_to do |format|
         format.turbo_stream do
@@ -281,6 +290,13 @@ class HomeController < ApplicationController
   end
 
   private
+
+  def query_events(device_id)
+    Event.where(car_id: device_id, created_at: HOURS_LAST_EVENTS.hours.ago..Time.current)
+      .where.not(event_name: IGNORED_EVENT_NAMES)
+      .where.not(event_type: IGNORED_EVENT_TYPES)
+      .order(created_at: :desc)
+  end
 
   def devices_admin
     return Detail.where("LOWER(device_name) LIKE LOWER(:query)", query: "%#{params[:query].downcase}%") if params[:query].present?
