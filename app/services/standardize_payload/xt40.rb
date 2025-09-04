@@ -214,7 +214,7 @@ class StandardizePayload::Xt40
 
   def commandResult_releOn
     {
-      rele_state: estado_rele,
+      rele_state: 'on',
       last_rele_modified: Time.now,
       **atributos_comuns
     }
@@ -222,7 +222,7 @@ class StandardizePayload::Xt40
 
   def commandResult_releOff
     {
-      rele_state: estado_rele,
+      rele_state: 'off',
       last_rele_modified: Time.now,
       **atributos_comuns
     }
