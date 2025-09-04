@@ -19,12 +19,12 @@
               <th><%= sort_link @search, :id %></th>
               <th><%= sort_link @search, :device_id %></th>
               <th style="width: 120px;"><%= sort_link @search, :device_name %></th>
-              <th style="width: 120px;"><%= sort_link @search, :last_user %></th>
+              <th style="width: 120px;"><%= sort_link @search, "Em uso por" %></th>
               <th style="width: 90px;"><%= sort_link @search, "Bat"%></th>
               <th style="width: 90px;"><%= sort_link @search, "Bck" %></th>
               <th style="width: 80px;"><%= sort_link @search, "Ign" %></th>
               <th style="width: 90px;"><%= sort_link @search, "Sts" %></th>
-              <th style="width: 80px;"><%= sort_link @search, "Rel" %></th>
+              <th style="width: 80px;"><%= sort_link @search, "Uso" %></th>
               <th>Lig/Desl</th>
               <th style="width: 100px;"><%= sort_link @search, "Event" %></th>
               <th style="width: 100px;"><%= sort_link @search, "Update" %></th>
@@ -75,7 +75,7 @@
                 <td style="width: 90px;"><%= detail.bat_bck %></td>
                 <td style="width: 80px; background-color:<%= detail.ignition == 'on' ? '#00FA9A' : '#e6727e' %>;"><%= detail.ignition %></td>
                 <td style="width: 90px; background-color:<%= detail.status == 'online' ? '#32CD32' : '#e6727e' %>;"><%= detail.status %></td>
-                <td style="width: 80px; background-color:<%= detail.rele_state == 'on' ? '#9ACD32' : '#e6727e' %>;"><%= detail.rele_state %></td>
+                <td style="width: 90px; background-color:<%= detail.rele_state == 'on' ? '#9ACD32' : '#e6727e' %>;"><%= detail.rele_state == 'on' ? 'Livre' : 'Ocupado' %></td>
                 <td style="display: flex; gap: 3px;">
                   <%= button_to "ON",  admin_details_rele_path, method: :post, params: { device_id: detail.device_id, model: detail.model, state: "ON",  imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja LIGAR o rele? O veículo pode está em movimento." }  %>
                   <%= button_to "OFF", admin_details_rele_path, method: :post, params: { device_id: detail.device_id, model: detail.model, state: "OFF", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja DESLIGAR o rele?" }  %>
