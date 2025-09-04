@@ -86,6 +86,7 @@ class HomeController < ApplicationController
   end
 
   def block_and_desblock
+    @detail = Detail.find_by(device_id: params[:id])
     if Current.user.maintenance?
       # Vai direto para o comando sem salvar checklist
     else
