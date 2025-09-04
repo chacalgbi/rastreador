@@ -45,7 +45,6 @@ class Admin::DetailsController < Admin::BaseController
   end
 
   def rele
-    @detail = Detail.find_by(device_id: params[:device_id])
     command_name = params[:state] == 'ON' ? 'rele_on' : 'rele_off'
     command = Command.find_by(type_device: params[:model], name: command_name)
     send_command = command.type_device == 'st8310u' ? command.command.gsub('XXXX', params[:imei]) : command.command
@@ -56,9 +55,6 @@ class Admin::DetailsController < Admin::BaseController
       redirect_to admin_details_url, alert: "Erro ao enviar o comando: #{params[:state]}. Status da resposta: #{response}"
       return
     end
-
-    @detail.last_user = params[:state] == 'ON' ? '' : 'System'
-    @detail.save
 
     notice = "O relé será #{params[:state] == 'ON' ? 'Ligado' : 'Desligado'}."
     redirect_to admin_details_url, notice: notice
