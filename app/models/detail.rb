@@ -16,6 +16,9 @@ class Detail < ApplicationRecord
     self.model = "xt40" if model.blank?
     self.ignition = "off" if ignition.blank?
     self.status = "online" if status.blank?
+    if rele_state.blank?
+      self.rele_state = category == "motorcycle" ? 'on' : 'off'
+    end
     # self.last_user = "System" if last_user.blank?
   end
 

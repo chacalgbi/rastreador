@@ -217,7 +217,7 @@ class StandardizePayload::Xt40
     # Necessário pois quando for moto, o relé deve ficar ligado quando o veículo estiver em uso.
     # lembrar que o relé é invertido em motos. Bomba de combutível funciona com o relé ligado. Pino 30 a 87.
     # No chicote fio amarelo e vermelho (isolar o fio preto).
-    # 'on' significa que Desbloquear na página dos motoristas.
+    # 'on' significa Desbloquear na página dos motoristas.
     {
       rele_state: estado_rele,
       last_rele_modified: Time.now,
@@ -228,7 +228,7 @@ class StandardizePayload::Xt40
   def commandResult_releOff
     estado_rele = @detail.category == "motorcycle" ? 'on' : 'off'
     # Necessário pois quando for moto, o relé deve ficar desligado quando o veículo estiver parado.
-    # 'off' significa que Bloquear na página dos motoristas.
+    # 'off' significa Bloquear na página dos motoristas.
     {
       rele_state: estado_rele,
       last_rele_modified: Time.now,
