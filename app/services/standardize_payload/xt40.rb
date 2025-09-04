@@ -213,16 +213,24 @@ class StandardizePayload::Xt40
   end
 
   def commandResult_releOn
+    estado_rele = @detail.category == "motorcycle" ? 'off' : 'on'
+    # Necessário pois quando for moto, o relé deve ficar ligado quando o veículo estiver em uso.
+    # lembrar que o relé é invertido em motos. Bomba de combutível funciona com o relé ligado. Pino 30 a 87.
+    # No chicote fio amarelo e vermelho (isolar o fio preto).
+    # 'on' significa que Desbloquear na página dos motoristas.
     {
-      rele_state: 'on',
+      rele_state: estado_rele,
       last_rele_modified: Time.now,
       **atributos_comuns
     }
   end
 
   def commandResult_releOff
+    estado_rele = @detail.category == "motorcycle" ? 'on' : 'off'
+    # Necessário pois quando for moto, o relé deve ficar desligado quando o veículo estiver parado.
+    # 'off' significa que Bloquear na página dos motoristas.
     {
-      rele_state: 'off',
+      rele_state: estado_rele,
       last_rele_modified: Time.now,
       **atributos_comuns
     }
@@ -230,12 +238,16 @@ class StandardizePayload::Xt40
 
   def commandResult_status
     status = decode_status_string(@payload.dig(:position, :attributes, :result))
+
+    rele_state = status["RELAYER"] == 'DISABLE' ? 'off' : 'on'
+    rele_state = @detail.category == "motorcycle" ? (rele_state == 'on' ? 'off' : 'on') : rele_state
+
     {
       horimetro: horas,
       odometro: kilometros,
       cercas: @payload.dig(:position, :geofenceIds) ? @payload.dig(:position, :geofenceIds).join(',') : nil,
       ignition: status["ACC"].start_with?('ON') ? 'on' : 'off',
-      rele_state: status["RELAYER"] == 'DISABLE' ? 'off' : 'on',
+      rele_state: rele_state,
       battery: status['VOLTAGE'].split(',').first.to_f.round(2) || 0,
       bat_bck: status['VOLTAGE'].split(',').last.to_f.round(2) || 0,
       signal_gps: "#{status["GPS"]},#{status["GPS SIGNAL"]}",
