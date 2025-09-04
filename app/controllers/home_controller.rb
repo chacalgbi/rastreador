@@ -177,7 +177,6 @@ class HomeController < ApplicationController
       return
     end
 
-    @detail = Detail.find_by(device_id: params[:id])
     @detail.last_user = params[:action_type] == 'bloquear' ? '' : Current.user.name
     @detail.save
 
