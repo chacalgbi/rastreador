@@ -53,14 +53,14 @@ class Admin::DetailsController < Admin::BaseController
     response = Traccar.command(params[:device_id], send_command)
 
     if response != 200
-      redirect_to admin_details_url, alert: "Erro ao enviar o comando: #{params[:state]}."
+      redirect_to admin_details_url, alert: "Erro ao enviar o comando: #{params[:state]}. Status da resposta: #{response}"
       return
     end
 
     @detail.last_user = params[:state] == 'ON' ? '' : 'System'
     @detail.save
 
-    notice = "O veículo será #{params[:state] == 'ON' ? 'BLOQUEADO' : 'DESBLOQUEADO'}."
+    notice = "O relé será #{params[:state] == 'ON' ? 'Ligado' : 'Desligado'}."
     redirect_to admin_details_url, notice: notice
   end
 
