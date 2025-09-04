@@ -28,6 +28,13 @@ class SendCommand
     "Parametros solicitados com sucesso: #{response}"
   end
 
+  def get_iccid
+    return error_command unless @send_command
+    response = Traccar.command(@device_id, @send_command)
+    return "Erro ao buscar parametros: #{response}" if response != 200
+    "Parametros solicitados com sucesso: #{response}"
+  end
+
   private
 
   def define_send_command

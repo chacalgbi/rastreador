@@ -78,6 +78,8 @@ class Admin::DetailsController < Admin::BaseController
       response = "Em breve o valor do horímetro será atualizado! #{response_rastreador} | #{response_traccar}"
     when 'parametros'
       response = send_command.params
+    when 'get_iccid'
+      response = send_command.get_iccid
     else
       response = "Comando desconhecido: #{params[:command]}"
     end
@@ -91,6 +93,6 @@ class Admin::DetailsController < Admin::BaseController
   end
 
   def detail_params
-    params.require(:detail).permit(:device_id, :device_name, :last_user, :model, :ignition, :rele_state, :url, :velo_max, :battery, :bat_bck, :horimetro, :odometro, :cercas, :satelites, :version, :imei, :bat_nivel, :signal_gps, :signal_gsm, :acc, :acc_virtual, :charge, :heartbeat, :obs, :status, :network, :params, :last_event_type, :apn, :ip_and_port, :alert_whatsApp, :alert_telegram, :alert_email, :send_exit_cerca, :send_battery, :send_moving, :send_velo_max, :send_rele, :created_at, :updated_at)
+  params.require(:detail).permit(:device_id, :device_name, :last_user, :model, :ignition, :rele_state, :url, :velo_max, :battery, :bat_bck, :horimetro, :odometro, :cercas, :satelites, :version, :imei, :iccid, :bat_nivel, :signal_gps, :signal_gsm, :acc, :acc_virtual, :charge, :heartbeat, :obs, :status, :network, :params, :last_event_type, :apn, :ip_and_port, :alert_whatsApp, :alert_telegram, :alert_email, :send_exit_cerca, :send_battery, :send_moving, :send_velo_max, :send_rele, :created_at, :updated_at)
   end
 end

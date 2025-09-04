@@ -20,7 +20,7 @@ class TraccarUpdateDevice
     filtered_params = params.permit(
       :device_name, :model, :ignition, :rele_state, :last_event_type, :last_user, :last_rele_modified, :url, :velo_max,
       :battery, :bat_bck, :horimetro, :odometro, :cercas, :satelites, :version, :imei, :bat_nivel, :signal_gps,
-      :signal_gsm, :acc, :acc_virtual, :charge, :heartbeat, :obs, :status, :network, :params, :apn, :ip_and_port
+      :signal_gsm, :acc, :acc_virtual, :charge, :heartbeat, :obs, :status, :network, :params, :apn, :ip_and_port, :iccid
     ).to_h.reject { |_, v| v.blank? }
 
     @changed_fields = detect_changed_fields(filtered_params)

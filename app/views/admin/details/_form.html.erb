@@ -128,6 +128,14 @@
   </div>
 
   <div class="form-group row mb-2">
+    <%= form.label :iccid, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :iccid, class: "form-control" %>
+      <%= tag.div detail.errors[:iccid].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
     <%= form.label :bat_nivel, class: "form-label col-md-3 col-form-label" %>
     <div class="col-md px-0">
       <%= form.text_field :bat_nivel, class: "form-control" %>

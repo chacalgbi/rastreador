@@ -38,6 +38,7 @@
               <th><%= sort_link @search, :satelites %></th>
               <th><%= sort_link @search, :version %></th>
               <th><%= sort_link @search, :imei %></th>
+              <th><%= sort_link @search, :iccid %></th>
               <th><%= sort_link @search, :bat_nivel %></th>
               <th><%= sort_link @search, :signal_gps %></th>
               <th><%= sort_link @search, :signal_gsm %></th>
@@ -90,6 +91,12 @@
                 <td><%= detail.satelites %></td>
                 <td><%= detail.version %></td>
                 <td><%= detail.imei %></td>
+                <td style="display: flex; gap: 3px;">
+                  <%= button_to "Get", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "get_iccid", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja OBTER o ICCID?" }  %>
+                  <% if detail.iccid.present? %>
+                    <%= link_to "https://allmanager.com.br/management/inventory?iccid=#{detail.iccid}", target: "_blank", rel: "noopener noreferrer", class: "btn btn-primary btn-sm" do %>Info<% end %>
+                  <% end %>
+                </td>
                 <td><%= detail.bat_nivel %></td>
                 <td><%= detail.signal_gps %></td>
                 <td><%= detail.signal_gsm %></td>

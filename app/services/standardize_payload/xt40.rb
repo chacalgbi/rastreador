@@ -166,10 +166,20 @@ class StandardizePayload::Xt40
       commandResult_network
     elsif commandResult_type.start_with?('SPEEDCHECK set OK!')
       commandResult_speedcheck
+    elsif commandResult_type.start_with?('ICCID')
+      commandResult_iccid
     else
       SaveLog.new('payload_desconhecido', @payload).save
       nil
     end
+  end
+
+  def commandResult_iccid
+    iccid = @payload.dig(:position, :attributes, :result).split(':').last.strip
+    {
+      iccid: iccid,
+      **atributos_comuns
+    }
   end
 
   def commandResult_speedcheck
