@@ -15,7 +15,6 @@ class Detail < ApplicationRecord
   def set_default_values
     self.model = "xt40" if model.blank?
     self.ignition = "off" if ignition.blank?
-    self.rele_state = category == "motorcycle" ? 'on' : 'off'
     self.status = "online" if status.blank?
     # self.last_user = "System" if last_user.blank?
   end
