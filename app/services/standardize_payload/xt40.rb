@@ -164,14 +164,38 @@ class StandardizePayload::Xt40
       commandResult_params
     elsif commandResult_type.start_with?('NetworkMode')
       commandResult_network
-    elsif commandResult_type.start_with?('SPEEDCHECK set OK!')
+    elsif commandResult_type.start_with?('SPEEDCHECK')
       commandResult_speedcheck
     elsif commandResult_type.start_with?('ICCID')
       commandResult_iccid
+    elsif commandResult_type.start_with?('ECLEAN MILEAGE NUM')
+      commandResult_clean_odometro
+    elsif commandResult_type.start_with?('CLEAN ACC ONLINE TIME')
+      commandResult_clean_horimetro
+    elsif commandResult_type.start_with?('queuedCommandSent')
+      commandResult_queuedCommandSent
     else
       SaveLog.new('payload_desconhecido', @payload).save
       nil
     end
+  end
+
+  def commandResult_queuedCommandSent
+    {
+      **atributos_comuns
+    }
+  end
+
+  def commandResult_clean_odometro
+    {
+      **atributos_comuns
+    }
+  end
+
+  def commandResult_clean_horimetro
+    {
+      **atributos_comuns
+    }
   end
 
   def commandResult_iccid
@@ -189,16 +213,20 @@ class StandardizePayload::Xt40
   end
 
   def commandResult_releOn
+    estado_rele = @detail.category == "motorcycle" ? 'off' : 'on' # Necessário pois quando for moto, o relé deve ficar ligado quando o veículo estiver em uso.
+    # lembrar que o relé é invertido em motos. Bomba de combutível funciona com o relé ligado. Pino 30 a 87.
+    # No chicote fio amarelo e vermelho (isolar o fio preto).
     {
-      rele_state: 'on',
+      rele_state: estado_rele,
       last_rele_modified: Time.now,
       **atributos_comuns
     }
   end
 
   def commandResult_releOff
+    estado_rele = @detail.category == "motorcycle" ? 'on' : 'off' # Necessário pois quando for moto, o relé deve ficar desligado quando o veículo estiver parado.
     {
-      rele_state: 'off',
+      rele_state: estado_rele,
       last_rele_modified: Time.now,
       **atributos_comuns
     }

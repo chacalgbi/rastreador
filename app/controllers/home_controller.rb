@@ -172,7 +172,7 @@ class HomeController < ApplicationController
     @detail.save
 
     driver_active = @detail.last_user.to_s.split(' ').first.presence || @detail.last_user
-    Traccar.update_contact(@detail.device_id, @detail.device_name, driver_active, @detail.imei)
+    Traccar.update_contact(@detail.device_id, @detail.device_name, driver_active, @detail.imei, @detail.category)
 
     notice = "Aguarde alguns segundos e o veículo será #{params[:action_type] == 'bloquear' ? 'BLOQUEADO' : 'DESBLOQUEADO'}."
     new_button_text = 'Aguarde...'

@@ -8,6 +8,14 @@
   </div>
 
   <div class="form-group row mb-2">
+    <%= form.label :category, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.select :category, [["Carro", "car"], ["Caminhão", "truck"], ["Moto", "motorcycle"], ["Pick-up", "pickup"]], {}, class: "form-control" %>
+      <%= tag.div detail.errors[:category].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
     <%= form.label :device_name, class: "form-label col-md-3 col-form-label" %>
     <div class="col-md px-0">
       <%= form.text_field :device_name, class: "form-control" %>

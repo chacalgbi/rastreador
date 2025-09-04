@@ -29,6 +29,7 @@
               <th style="width: 100px;"><%= sort_link @search, "Event" %></th>
               <th style="width: 100px;"><%= sort_link @search, "Update" %></th>
               <th><%= sort_link @search, :network %></th>
+              <th><%= sort_link @search, :category %></th>
               <th><%= sort_link @search, :odometro %></th>
               <th><%= sort_link @search, :horimetro %></th>
               <th><%= sort_link @search, "Modelo" %></th>
@@ -82,6 +83,7 @@
                 <td style="width: 100px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<%= detail.last_event_type %>"><%= detail.last_event_type %></td>
                 <td style="width: 100px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<%= detail.updated_at.strftime("%H:%M:%S %d/%m/%Y") %>"><%= detail.updated_at.strftime("%H:%M:%S %d/%m/%Y") %></td>
                 <td><%= detail.network %></td>
+                <td><%= detail.category %></td>
                 <td><%= button_to "#{detail.odometro } Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_hodometro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Hodômetro?" }  %></td>
                 <td><%= button_to "#{detail.horimetro} Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_horimetro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Horímetro?" }  %></td>
                 <td><%= detail.model %></td>

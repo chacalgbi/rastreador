@@ -137,7 +137,7 @@ class Traccar
     response.code.to_i
   end
 
-  def self.update_contact(device_id, name, contact, imei)
+  def self.update_contact(device_id, name, contact, imei, category = 'car')
     log("update_contact #{device_id}")
 
     payload = {
@@ -145,7 +145,7 @@ class Traccar
       name: name,
       uniqueId: imei,
       contact: contact,
-      category: 'car'
+      category: category
     }
 
     uri = URI("#{ENV["TRACCAR_URL"]}/api/devices/#{device_id}")
