@@ -47,15 +47,6 @@ class Admin::DetailsController < Admin::BaseController
   def rele
     @detail = Detail.find_by(device_id: params[:device_id])
     command_name = params[:state] == 'ON' ? 'rele_on' : 'rele_off'
-
-    if @detail.category == 'motorcycle'
-      if command_name == 'rele_on'
-        command_name = 'rele_off'
-      else
-        command_name = 'rele_on'
-      end
-    end
-
     command = Command.find_by(type_device: params[:model], name: command_name)
     send_command = command.type_device == 'st8310u' ? command.command.gsub('XXXX', params[:imei]) : command.command
 
