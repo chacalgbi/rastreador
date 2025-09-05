@@ -28,18 +28,19 @@
               <th>Lig/Desl</th>
               <th style="width: 100px;"><%= sort_link @search, "Event" %></th>
               <th style="width: 100px;"><%= sort_link @search, "Update" %></th>
-              <th><%= sort_link @search, :network %></th>
               <th><%= sort_link @search, :category %></th>
+              <th>Params</th>
               <th><%= sort_link @search, :odometro %></th>
               <th><%= sort_link @search, :horimetro %></th>
-              <th><%= sort_link @search, "Modelo" %></th>
+              <th><%= sort_link @search, :iccid %></th>
               <th><%= sort_link @search, :url %></th>
+              <th><%= sort_link @search, :network %></th>
+              <th><%= sort_link @search, "Modelo" %></th>
               <th><%= sort_link @search, :velo_max %></th>
               <th><%= sort_link @search, :cercas %></th>
               <th><%= sort_link @search, :satelites %></th>
               <th><%= sort_link @search, :version %></th>
               <th><%= sort_link @search, :imei %></th>
-              <th><%= sort_link @search, :iccid %></th>
               <th><%= sort_link @search, :bat_nivel %></th>
               <th><%= sort_link @search, :signal_gps %></th>
               <th><%= sort_link @search, :signal_gsm %></th>
@@ -48,7 +49,6 @@
               <th><%= sort_link @search, :charge %></th>
               <th><%= sort_link @search, :heartbeat %></th>
               <th><%= sort_link @search, :obs %></th>
-              <th>Obter Params</th>
               <th><%= sort_link @search, :params %></th>
               <th><%= sort_link @search, :apn %></th>
               <th><%= sort_link @search, :ip_and_port %></th>
@@ -82,23 +82,24 @@
                 </td>
                 <td style="width: 100px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<%= detail.last_event_type %>"><%= detail.last_event_type %></td>
                 <td style="width: 100px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<%= detail.updated_at.strftime("%H:%M:%S %d/%m/%Y") %>"><%= detail.updated_at.strftime("%H:%M:%S %d/%m/%Y") %></td>
-                <td><%= detail.network %></td>
                 <td><%= detail.category %></td>
+                <td><%= button_to "Obter", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "parametros", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja OBTER os parametros?" }  %></td>
                 <td><%= button_to "#{detail.odometro } Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_hodometro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Hodômetro?" }  %></td>
                 <td><%= button_to "#{detail.horimetro} Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_horimetro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Horímetro?" }  %></td>
-                <td><%= detail.model %></td>
-                <td><%= link_to detail.url, target: "_blank", rel: "noopener noreferrer", class: "btn btn-primary btn-sm" do %>📍 Ver no Mapa <% end %></td>
-                <td><%= detail.velo_max %></td>
-                <td><%= detail.cercas %></td>
-                <td><%= detail.satelites %></td>
-                <td><%= detail.version %></td>
-                <td><%= detail.imei %></td>
                 <td style="display: flex; gap: 3px;">
                   <%= button_to "Get", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "get_iccid", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja OBTER o ICCID?" }  %>
                   <% if detail.iccid.present? %>
                     <%= link_to "https://allmanager.com.br/management/inventory?iccid=#{detail.iccid}", target: "_blank", rel: "noopener noreferrer", class: "btn btn-primary btn-sm" do %>Info<% end %>
                   <% end %>
                 </td>
+                <td><%= link_to detail.url, target: "_blank", rel: "noopener noreferrer", class: "btn btn-primary btn-sm" do %>📍 Ver no Mapa <% end %></td>
+                <td><%= detail.network %></td>
+                <td><%= detail.model %></td>
+                <td><%= detail.velo_max %></td>
+                <td><%= detail.cercas %></td>
+                <td><%= detail.satelites %></td>
+                <td><%= detail.version %></td>
+                <td><%= detail.imei %></td>
                 <td><%= detail.bat_nivel %></td>
                 <td><%= detail.signal_gps %></td>
                 <td><%= detail.signal_gsm %></td>
@@ -107,7 +108,6 @@
                 <td><%= detail.charge %></td>
                 <td><%= detail.heartbeat %></td>
                 <td><%= detail.obs %></td>
-                <td><%= button_to "Obter", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "parametros", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja OBTER os parametros?" }  %></td>
                 <td><%= detail.params %></td>
                 <td><%= detail.apn %></td>
                 <td><%= detail.ip_and_port %></td>
