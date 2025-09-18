@@ -11,6 +11,8 @@ class SendAlertJob < ApplicationJob
       @phone = []
       @email = []
       @telegram = []
+      @message = arg[:message]
+      @evento = arg[:event]
 
       ENV["TYPE_APP"] == 'company' ? define_company_notifications : define_personal_notifications
 
@@ -22,7 +24,7 @@ class SendAlertJob < ApplicationJob
 
       true
     rescue StandardError => e
-      error_message = "SendAlertJob.perform | Error: #{e.message}\nBacktrace:\n#{e.backtrace.first(8).join("\n")}"
+      error_message = "SendAlertJob.perform | Error: #{e.message}\nBacktrace:\n#{e.backtrace.first(5).join("\n")}"
       Rails.logger.error("#{error_message}\n")
       SaveLog.new('error', error_message).save
       nil
@@ -57,7 +59,7 @@ class SendAlertJob < ApplicationJob
   def send_whatsapp
     unless @phone.nil? || @phone.empty?
       @phone.each do |cel|
-        Notify.whatsapp(cel, arg[:message])
+        Notify.whatsapp(cel, @message)
       end
     end
   end
@@ -65,7 +67,7 @@ class SendAlertJob < ApplicationJob
   def send_telegram
     unless @telegram.nil? || @telegram.empty?
       @telegram.each do |chat|
-        Notify.telegram(chat, arg[:message])
+        Notify.telegram(chat, @message)
       end
     end
   end
@@ -74,7 +76,7 @@ class SendAlertJob < ApplicationJob
     unless @email.nil? || @email.empty?
       @email.each do |email|
         # Notify.email(email, "Alerta(#{arg[:event]})", arg[:message]) # Não usando na versão atual
-        NotifyMailer.notify(email, "Alerta(#{arg[:event]})", arg[:message]).deliver_later
+        NotifyMailer.notify(email, "Alerta(#{@evento})", @message).deliver_later
       end
     end
   end
