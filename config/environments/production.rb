@@ -44,11 +44,6 @@ Rails.application.configure do
   ActiveRecord::Base.logger = Rails.logger
   config.paths["log"] = "/home/deploy/rastreador/shared/log/production.log"
 
-  # Configurações específicas para Solid Queue logs
-  config.solid_queue.logger = Rails.logger
-  config.solid_queue.log_level = :debug
-  config.solid_queue.logger = Logger.new("/home/deploy/rastreador/shared/log/solid_queue_detailed.log")
-
   # Prevent health checks from clogging up the logs.
   config.silence_healthcheck_path = "/up"
 
