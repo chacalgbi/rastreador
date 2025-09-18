@@ -17,9 +17,6 @@
                 <%= link_to 'Notificações', notifications_path, class: "btn sidebar-menu__button" %>
                 <%= link_to 'Relatório Checklists', check_lists_path, class: "btn sidebar-menu__button" %>
               <% end %>
-            <% else %>
-              <%= link_to 'Faça sua inscrição', new_registration_path %>
-              <%= link_to 'Esqueçeu sua senha?', new_password_path %>
             <% end %>
           </nav>
         </details>
@@ -32,9 +29,6 @@
         <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
         <%= Current.user.name.truncate(25) %> - Sair
       <% end %>
-    <% else %>
-      <%= image_tag "door-open.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
-      <%= link_to 'Entrar', new_session_path %>
     <% end %>
   <% end %>
 </div>

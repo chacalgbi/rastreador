@@ -25,6 +25,14 @@
   </div>
 
   <div class="form-group row mb-2">
+    <%= form.label :command_sms, "Comando SMS", class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :command_sms, class: "form-control" %>
+      <%= tag.div command.errors[:command_sms].first, class: "invalid-feedback" if command.errors[:command_sms].any? %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
     <%= form.label :description, class: "form-label col-md-3 col-form-label" %>
     <div class="col-md px-0">
       <%= form.textarea :description, class: "form-control" %>

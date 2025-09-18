@@ -45,11 +45,13 @@ class Admin::DetailsController < Admin::BaseController
   end
 
   def rele
-    command_name = params[:state] == 'ON' ? 'rele_on' : 'rele_off'
-    command = Command.find_by(type_device: params[:model], name: command_name)
-    send_command = command.type_device == 'st8310u' ? command.command.gsub('XXXX', params[:imei]) : command.command
+    send_command = define_send_command
 
-    response = Traccar.command(params[:device_id], send_command)
+    if params[:sms] == '0'
+      response = Traccar.command(params[:device_id], send_command)
+    elsif params[:sms] == '1'
+      response = SendSms.send_sms(params[:cell_number], send_command)
+    end
 
     if response != 200
       redirect_to admin_details_url, alert: "Erro ao enviar o comando: #{params[:state]}. Status da resposta: #{response}"
@@ -89,6 +91,15 @@ class Admin::DetailsController < Admin::BaseController
   end
 
   def detail_params
-  params.require(:detail).permit(:device_id, :device_name, :last_user, :model, :ignition, :rele_state, :url, :velo_max, :battery, :bat_bck, :horimetro, :odometro, :cercas, :satelites, :version, :imei, :iccid, :bat_nivel, :signal_gps, :signal_gsm, :acc, :acc_virtual, :charge, :heartbeat, :obs, :status, :network, :params, :last_event_type, :apn, :ip_and_port, :alert_whatsApp, :alert_telegram, :alert_email, :send_exit_cerca, :send_battery, :send_moving, :send_velo_max, :send_rele, :created_at, :updated_at, :category)
+    params.require(:detail).permit(:device_id, :device_name, :last_user, :model, :ignition, :rele_state, :url, :velo_max, :battery, :bat_bck, :horimetro, :odometro, :cercas, :satelites, :version, :imei, :iccid, :bat_nivel, :signal_gps, :signal_gsm, :acc, :acc_virtual, :charge, :heartbeat, :obs, :status, :network, :params, :last_event_type, :apn, :ip_and_port, :alert_whatsApp, :alert_telegram, :alert_email, :send_exit_cerca, :send_battery, :send_moving, :send_velo_max, :send_rele, :created_at, :updated_at, :category, :cell_number)
+  end
+
+  def define_send_command
+    command_name = params[:state] == 'ON' ? 'rele_on' : 'rele_off'
+    command = Command.find_by(type_device: params[:model], name: command_name)
+
+    return command.command_sms if params[:sms] == '1'
+    return command.command if command.type_device == 'xt40'
+    return command.command.gsub('XXXX', params[:imei]) if command.type_device == 'st8310u'
   end
 end

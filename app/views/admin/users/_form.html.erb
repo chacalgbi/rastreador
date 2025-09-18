@@ -16,6 +16,14 @@
   </div>
 
   <div class="form-group row mb-2">
+    <%= form.label :cpf, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :cpf, class: "form-control" %>
+      <%= tag.div user.errors[:cpf].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
     <%= form.label :phone, class: "form-label col-md-3 col-form-label" %>
     <div class="col-md px-0">
       <%= form.text_field :phone, class: "form-control" %>
@@ -44,6 +52,22 @@
     <div class="col-md px-0">
       <%= form.checkbox :admin, class: "form-check-input" %>
       <%= tag.div user.errors[:admin].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :maintenance, class: "form-check-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.checkbox :maintenance, class: "form-check-input" %>
+      <%= tag.div user.errors[:maintenance].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :pessoal, class: "form-check-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.checkbox :pessoal, class: "form-check-input" %>
+      <%= tag.div user.errors[:pessoal].first, class: "invalid-feedback" %>
     </div>
   </div>
 

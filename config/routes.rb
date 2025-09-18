@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     resources :events
     resources :commands
     resources :batteries
+    resources :notifications
     resource  :password_reset
 
     resources :logs, only: [:index] do
@@ -55,7 +56,7 @@ Rails.application.routes.draw do
   post "home/odometro"
   post "home/block_and_desblock"
   post "event/webhook_traccar"
-  resources :registrations, only: [:new, :create]
+  # resources :registrations, only: [:new, :create] # Removido para desabilitar auto-registro
   get "up" => "rails/health#show", as: :rails_health_check
   root "home#index"
 

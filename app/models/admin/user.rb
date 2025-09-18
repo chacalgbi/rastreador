@@ -11,6 +11,6 @@ class Admin::User < Admin::ApplicationRecord
   normalizes :email, with: -> { _1.strip.downcase }
 
   def self.ransackable_attributes(auth_object = nil)
-    %w[email created_at]
+    %w[email cpf phone created_at]
   end
 end

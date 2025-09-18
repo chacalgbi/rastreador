@@ -11,6 +11,7 @@
     </div>
   <% end %>
 
+
   <div class="flex flex-col items-start gap-half mbe-4">
     <%= form.label :whatsapp, class: "text-sm font-medium leading-none" %>
     <%= form.textarea :whatsapp, class: "input" %>
@@ -25,6 +26,13 @@
     <%= form.label :telegram, class: "text-sm font-medium leading-none" %>
     <%= form.textarea :telegram, class: "input" %>
   </div>
+
+  <% if notification.persisted? && notification.user_id.present? %>
+    <div class="flex flex-col items-start gap-half mbe-4">
+      <%= form.label :user_id, class: "text-sm font-medium leading-none" %>
+      <%= form.text_field :user_id, class: "input", readonly: true %>
+    </div>
+  <% end %>
 
   <div class="inline-flex items-center mbs-2 mie-1">
     <%= form.submit "Salvar", class: "btn btn--primary" %>

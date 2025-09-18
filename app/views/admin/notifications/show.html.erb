@@ -1,0 +1,39 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Showing notification" do %>
+    <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+    <li class="breadcrumb-item"><%= link_to "Notifications", admin_notifications_path %></li>
+  <% end %>
+
+  <%= render "page_header_actions" do %>
+    <%= link_to "Edit notification", edit_admin_notification_path(@notification), class: "btn btn-primary" %>
+    <%= link_to "Delete notification", [:admin, @notification], class: "btn btn-white", data: { method: :delete, confirm: "Are you sure?" } %>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Notification details</h3>
+      </div>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-md-3">Id</dt>
+          <dd class="col-md-9"><%= @notification.id %></dd>
+          <dt class="col-md-3">User</dt>
+          <dd class="col-md-9"><%= @notification.user_id %></dd>
+          <dt class="col-md-3">Whatsapp</dt>
+          <dd class="col-md-9"><%= @notification.whatsapp %></dd>
+          <dt class="col-md-3">Email</dt>
+          <dd class="col-md-9"><%= @notification.email %></dd>
+          <dt class="col-md-3">Telegram</dt>
+          <dd class="col-md-9"><%= @notification.telegram %></dd>
+          <dt class="col-md-3">Created at</dt>
+          <dd class="col-md-9"><%= @notification.created_at %></dd>
+          <dt class="col-md-3">Updated at</dt>
+          <dd class="col-md-9"><%= @notification.updated_at %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

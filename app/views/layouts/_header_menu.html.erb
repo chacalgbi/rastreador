@@ -12,10 +12,10 @@
         <%= link_to 'Config Alertas', details_path %>
         <%= link_to 'Notificações', notifications_path %>
         <%= link_to 'Relatório Checklists', check_lists_path %>
+      <% elsif Current.user.pessoal %>
+        <%= link_to 'Config Alertas', details_path %>
+        <%= link_to 'Notificações', notifications_path %>
       <% end %>
-    <% else %>
-      <%= link_to 'Faça sua inscrição', new_registration_path %>
-      <%= link_to 'Esqueçeu sua senha?', new_password_path %>
     <% end %>
   </nav>
 </div>
@@ -27,8 +27,5 @@
       <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
       Sair
     <% end %>
-  <% else %>
-    <%= image_tag "door-open.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
-    <%= link_to 'Entrar', new_session_path %>
   <% end %>
 </div>

@@ -1,29 +1,35 @@
-<div class="car_container">
-  <div class="car_item"><h1 class="text-2xl" style="font-family: var(--font-system-ui)">Gerenciar veículos</h1></div>
-</div>
-
-<%= turbo_stream_from "home_stream" %>
-
-<%= form_with(url: root_path, method: :get, data: {controller: "search-devices", turbo_frame: "devices_active"}, class: "card flex items-center gap") do |form| %>
-  <%= form.label :query, "Pesquisar Veículos", class: "text-sm font-medium leading-none" %>
-  <%= form.text_field :query, data: {action: "input->search-devices#search"}, placeholder: "Digite o modelo ou código do veículo", class: "input" %>
-  <% if @search_query %>
-    <%= link_to 'Limpar filtro', home_index_path, class: "btn btn--positive" %>
-  <% end %>
-<% end %>
-
-<% if @devices.present? %>
-  <%= paginate @devices %>
-  <br>
-  <% @devices.each.with_index(1) do |device, index| %>
-    <%= render 'car', car: device, index: index %>
-  <% end %>
-<% else %>
-  <div class="alert flex items-start" role="alert">
-    <%= image_tag "circle-x.svg", size: 16, aria: { hidden: true } %>
-    <div class="flex flex-col mis-3">
-      <h1 class="text-2xl">Você não tem carros disponíveis</h1>
-      <p>Procure seu supervisor para liberar os carros que você precisa.</p>
-    </div>
+<% if Current.user&.pessoal && Current.user&.active == false %>
+  <div class="flex flex-col mis-3">
+    <h1 class="text-2xl">Você está com o acesso desativado. Entre em contato com o administrador.</h1>
   </div>
+<% else %>
+  <div class="car_container">
+    <div class="car_item"><h1 class="text-2xl" style="font-family: var(--font-system-ui)">Gerenciar veículos</h1></div>
+  </div>
+
+  <%= turbo_stream_from "home_stream" %>
+
+  <%= form_with(url: root_path, method: :get, data: {controller: "search-devices", turbo_frame: "devices_active"}, class: "card flex items-center gap") do |form| %>
+    <%= form.label :query, "Pesquisar Veículos", class: "text-sm font-medium leading-none" %>
+    <%= form.text_field :query, data: {action: "input->search-devices#search"}, placeholder: "Digite o modelo ou código do veículo", class: "input" %>
+    <% if @search_query %>
+      <%= link_to 'Limpar filtro', home_index_path, class: "btn btn--positive" %>
+    <% end %>
+  <% end %>
+
+  <% if @devices.present? %>
+    <%= paginate @devices %>
+    <br>
+    <% @devices.each.with_index(1) do |device, index| %>
+      <%= render 'car', car: device, index: index %>
+    <% end %>
+  <% else %>
+    <div class="alert flex items-start" role="alert">
+      <%= image_tag "circle-x.svg", size: 16, aria: { hidden: true } %>
+      <div class="flex flex-col mis-3">
+        <h1 class="text-2xl">Você não tem carros disponíveis</h1>
+        <p>Procure seu supervisor para liberar os carros que você precisa.</p>
+      </div>
+    </div>
+  <% end %>
 <% end %>

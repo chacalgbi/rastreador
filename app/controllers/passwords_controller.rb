@@ -6,26 +6,42 @@ class PasswordsController < ApplicationController
   end
 
   def create
-    clean_phone = params[:phone].gsub(/\D/, '') if params[:phone].present?
+    login = params[:phone]
+    isphone = false
+    msg = ""
+    clean_phone = nil
+    user = nil
 
-    if user = User.find_by(phone: clean_phone)
+    if login.present?
+      if login.include?("@")
+        user = User.find_by(email_address: login)
+      else
+        clean_phone = login.gsub(/\D/, '')
+        isphone = true
+        user = User.find_by(phone: clean_phone)
+      end
+    end
+
+    if user
       user.update!(password_reset_sent_at: Time.current)
       token = user.generate_token_for(:password_reset)
+      url = edit_password_url(token: token)
+      corpo = "Acesse o link para trocar a senha: #{url}"
+      msg_log = "Login: #{login} - Usuário: #{user.name} - Solicitou alteração de senha.\nToken gerado: #{token}\nURL gerada: #{url}"
 
-      Rails.logger.info "DEBUG: Token gerado: #{token}"
-      Rails.logger.info "DEBUG: URL gerada: #{edit_password_url(token: token)}"
+      SaveLog.new('redefinir_senha', msg_log).save
 
-      corpo = "Acesse o link para trocar a senha: #{edit_password_url(token: token)}"
-
-      response = Notify.whatsapp(clean_phone, corpo)
-
-      if response["erroGeral"] == "nao"
-        redirect_to new_session_path, notice: "Instruções de redefinição de senha enviadas para o telefone: #{clean_phone}."
+      if isphone
+        Notify.whatsapp(clean_phone, corpo)
+        msg = "Instruções de redefinição de senha enviadas para o telefone: #{clean_phone}."
       else
-        redirect_to new_session_path, alert: "Erro ao enviar mensagem para o telefone: #{clean_phone}. ERROR: #{response["msg"]}"
+        NotifyMailer.notify(user.email_address, "Redefinição de senha", corpo).deliver_later
+        msg = "Instruções de redefinição de senha enviadas para o e-mail: #{user.email_address}."
       end
+
+      redirect_to new_session_path, notice: msg
     else
-      redirect_to new_session_path, alert: "Telefone não encontrado: #{params[:phone]}"
+      redirect_to new_session_path, alert: "Telefone ou e-mail não encontrado: #{params[:phone]}"
     end
   end
 

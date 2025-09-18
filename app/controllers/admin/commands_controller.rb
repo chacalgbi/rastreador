@@ -113,17 +113,17 @@ class Admin::CommandsController < Admin::BaseController
       end
     end
 
-    message = "Comandos enviados para todos os veículos: #{results.join(', ')}"
+    message = "Comando '#{comando}' enviado para todos os veículos: #{results.join(', ')}"
     SaveLog.new('info', message).save
     redirect_to admin_commands_path, notice: message
   end
 
   private
-    def set_command
-      @command = Command.find(params[:id])
-    end
+  def set_command
+    @command = Command.find(params[:id])
+  end
 
-    def command_params
-      params.require(:command).permit(:id, :type_device, :name, :command, :description, :created_at, :updated_at)
-    end
+  def command_params
+    params.require(:command).permit(:id, :type_device, :name, :command, :command_sms, :description, :created_at, :updated_at)
+  end
 end

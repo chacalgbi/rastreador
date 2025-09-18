@@ -22,18 +22,29 @@
           <dd class="col-md-9"><%= @user.email_address %></dd>
           <dt class="col-md-3">Name</dt>
           <dd class="col-md-9"><%= @user.name %></dd>
+          <dt class="col-md-3">CPF</dt>
+          <dd class="col-md-9"><%= @user.cpf %></dd>
           <dt class="col-md-3">Phone</dt>
           <dd class="col-md-9"><%= @user.phone %></dd>
           <dt class="col-md-3">Password digest</dt>
           <dd class="col-md-9"><%= @user.password_digest %></dd>
-          <dt class="col-md-3">Active</dt>
+          <dt class="col-md-3">Active(*)</dt>
           <dd class="col-md-9"><%= @user.active %></dd>
           <dt class="col-md-3">Admin</dt>
           <dd class="col-md-9"><%= @user.admin %></dd>
+          <dt class="col-md-3">Maintenance</dt>
+          <dd class="col-md-9"><%= @user.maintenance %></dd>
+          <dt class="col-md-3">Pessoal</dt>
+          <dd class="col-md-9"><%= @user.pessoal %></dd>
           <dt class="col-md-3">Cars</dt>
           <dd class="col-md-9"><%= @user.cars %></dd>
+          <dt class="col-md-3">Created at</dt>
+          <dd class="col-md-9"><%= @user.created_at.strftime("%H:%M:%S %d/%m/%Y") %></dd>
+          <dt class="col-md-3">Updated at</dt>
+          <dd class="col-md-9"><%= @user.updated_at.strftime("%H:%M:%S %d/%m/%Y") %></dd>
         </dl>
       </div>
+      <small class="mbe-4 mls-4">(*) Quando 'false' o usuário com PESSOAL == TRUE não verá os veículos e a barra de menu.</small>
     </div>
   </div>
 </div>

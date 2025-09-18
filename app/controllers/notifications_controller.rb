@@ -1,27 +1,30 @@
 class NotificationsController < ApplicationController
+  before_action :check_main_or_pessoal_user
   before_action :set_notification, only: %i[ show edit update destroy ]
 
-  # GET /notifications or /notifications.json
   def index
-    @notifications = Notification.all
+    if Current.user&.admin?
+      @notifications = Notification.all
+    elsif Current.user
+      @notifications = Notification.where(user_id: Current.user.id.to_s)
+    else
+      @notifications = Notification.none
+    end
   end
 
-  # GET /notifications/1 or /notifications/1.json
   def show
   end
 
-  # GET /notifications/new
   def new
     @notification = Notification.new
   end
 
-  # GET /notifications/1/edit
   def edit
   end
 
-  # POST /notifications or /notifications.json
   def create
     @notification = Notification.new(notification_params)
+    @notification.user_id = Current.user&.id if Current.user
 
     respond_to do |format|
       if @notification.save
@@ -34,7 +37,6 @@ class NotificationsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /notifications/1 or /notifications/1.json
   def update
     respond_to do |format|
       if @notification.update(notification_params)
@@ -47,7 +49,6 @@ class NotificationsController < ApplicationController
     end
   end
 
-  # DELETE /notifications/1 or /notifications/1.json
   def destroy
     @notification.destroy!
 
@@ -58,13 +59,18 @@ class NotificationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_notification
-      @notification = Notification.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def notification_params
-      params.expect(notification: [ :whatsapp, :email, :telegram ])
+  def set_notification
+    @notification = Notification.find(params[:id])
+  end
+
+  def notification_params
+    params.require(:notification).permit(:whatsapp, :email, :telegram)
+  end
+
+  def check_main_or_pessoal_user
+    unless Current.user&.admin || Current.user&.pessoal
+      redirect_to root_path, alert: "Você não tem acesso a essa página"
     end
+  end
 end

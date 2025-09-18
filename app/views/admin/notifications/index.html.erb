@@ -1,48 +1,45 @@
 <%= render "page_header" do %>
-  <%= render "page_header_breadcrumb", title: "Commands" do %>
+  <%= render "page_header_breadcrumb", title: "Notifications" do %>
     <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
   <% end %>
 
   <%= render "page_header_actions" do %>
     <%= link_to "Filters", "#offcanvas_filters", "data-bs-toggle": "offcanvas", class: "btn btn-white" %>
-    <%= link_to "New command", new_admin_command_path, class: "btn btn-primary" %>
+    <%= link_to "New notification", new_admin_notification_path, class: "btn btn-primary" %>
   <% end %>
 <% end %>
 
 <div class="page-body">
   <div class="container-xl">
     <div class="card">
-      <%= render "send_command"%>
       <div class="table-responsive">
         <table class="table table-vcenter table-nowrap card-table table-striped">
           <thead>
             <tr>
               <th><%= sort_link @search, :id %></th>
-              <th><%= sort_link @search, :type_device %></th>
-              <th><%= sort_link @search, :name %></th>
-              <th><%= sort_link @search, :command %></th>
-              <th><%= sort_link @search, :command_sms %></th>
-              <th><%= sort_link @search, :description %></th>
+              <th><%= sort_link @search, :user_id %></th>
+              <th><%= sort_link @search, :whatsapp %></th>
+              <th><%= sort_link @search, :email %></th>
+              <th><%= sort_link @search, :telegram %></th>
               <th><%= sort_link @search, :created_at %></th>
               <th><%= sort_link @search, :updated_at %></th>
               <th class="w-1"></th>
             </tr>
           </thead>
           <tbody>
-            <% @commands.each do |command| %>
+            <% @notifications.each do |notification| %>
               <tr>
-                <td><%= command.id %></td>
-                <td><%= command.type_device %></td>
-                <td><%= command.name %></td>
-                <td><%= command.command %></td>
-                <td><%= command.command_sms %></td>
-                <td><%= command.description %></td>
-                <td><%= command.created_at %></td>
-                <td><%= command.updated_at %></td>
+                <td><%= notification.id %></td>
+                <td><%= notification.user_id %></td>
+                <td><%= notification.whatsapp %></td>
+                <td><%= notification.email %></td>
+                <td><%= notification.telegram %></td>
+                <td><%= notification.created_at %></td>
+                <td><%= notification.updated_at %></td>
                 <td>
-                  <%= link_to "View", [:admin, command], class: "btn btn-white btn-sm" %>
-                  <%= link_to "Edit", edit_admin_command_path(command), class: "btn btn-white btn-sm" %>
-                  <%= link_to "Delete", [:admin, command], class: "btn btn-white btn-sm", data: { method: :delete, confirm: "Are you sure?" } %>
+                  <%= link_to "View", [:admin, notification], class: "btn btn-white btn-sm" %>
+                  <%= link_to "Edit", edit_admin_notification_path(notification), class: "btn btn-white btn-sm" %>
+                  <%= link_to "Delete", [:admin, notification], class: "btn btn-white btn-sm", data: { method: :delete, confirm: "Are you sure?" } %>
                 </td>
               </tr>
             <% end %>
@@ -72,6 +69,6 @@
     <%# f.text_field :name_cont, class: "form-control mb-3" %>
 
     <%= f.submit "Filter", class: "btn btn-primary" %>
-    <%= link_to "Clear Filter", admin_commands_path, class: "btn btn-white" %>
+    <%= link_to "Clear Filter", admin_notifications_path, class: "btn btn-white" %>
   <% end %>
 </div>

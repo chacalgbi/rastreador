@@ -3,10 +3,19 @@ class DetailsController < ApplicationController
   before_action :set_detail, only: [:edit_settings, :update_settings]
 
   def index
-    if params[:search].present?
-      @details = Detail.where("device_name LIKE ?", "%#{params[:search]}%")
+    if Current.user&.pessoal
+      car_ids = (Current.user.cars || "").split(",").map(&:strip).reject(&:blank?)
+      scope = Detail.where(device_id: car_ids)
+    elsif Current.user&.admin
+      scope = Detail.all
     else
-      @details = Detail.all.order(:device_name, :device_id)
+      scope = Detail.none
+    end
+
+    if params[:search].present?
+      @details = scope.where("device_name LIKE ?", "%#{params[:search]}%")
+    else
+      @details = scope.order(:device_name, :device_id)
     end
   end
 
@@ -41,7 +50,7 @@ class DetailsController < ApplicationController
   end
 
   def check_main_user
-    unless Current.user&.admin
+    unless Current.user&.admin || Current.user&.pessoal
       redirect_to root_path, alert: "Você não tem acesso a essa página"
     end
   end

@@ -23,9 +23,7 @@
               <th><%= sort_link @search, :event_type %></th>
               <th><%= sort_link @search, :event_name %></th>
               <th><%= sort_link @search, :message %></th>
-              <th><%= sort_link @search, :driver_id %></th>
               <th><%= sort_link @search, :driver_name %></th>
-              <th><%= sort_link @search, :created_at %></th>
               <th class="w-1"></th>
             </tr>
           </thead>
@@ -46,13 +44,10 @@
                 <td><%= event.event_type %></td>
                 <td><%= event.event_name %></td>
                 <td><%= event.message %></td>
-                <td><%= event.driver_id %></td>
                 <td><%= event.driver_name %></td>
-                <td><%= event.created_at %></td>
                 <td>
-                  <%= link_to "View", [:admin, event], class: "btn btn-white btn-sm" %>
                   <%= link_to "Edit", edit_admin_event_path(event), class: "btn btn-white btn-sm" %>
-                  <%= link_to "Delete", [:admin, event], class: "btn btn-white btn-sm", data: { method: :delete, confirm: "Are you sure?" } %>
+                  <%= link_to "Delete", [:admin, event], class: "btn btn-white btn-sm", data: { method: :delete, confirm: "Deletar este evento?" } %>
                 </td>
               </tr>
             <% end %>
@@ -90,6 +85,7 @@
           ['Todos', ''],
           ['alarm', 'alarm'],
           ['commandResult', 'commandResult'],
+          ['commandSend', 'commandSend'],
           ['deviceOffline', 'deviceOffline'],
           ['deviceOnline', 'deviceOnline'],
           ['deviceMoving', 'deviceMoving'],

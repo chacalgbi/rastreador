@@ -19,6 +19,10 @@ class SaveLog
         error_payload
       when 'error_alert'
         error_alert
+      when 'redefinir_senha'
+        redefinir_senha
+      when 'enviar_sms'
+        enviar_sms
       when 'error'
         error
       when 'params'
@@ -81,6 +85,30 @@ class SaveLog
   def error_alert
     path = Rails.root.join('log', 'informacao')
     file = File.join(path, "error_alert.log")
+
+    FileUtils.mkdir_p(path) unless File.directory?(path)
+
+    FileUtils.touch(file)
+
+    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger.info("#{@log}\n")
+  end
+
+  def redefinir_senha
+    path = Rails.root.join('log', 'informacao')
+    file = File.join(path, "redefinir_senha.log")
+
+    FileUtils.mkdir_p(path) unless File.directory?(path)
+
+    FileUtils.touch(file)
+
+    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger.info("#{@log}\n")
+  end
+
+  def enviar_sms
+    path = Rails.root.join('log', 'informacao')
+    file = File.join(path, "enviar_sms.log")
 
     FileUtils.mkdir_p(path) unless File.directory?(path)
 

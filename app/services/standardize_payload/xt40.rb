@@ -49,12 +49,10 @@ class StandardizePayload::Xt40
 
   def atributos_comuns
     {
+      device_id:   @detail.id,
       last_event_type: @type,
       alarme_type: @payload.dig(:event, :attributes, :alarm),
       device_name: @payload.dig(:device, :name),
-      email:       NotificationCacheService.email_addresses,
-      phone:       NotificationCacheService.whatsapp_numbers,
-      telegram:    NotificationCacheService.telegram_ids,
       status:      @payload.dig(:device, :status) == 'online' ? 'online' : 'offline',
       imei:        @payload.dig(:device, :uniqueId),
       url:         url_google_maps,

@@ -6,18 +6,26 @@ class SessionsController < ApplicationController
   end
 
   def create
-    phone = params[:phone]
+    login = params[:phone]
     password = params[:password]
 
-    clean_phone = phone.gsub(/\D/, '') if phone.present?
+    user = nil
+    if login.present?
+      if login.include?("@")
+        user = User.find_by(email_address: login)
+      else
+        clean_phone = login.gsub(/\D/, '')
+        user = User.find_by(phone: clean_phone)
+      end
+    end
 
-    user = User.find_by(phone: clean_phone)&.authenticate(password)
+    user = user&.authenticate(password)
 
     if user
       start_new_session_for user
       redirect_to after_authentication_url, notice: "Login feito com sucesso!"
     else
-      redirect_to new_session_path, alert: "Telefone ou senha inválidos!"
+      redirect_to new_session_path, alert: "Telefone, e-mail ou senha inválidos!"
     end
   end
 

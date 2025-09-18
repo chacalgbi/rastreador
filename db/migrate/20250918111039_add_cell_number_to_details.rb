@@ -1,0 +1,5 @@
+class AddCellNumberToDetails < ActiveRecord::Migration[8.0]
+  def change
+    add_column :details, :cell_number, :string
+  end
+end

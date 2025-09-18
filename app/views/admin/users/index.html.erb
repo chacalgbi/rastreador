@@ -10,32 +10,42 @@
 <% end %>
 
 <div class="page-body">
-  <div class="container-xl">
+  <div class="container-fluid">
     <div class="card">
       <div class="table-responsive">
         <table class="table table-vcenter table-nowrap card-table table-striped">
           <thead>
             <tr>
+              <th><%= sort_link @search, :id %></th>
               <th><%= sort_link @search, :email_address %></th>
               <th><%= sort_link @search, :name %></th>
+              <th><%= sort_link @search, :cpf %></th>
               <th><%= sort_link @search, :phone %></th>
-              <th><%= sort_link @search, :password_digest %></th>
-              <th><%= sort_link @search, :active %></th>
+              <th><%= 'Ativo(*)' %></th>
               <th><%= sort_link @search, :admin %></th>
+              <th><%= sort_link @search, :maintenance %></th>
+              <th><%= sort_link @search, :pessoal %></th>
               <th><%= sort_link @search, :cars %></th>
+              <th><%= sort_link @search, :updated_at %></th>
+              <th><%= 'Redef Senha' %></th>
               <th class="w-1"></th>
             </tr>
           </thead>
           <tbody>
             <% @users.each do |user| %>
-              <tr>
+              <tr style="<%= 'background-color: #fa8888ff;' if user.pessoal && !user.active %>">
+                <td><%= user.id %></td>
                 <td><%= user.email_address %></td>
                 <td><%= user.name %></td>
+                <td><%= user.cpf %></td>
                 <td><%= user.phone %></td>
-                <td><%= user.password_digest %></td>
-                <td><%= user.active %></td>
-                <td><%= user.admin %></td>
+                <td><%= user.active ? "Sim" : "Não" %></td>
+                <td><%= user.admin ? "Sim" : "Não" %></td>
+                <td><%= user.maintenance ? "Sim" : "Não" %></td>
+                <td><%= user.pessoal ? "Sim" : "Não" %></td>
                 <td><%= user.cars %></td>
+                <td><%= user.updated_at.strftime("%H:%M:%S %d/%m/%Y") %></td>
+                <td><%= user.password_reset_sent_at&.strftime("%H:%M:%S %d/%m/%Y") %></td>
                 <td>
                   <%= link_to "View", [:admin, user], class: "btn btn-white btn-sm" %>
                   <%= link_to "Edit", edit_admin_user_path(user), class: "btn btn-white btn-sm" %>
@@ -55,6 +65,7 @@
           <%== pagy_bootstrap_nav(@pagy) %>
         </div>
       </div>
+      <small class="mbe-4 mls-4">(*) Quando 'false' o usuário com PESSOAL == TRUE não verá os veículos e a barra de menu.</small>
     </div>
   </div>
 </div>

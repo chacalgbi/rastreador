@@ -179,6 +179,7 @@ class HomeController < ApplicationController
 
     @detail.last_user = params[:action_type] == 'bloquear' ? '' : Current.user.name
     @detail.save
+    create_event_log('commandSend', "#{command_name} / #{send_command}", @detail.device_id, @detail.device_name, "#{params[:action_type]} - Resposta: #{response}", @detail.last_user)
 
     driver_active = @detail.last_user.to_s.split(' ').first.presence || @detail.last_user
     Traccar.update_contact(@detail.device_id, @detail.device_name, driver_active, @detail.imei, @detail.category)
@@ -313,6 +314,10 @@ class HomeController < ApplicationController
   end
 
   def devices_user
+    if Current.user&.pessoal && Current.user&.active == false
+      return Detail.none
+    end
+
     device_ids = Current.user&.cars.present? ? Current.user.cars.split(",") : []
     if params[:query].present?
       devices = device_ids.present? ? Detail.where("LOWER(device_name) LIKE LOWER(:query)", query: "%#{params[:query].downcase}%").where(device_id: device_ids) : []
@@ -366,5 +371,16 @@ class HomeController < ApplicationController
     end
 
     response
+  end
+
+  def create_event_log(event_type, event_name, car_id, device_name, message, driver_active = '')
+    Event.create(
+      car_id: car_id,
+      car_name: device_name,
+      driver_name: driver_active,
+      event_type: event_type,
+      event_name: event_name,
+      message: message
+    )
   end
 end

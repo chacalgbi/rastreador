@@ -1,9 +1,7 @@
 class Notification < ApplicationRecord
-  after_commit :reload_notification_cache
+  validates :user_id, presence: true
 
-  private
-
-  def reload_notification_cache
-    NotificationCacheService.load_notifications
+  def self.ransackable_attributes(auth_object = nil)
+    ["created_at", "email", "id", "id_value", "telegram", "updated_at", "user_id", "whatsapp"]
   end
 end

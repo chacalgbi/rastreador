@@ -49,15 +49,13 @@ class BuildAlert
   private
 
   def define_values
-    @motorista = @detail.last_user
+    @motorista = @detail.last_user.to_s.split(' ').first.presence || @detail.last_user
     @alert_whatsApp = @detail.alert_whatsApp
     @alert_telegram = @detail.alert_telegram
     @alert_email = @detail.alert_email
 
+    @device_id = @payload.dig(:device_id) || @detail.device_id
     @veiculo = @payload.dig(:device_name) || @detail.device_name
-    @email = @payload.dig(:email)
-    @phone = @payload.dig(:phone)
-    @telegram = @payload.dig(:telegram)
     @cerca = @payload.dig(:cerca)
     @url = @payload.dig(:url)
     @velocidade = @payload.dig(:velocidade)
@@ -186,13 +184,11 @@ class BuildAlert
 
   def payload_job_send_alert(msg2, event)
     {
+      device_id: @device_id,
       alert_whatsApp: @alert_whatsApp,
       alert_telegram: @alert_telegram,
       alert_email: @alert_email,
       message: msg2,
-      phone: @phone,
-      email: @email,
-      telegram: @telegram,
       event: event
     }
   end
