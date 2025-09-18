@@ -49,7 +49,7 @@ class StandardizePayload::Xt40
 
   def atributos_comuns
     {
-      device_id:   @detail.id,
+      device_id:   @detail.device_id,
       last_event_type: @type,
       alarme_type: @payload.dig(:event, :attributes, :alarm),
       device_name: @payload.dig(:device, :name),
