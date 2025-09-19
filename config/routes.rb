@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount MissionControl::Jobs::Engine, at: "/jobs"
   resources :notifications
   namespace :admin do
     get    '/',        to: 'details#index'
