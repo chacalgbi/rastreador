@@ -1,8 +1,9 @@
 class DriverController < ApplicationController
   before_action :check_main_user
+  before_action :view_only_user?, only: [:create, :update, :destroy, :cars_update, :update_password]
 
   def index
-    @drivers = User.order(:name)
+    @drivers = User.where(view_only: false).order(:name)
   end
 
   def new
@@ -114,26 +115,18 @@ class DriverController < ApplicationController
 
     password_params = params.require(:user).permit(:password, :password_confirmation)
 
-    # Validação manual do comprimento da senha apenas se não estiver vazia
     if password_params[:password].present? && password_params[:password].length < 5
       @user.errors.add(:password, "deve ter pelo menos 5 caracteres")
       render :edit_password, status: :unprocessable_entity
       return
     end
 
-    # O has_secure_password automaticamente valida a confirmação da senha
     if @user.update(password_params)
       flash[:notice] = "Senha do motorista #{@user.name} foi alterada com sucesso."
       redirect_to driver_index_path
     else
       render :edit_password, status: :unprocessable_entity
     end
-  end
-
-  # Ação temporária para testar flash messages
-  def test_flash
-    flash[:notice] = "Teste de mensagem de sucesso - Flash funcionando!"
-    redirect_to driver_index_path
   end
 
   private

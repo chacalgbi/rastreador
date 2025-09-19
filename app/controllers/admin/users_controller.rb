@@ -49,6 +49,11 @@ class Admin::UsersController < Admin::BaseController
     end
 
     def user_params
-      params.require(:user).permit(:email_address, :name, :cpf, :phone, :password_digest, :active, :admin, :maintenance, :pessoal, :cars)
+      permitted_params = params.require(:user).permit(:email_address, :name, :cpf, :phone, :password_digest, :active, :admin, :maintenance, :pessoal, :cars, :view_only)
+
+      # Converte string vazia em nil para email_address
+      permitted_params[:email_address] = nil if permitted_params[:email_address].blank?
+
+      permitted_params
     end
 end

@@ -13,7 +13,7 @@
   <div class="container-fluid">
     <div class="card">
       <div class="table-responsive">
-        <table class="table table-vcenter table-nowrap card-table table-striped">
+        <table class="table table-vcenter table-nowrap card-table">
           <thead>
             <tr>
               <th><%= sort_link @search, :id %></th>
@@ -25,6 +25,7 @@
               <th><%= sort_link @search, :admin %></th>
               <th><%= sort_link @search, :maintenance %></th>
               <th><%= sort_link @search, :pessoal %></th>
+              <th><%= sort_link @search, :view_only %></th>
               <th><%= sort_link @search, :cars %></th>
               <th><%= sort_link @search, :updated_at %></th>
               <th><%= 'Redef Senha' %></th>
@@ -39,10 +40,11 @@
                 <td><%= user.name %></td>
                 <td><%= user.cpf %></td>
                 <td><%= user.phone %></td>
-                <td><%= user.active ? "Sim" : "Não" %></td>
-                <td><%= user.admin ? "Sim" : "Não" %></td>
-                <td><%= user.maintenance ? "Sim" : "Não" %></td>
-                <td><%= user.pessoal ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(user.active) %>"><%= user.active ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(user.admin) %>"><%= user.admin ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(user.maintenance) %>"><%= user.maintenance ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(user.pessoal) %>"><%= user.pessoal ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(user.view_only) %>"><%= user.view_only ? "Sim" : "Não" %></td>
                 <td><%= user.cars %></td>
                 <td><%= user.updated_at.strftime("%H:%M:%S %d/%m/%Y") %></td>
                 <td><%= user.password_reset_sent_at&.strftime("%H:%M:%S %d/%m/%Y") %></td>

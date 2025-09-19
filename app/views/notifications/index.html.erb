@@ -6,10 +6,32 @@
 </div>
 
 <div id="notifications" class="flex flex-col" style="gap: 2rem;">
-  <% @notifications.each do |notification| %>
-    <div class="flex flex-col items-start gap">
-      <%= render notification %>
-      <%= link_to "Editar notificação", notification, class: "btn" %>
-    </div>
-  <% end %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>N°</th>
+        <th>Whatsapp</th>
+        <th>Email</th>
+        <th>Telegram</th>
+        <th>Usuário</th>
+        <th>Atualizado em</th>
+        <th>Editar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @notifications.each.with_index(1) do |notification, index| %>
+        <tr>
+          <th><%= index %></th>
+          <td><%= notification.whatsapp %></td>
+          <td><%= notification.email %></td>
+          <td><%= notification.telegram %></td>
+          <td><%= notification.user_id %></td>
+          <td><%= notification.updated_at.strftime("%H:%M:%S %d/%m/%Y") %></td>
+          <td>
+            <%= link_to "#", notification, class: "btn btn--secondary" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>

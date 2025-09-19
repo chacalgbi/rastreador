@@ -12,13 +12,12 @@
               <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc" style="max-width: 600px; max-height: 80vh; overflow-y: auto;">
                 <div class="dialog__content">
                   <h2 class="text-lg font-semibold leading-none mbe-2" id="dialog_label">Tem certeza que deseja DESBLOQUEAR o veículo?</h2>
-                  <p class="text-lg text-subtle mbe-4" id="dialog_desc">
                     <% if defined?(user_maintenance) && user_maintenance %>
-                      Tem certeza que deseja DESBLOQUEAR o veículo?
                     <% else %>
-                      Esta ação irá desbloquear o veículo, permitindo que ele seja utilizado e irá registrar que você é o usuário.
+                      <p class="text-lg text-subtle mbe-4" id="dialog_desc">
+                        Esta ação irá desbloquear o veículo, permitindo que ele seja utilizado e irá registrar que você é o usuário.
+                      </p>
                     <% end %>
-                  </p>
 
                   <%= form_with url: home_block_and_desblock_path, method: :post, local: false, 
                               data: { turbo_stream: true }, 

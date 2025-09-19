@@ -10,6 +10,7 @@ class HomeController < ApplicationController
   IGNORED_EVENT_NAMES = ['resposta'].freeze
   HOURS_LAST_EVENTS = 96
   before_action :set_global_variables
+  before_action :view_only_user?, only: [:block_and_desblock, :odometro]
 
   def set_global_variables
     @user_admin = Current.user.admin?

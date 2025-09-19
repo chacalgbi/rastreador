@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_18_114149) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_19_093412) do
   create_table "action_mailbox_inbound_emails", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
@@ -200,6 +200,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_18_114149) do
     t.boolean "maintenance", default: false
     t.string "cpf"
     t.boolean "pessoal", default: false, null: false
+    t.boolean "view_only", default: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 

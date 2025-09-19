@@ -10,4 +10,8 @@ module Admin::ApplicationHelper
   def active_nav_item(*names)
     names.include?(controller_path) ? "active" : ""
   end
+
+  def color_cel(value)
+    value ? "background-color: #c8e6c9;" : "background-color: #ffcdd2;"
+  end
 end

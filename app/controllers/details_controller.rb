@@ -1,6 +1,7 @@
 class DetailsController < ApplicationController
   before_action :check_main_user
   before_action :set_detail, only: [:edit_settings, :update_settings]
+  before_action :view_only_user?, only: [:update_settings]
 
   def index
     if Current.user&.pessoal

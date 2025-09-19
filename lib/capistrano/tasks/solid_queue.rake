@@ -14,10 +14,10 @@ namespace :solid_queue do
   desc "Stop Solid Queue"
   task :stop do
     on roles(:app) do
-      execute "pkill -TERM -f bin/jobs || true"
+      execute "ps aux | grep -i solid-queue || true"
       execute "sleep 3"
-      execute "pkill -KILL -f bin/jobs || true"
-      execute "sleep 2"
+      execute "pkill -9 -f solid-queue || true"
+      execute "sleep 4"
     end
   end
 

@@ -1,6 +1,7 @@
 class NotificationsController < ApplicationController
   before_action :check_main_or_pessoal_user
   before_action :set_notification, only: %i[ show edit update destroy ]
+  before_action :view_only_user?, only: [:create, :update, :destroy]
 
   def index
     if Current.user&.admin?
