@@ -118,6 +118,55 @@ class Admin::CommandsController < Admin::BaseController
     redirect_to admin_commands_path, notice: message
   end
 
+  def send_command_sms
+    comando = params[:comando]
+    device_ids_param = params[:deviceid]
+
+    if comando.blank?
+      redirect_to admin_commands_path, alert: "Comando não pode estar vazio."
+      return
+    end
+
+    if device_ids_param.blank?
+      redirect_to admin_commands_path, alert: "Device ID não pode estar vazio."
+      return
+    end
+
+    device_ids = device_ids_param.split(',').map(&:strip).reject(&:blank?)
+
+    if device_ids.empty?
+      redirect_to admin_commands_path, alert: "Nenhum Device ID válido fornecido."
+      return
+    end
+
+    results = []
+
+    device_ids.each do |device_id|
+      begin
+        @detail = Detail.find_by(device_id: device_id)
+        cell_number = @detail&.cell_number
+        if cell_number.blank?
+          results << "(#{device_id}, ERRO: Número de celular não encontrado)"
+          next
+        end
+        response = SendSms.send_sms(cell_number, comando)
+        results << "(#{device_id}, #{response})"
+      rescue => e
+        results << "(#{device_id}, ERRO: #{e.message})"
+        SaveLog.new('error', "Erro ao enviar sms para device #{device_id}: #{e.message}").save
+      end
+    end
+
+    if device_ids.size == 1
+      message = "O sms '#{comando}' foi enviado para o veículo #{device_ids.first}: #{results.first}"
+    else
+      message = "O sms '#{comando}' foi enviado para #{device_ids.size} veículos: #{results.join(', ')}"
+    end
+
+    SaveLog.new('enviar_sms', message).save
+    redirect_to admin_commands_path, notice: message
+  end
+
   private
   def set_command
     @command = Command.find(params[:id])

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     post 'details/send_command'
     post 'commands/send_command'
     post 'commands/send_command_to_all'
+    post 'commands/send_command_sms'
     resources :events
     resources :commands
     resources :batteries

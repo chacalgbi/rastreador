@@ -1,25 +1,40 @@
-<%= form_with url: admin_commands_send_command_path, class: "card flex flex-col gap" do |form| %>
-  <div class="flex flex-col gap mb-2">
-    <div class="flex flex-col gap-half">
-      <%= form.text_field :comando, placeholder: "Digite o comando", class: "input" %>
-      <%= form.text_field :deviceid, placeholder: "Id do device (ou múltiplos IDs separados por vírgula)", class: "input" %>
-      <%= form.submit "Enviar para veículo(s)", class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar este comando?" } %>
-    </div>
-    <div class="text-info">
-      💬 <strong>INFORMAÇÃO:</strong> O comando será enviado sem tratamento, portanto, tenha certeza de que o comando está correto.<br>
-      📝 <strong>Dica:</strong> Para enviar para múltiplos veículos, separe os IDs por vírgula (ex: 123, 456, 789).
-    </div>
-  </div>
-<% end %>
+<div class="container-xl">
 
-<%= form_with url: admin_commands_send_command_to_all_path, class: "card flex flex-col gap" do |form| %>
-  <div class="flex flex-col gap mb-2">
-    <div class="flex flex-col gap-half">
+  <%= form_with url: admin_commands_send_command_path, class: "card" do |form| %>
+    <div style="padding: 10px; display: flex;">
+      <%= form.text_field :comando, placeholder: "Digite o comando", class: "input" %>
+      <%= form.text_field :deviceid, placeholder: "device_ids Ex: 5,58,125", class: "input" %>
+      <%= form.submit "Enviar para veículo(s)", class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar este comando?" } %>
+      <div class="text-info">
+        💬 <strong>INFORMAÇÃO:</strong> O comando será enviado sem tratamento, tenha cuidado.<br>
+        📝 <strong>Dica:</strong> Separe os IDs por vírgula (ex: 123, 456, 789).
+      </div>
+    </div>
+  <% end %>
+  <br>
+
+  <%= form_with url: admin_commands_send_command_to_all_path, class: "card" do |form| %>
+    <div style="padding: 10px; display: flex;">
       <%= form.text_field :comando, placeholder: "Digite o comando para todos os veículos", class: "input" %>
       <%= form.submit "Enviar para TODOS os veículos", class: "btn btn--danger", data: { turbo_confirm: "ATENÇÃO: Este comando será enviado para TODOS os veículos cadastrados. Você tem certeza?" } %>
+      <div class="text-warning">
+        ⚠️ <strong>ATENÇÃO:</strong> Este comando será enviado para TODOS os veículos cadastrados no sistema. Use com extrema cautela.
+      </div>
     </div>
-    <div class="text-warning">
-      ⚠️ <strong>ATENÇÃO:</strong> Este comando será enviado para TODOS os veículos cadastrados no sistema. Use com extrema cautela.
+  <% end %>
+  <br>
+
+  <%= form_with url: admin_commands_send_command_sms_path, class: "card" do |form| %>
+    <div style="padding: 10px; display: flex;">
+      <%= form.text_field :comando, placeholder: "Digite o comando SMS", class: "input" %>
+      <%= form.text_field :deviceid, placeholder: "device_ids Ex: 14,8,87", class: "input" %>
+      <%= form.submit "Enviar SMS para veículo(s)", class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar este comando?" } %>
+      <div class="text-info">
+        💬 <strong>INFORMAÇÃO:</strong> O comando SMS será enviado sem tratamento, tenha cuidado.<br>
+        📝 <strong>Dica:</strong> Separe os IDs por vírgula (ex: 17, 4, 789).
+      </div>
     </div>
-  </div>
-<% end %>
+  <% end %>
+  <br>
+
+</div>
