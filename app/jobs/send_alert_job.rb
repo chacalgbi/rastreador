@@ -1,5 +1,5 @@
 class SendAlertJob < ApplicationJob
-  queue_as :default
+  queue_as :alerts
 
   def perform(params)
     begin

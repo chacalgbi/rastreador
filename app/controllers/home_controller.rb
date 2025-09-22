@@ -58,6 +58,7 @@ class HomeController < ApplicationController
 
     send_command('Status')
     send_command('network')
+    send_command('parametros')
 
     info = @event
     msg = define_text(@event, params[:status])
@@ -335,8 +336,8 @@ class HomeController < ApplicationController
     return if send_command.nil?
     send_command = send_command.gsub('XXXX', @event.imei) if @event.model == 'st8310u'
 
-    #SendCommandJob.perform_later({device_id: @event.device_id, command: send_command})
-    Traccar.command(@event.device_id, send_command) # Temporariamente até ver o problema do job
+    SendCommandJob.perform_later({device_id: @event.device_id, command: send_command})
+    #Traccar.command(@event.device_id, send_command) # Temporariamente até ver o problema do job
   end
 
   def define_text(event, status)

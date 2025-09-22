@@ -1,5 +1,5 @@
 class SendCommandJob < ApplicationJob
-  queue_as :default
+  queue_as :status
 
   def perform(params)
     begin

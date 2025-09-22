@@ -66,7 +66,6 @@ class StandardizePayload::Xt40
   def ignitionOn
     {
       ignition: @payload.dig(:position, :attributes, :ignition) ? 'on' : 'off',
-      horimetro: horas,
       odometro: kilometros,
       cercas: @payload.dig(:position, :geofenceIds) ? @payload.dig(:position, :geofenceIds).join(',') : nil,
       bat_nivel: "#{@payload.dig(:position, :attributes, :batteryLevel)}%",
@@ -78,7 +77,6 @@ class StandardizePayload::Xt40
   def ignitionOff
     {
       ignition: @payload.dig(:position, :attributes, :ignition) ? 'on' : 'off',
-      horimetro: horas,
       odometro: kilometros,
       cercas: @payload.dig(:position, :geofenceIds) ? @payload.dig(:position, :geofenceIds).join(',') : nil,
       bat_nivel: "#{@payload.dig(:position, :attributes, :batteryLevel)}%",
@@ -89,23 +87,22 @@ class StandardizePayload::Xt40
 
   def deviceMoving
     {
+      satelites: @payload.dig(:position, :attributes, :sat),
       odometro: kilometros,
-      horimetro: horas,
       **atributos_comuns
     }
   end
 
   def deviceStopped
     {
+      satelites: @payload.dig(:position, :attributes, :sat),
       odometro: kilometros,
-      horimetro: horas,
       **atributos_comuns
     }
   end
 
   def geofenceExit
     {
-      horimetro: horas,
       odometro: kilometros,
       **atributos_comuns
     }
@@ -113,7 +110,6 @@ class StandardizePayload::Xt40
 
   def geofenceEnter
     {
-      horimetro: horas,
       odometro: kilometros,
       **atributos_comuns
     }
@@ -241,7 +237,6 @@ class StandardizePayload::Xt40
     rele_state = @detail.category == "motorcycle" ? (rele_state == 'on' ? 'off' : 'on') : rele_state
 
     {
-      horimetro: horas,
       odometro: kilometros,
       cercas: @payload.dig(:position, :geofenceIds) ? @payload.dig(:position, :geofenceIds).join(',') : nil,
       ignition: status["ACC"].start_with?('ON') ? 'on' : 'off',
@@ -260,11 +255,13 @@ class StandardizePayload::Xt40
     params = @payload.dig(:position, :attributes, :result)
     params_array = params.split(" ")
     other_params = extract_params(params) || []
+    minutos = extract_acct_value(params) || 0
     {
+      horimetro: horas(minutos),
       apn: params_array[0],
       ip_and_port: params_array[1],
       heartbeat: other_params[1],
-      params: "#{other_params[0]} #{other_params[2]} #{other_params[3]}",
+      params: "#{other_params[0]} #{other_params[1]} #{other_params[2]} #{other_params[3]} #{other_params[4]} #{other_params[5]} #{other_params[6]}",
       **atributos_comuns
     }
   end
@@ -293,12 +290,10 @@ class StandardizePayload::Xt40
     "https://www.google.com/maps?q=#{@payload.dig(:position, :latitude)},#{@payload.dig(:position, :longitude)}"
   end
 
-  def horas
-    milissegundos = @payload.dig(:position, :attributes, :hours) || 0
-    segundos = milissegundos / 1000
-    minutos = segundos / 60
-    horas = minutos / 60
-    "#{horas.to_i}h"
+  def horas(minutos)
+    hours = minutos / 60
+    remaining_minutes = minutos % 60
+    "#{hours}h #{remaining_minutes.to_s.rjust(2, '0')}m"
   end
 
   def kilometros
@@ -318,7 +313,7 @@ class StandardizePayload::Xt40
 
   def extract_params(params)
     begin
-      target_keys = ["GMT", "HBT", "MIL", "BEND"]
+      target_keys = ["GMT", "SLEEP", "VIB", "HBT", "MIL", "BEND", "DLYACC"]
       extracted_data = {}
 
       # Regex para encontrar as chaves desejadas e capturar seus valores
@@ -341,6 +336,23 @@ class StandardizePayload::Xt40
       result_array
     rescue StandardError => e
       error_message = "StandardizePayload::Xt40.extract_params | Error: #{e.message}\nBacktrace:\n#{e.backtrace.first(5).join("\n")}"
+      Rails.logger.error("#{error_message}\n")
+      SaveLog.new('error_payload', error_message).save
+      nil
+    end
+  end
+
+  def extract_acct_value(string)
+    begin
+      # Regex para capturar o valor entre "ACCT: " e " BEND:"
+      # ACCT:\s* -> "ACCT: " com zero ou mais espaços após os dois pontos
+      # (\d+) -> captura um ou mais dígitos (o valor que queremos)
+      # \s+BEND: -> um ou mais espaços seguidos de "BEND:"
+      match = string.match(/ACCT:\s*(\d+)\s+BEND:/)
+      return match[1].to_i if match
+      nil
+    rescue StandardError => e
+      error_message = "StandardizePayload::Xt40.extract_acct_value | Error: #{e.message}\nBacktrace:\n#{e.backtrace.first(5).join("\n")}"
       Rails.logger.error("#{error_message}\n")
       SaveLog.new('error_payload', error_message).save
       nil

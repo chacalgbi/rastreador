@@ -34,8 +34,8 @@
               <th><%= sort_link @search, :horimetro %></th>
               <th><%= sort_link @search, :iccid %></th>
               <th><%= sort_link @search, :url %></th>
+              <th>Numero</th>
               <th><%= sort_link @search, :network %></th>
-              <th><%= sort_link @search, :cell_number %></th>
               <th><%= sort_link @search, "Modelo" %></th>
               <th><%= sort_link @search, :velo_max %></th>
               <th><%= sort_link @search, :cercas %></th>
@@ -94,7 +94,7 @@
                 <td><%= detail.category %></td>
                 <td><%= button_to "Obter", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "parametros", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja OBTER os parametros?" }  %></td>
                 <td><%= button_to "#{detail.odometro } Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_hodometro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Hodômetro?" }  %></td>
-                <td><%= button_to "#{detail.horimetro} Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_horimetro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Horímetro?" }  %></td>
+                <td><%= detail.horimetro %></td>
                 <td style="display: flex; gap: 3px;">
                   <%= button_to "Get", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "get_iccid", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja OBTER o ICCID?" }  %>
                   <% if detail.iccid.present? %>
@@ -102,8 +102,8 @@
                   <% end %>
                 </td>
                 <td><%= link_to detail.url, target: "_blank", rel: "noopener noreferrer", class: "btn btn-primary btn-sm" do %>📍 Ver no Mapa <% end %></td>
-                <td><%= detail.network %></td>
                 <td><%= detail.cell_number %></td>
+                <td><%= detail.network %></td>
                 <td><%= detail.model %></td>
                 <td><%= detail.velo_max %></td>
                 <td><%= detail.cercas %></td>
@@ -121,14 +121,14 @@
                 <td><%= detail.params %></td>
                 <td><%= detail.apn %></td>
                 <td><%= detail.ip_and_port %></td>
-                <td><%= detail.alert_whatsApp %></td>
-                <td><%= detail.alert_telegram %></td>
-                <td><%= detail.alert_email %></td>
-                <td><%= detail.send_exit_cerca %></td>
-                <td><%= detail.send_battery %></td>
-                <td><%= detail.send_moving %></td>
-                <td><%= detail.send_velo_max %></td>
-                <td><%= detail.send_rele %></td>
+                <td style="<%= color_cel(detail.alert_whatsApp) %>"><%= detail.alert_whatsApp ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(detail.alert_telegram) %>"><%= detail.alert_telegram ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(detail.alert_email) %>"><%= detail.alert_email ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(detail.send_exit_cerca) %>"><%= detail.send_exit_cerca ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(detail.send_battery) %>"><%= detail.send_battery ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(detail.send_moving) %>"><%= detail.send_moving ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(detail.send_velo_max) %>"><%= detail.send_velo_max ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(detail.send_rele) %>"><%= detail.send_rele ? "Sim" : "Não" %></td>
                 <td><%= detail.created_at %></td>
                 <td>
                   <%= link_to "Ver", [:admin, detail], class: "btn btn-white btn-sm" %>
