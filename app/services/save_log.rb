@@ -29,6 +29,8 @@ class SaveLog
         params
       when 'alert_job'
         alert_job
+      when 'sleep_motos'
+        sleep_motos
       when 'notify_error'
         notify_error
       when 'payload_desconhecido'
@@ -133,6 +135,18 @@ class SaveLog
   def alert_job
     path = Rails.root.join('log', 'informacao')
     file = File.join(path, "alert_job.log")
+
+    FileUtils.mkdir_p(path) unless File.directory?(path)
+
+    FileUtils.touch(file)
+
+    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger.info("#{@log}\n")
+  end
+
+  def sleep_motos
+    path = Rails.root.join('log', 'informacao')
+    file = File.join(path, "sleep_motos.log")
 
     FileUtils.mkdir_p(path) unless File.directory?(path)
 

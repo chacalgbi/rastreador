@@ -24,7 +24,9 @@ namespace :solid_queue do
   desc "Check if Solid Queue is running"
   task :status do
     on roles(:app) do
-      execute "pgrep -f bin/jobs && echo 'SolidQueue is running' || echo 'SolidQueue is not running'"
+      execute "echo 'Processos Solid Queue:'"
+      execute "pgrep -f solid-queue | wc -l | xargs echo 'Número de processos:'"
+      execute "ps aux | grep -v grep | grep solid-queue || echo 'Nenhum processo encontrado'"
     end
   end
 

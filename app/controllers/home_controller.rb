@@ -56,6 +56,10 @@ class HomeController < ApplicationController
     @event = Detail.find_by(device_id: device_id)
     @events_last_x_hours = query_events(device_id).count
 
+    if @event.status == 'offline' && @event.category == 'motorcycle'
+      send_command_sms('acordar', @event)
+    end
+
     send_command('Status')
     send_command('network')
     send_command('parametros')
@@ -182,6 +186,11 @@ class HomeController < ApplicationController
     @detail.last_user = params[:action_type] == 'bloquear' ? '' : Current.user.name
     @detail.save
     create_event_log('commandSend', "#{command_name} / #{send_command}", @detail.device_id, @detail.device_name, "#{params[:action_type]} - Resposta: #{response}", @detail.last_user)
+
+    # Colocar o rastreador para dormir assim que bloquear a moto(desligando o relé), para não gastar bateria.
+    if response == 200 && @detail.category == 'motorcycle' && command_name == 'rele_off'
+      send_command_person('dormir', @detail)
+    end
 
     driver_active = @detail.last_user.to_s.split(' ').first.presence || @detail.last_user
     Traccar.update_contact(@detail.device_id, @detail.device_name, driver_active, @detail.imei, @detail.category)
@@ -338,6 +347,26 @@ class HomeController < ApplicationController
 
     SendCommandJob.perform_later({device_id: @event.device_id, command: send_command})
     #Traccar.command(@event.device_id, send_command) # Temporariamente até ver o problema do job
+  end
+
+  def send_command_person(command_name, detail)
+    command = Command.find_by(type_device: detail.model, name: command_name)
+    send_command = command.present? ? command.command : nil
+    return if send_command.nil?
+    send_command = send_command.gsub('XXXX', detail.imei) if detail.model == 'st8310u'
+
+    SendCommandJob.perform_later({device_id: detail.device_id, command: send_command})
+    #Traccar.command(detail.device_id, send_command) # Temporariamente até ver o problema do job
+  end
+
+  def send_command_sms(command_name, detail)
+    command = Command.find_by(type_device: detail.model, name: command_name)
+    send_command = command.present? ? command.command_sms : nil
+    return if send_command.nil?
+    response = SendSms.send_sms(detail.cell_number, send_command)
+    msg = "CELL: #{detail.cell_number} | SMS: #{send_command} | Resposta: #{response}"
+    SaveLog.new('sleep_motos', msg).save
+    true
   end
 
   def define_text(event, status)
