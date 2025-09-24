@@ -56,10 +56,6 @@ class HomeController < ApplicationController
     @event = Detail.find_by(device_id: device_id)
     @events_last_x_hours = query_events(device_id).count
 
-    if @event.status == 'offline' && @event.category == 'motorcycle'
-      send_command_sms('acordar', @event)
-    end
-
     send_command('Status')
     send_command('network')
     send_command('parametros')
@@ -310,6 +306,38 @@ class HomeController < ApplicationController
     end
   end
 
+  def acordar_rastreador
+    device_id = params[:device_id]
+    detail = Detail.find_by(device_id: device_id)
+
+    resp = send_command_sms('acordar', detail)
+
+    if resp == 200
+      notice = "Comando para acordar o rastreador enviado com sucesso. Aguarde alguns instantes e atualize a página."
+      flash.now[:notice] = notice
+
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.append("flash", partial: "/alert", locals: { notice: notice }),
+            turbo_stream.append("flash", partial: "shared/flash_popup", locals: { notice_message: notice, redirect_on_success: true })
+          ]
+        end
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.append(
+            "flash",
+            partial: "shared/flash_popup",
+            locals: { alert_message: "Erro ao enviar o comando para acordar o rastreador. Resposta: #{resp}" }
+          )
+        end
+        format.html { redirect_to root_path, alert: "Erro ao enviar o comando para acordar o rastreador. Resposta: #{resp}" }
+      end
+    end
+  end
+
   private
 
   def query_events(device_id)
@@ -366,7 +394,7 @@ class HomeController < ApplicationController
     response = SendSms.send_sms(detail.cell_number, send_command)
     msg = "CELL: #{detail.cell_number} | SMS: #{send_command} | Resposta: #{response}"
     SaveLog.new('sleep_motos', msg).save
-    true
+    response
   end
 
   def define_text(event, status)

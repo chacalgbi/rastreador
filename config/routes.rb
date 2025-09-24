@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   post "home/last_events"
   post "home/odometro"
   post "home/block_and_desblock"
+  post "home/acordar_rastreador"
   post "event/webhook_traccar"
   # resources :registrations, only: [:new, :create] # Removido para desabilitar auto-registro
   get "up" => "rails/health#show", as: :rails_health_check

@@ -1,0 +1,20 @@
+<div class="car_item">
+  <div contents data-controller="dialog">
+    <button type="button" class="btn" data-action="dialog#showModal">ACORDAR RASTREADOR</button>
+
+    <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc">
+      <div class="dialog__content">
+        <h2 class="text-lg font-semibold leading-none mbe-2" id="dialog_label">Deseja acordar o rastreador?</h2>
+        <p class="text-lg text-subtle mbe-4" id="dialog_desc">
+          Depois de confirmar, o rastreador receberá o comando para acordar. Aguarde alguns minutos e verifique se o veículo está online.
+        </p>
+
+        <div class="flex items-center justify-end gap">
+          <button type="button" class="btn" data-action="click->dialog#close">Cancelar</button>
+          <%= button_to "Confirmar",  home_acordar_rastreador_path, method: :post, params: { device_id: device_id }, class: "btn btn--negative", data: { turbo_stream: true, action: "click->dialog#close" }  %>
+        </div>
+      </div>
+    </dialog>
+  </div>
+</div>
+
