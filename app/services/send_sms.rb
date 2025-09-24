@@ -3,9 +3,9 @@ require 'uri'
 require 'json'
 
 class SendSms
-  def self.send_sms(cell, message)
+  def self.send_sms(cell, message, device_id)
     payload = {
-      message: "sms_rastreador:#{cell}_#{message}",
+      message: "sms_rastreador:#{cell}_#{message}_#{device_id}_#{ENV["SERVIDOR"]}"
     }
 
     uri = URI("#{ENV["SMS_API_URL"]}/sms_rastreador")

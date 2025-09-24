@@ -1,7 +1,7 @@
 class BuildAlert
 
   def initialize(payload, detail)
-    # '🚙🚗🚘🚨⚠️✅📣📢🪫📡⌛🔋🔓🔒💬🔴🟠🟡🟢🗺️'
+    # '🚙🚗🚘🚨⚠️✅📣📢🪫📡⌛🔋🔓🔒💬🔴🟠🟡🟢🗺️📩⤵️🔂📌🚖↗️🆘🚷❗'
     @payload = payload
     @detail = detail
   end
@@ -35,6 +35,8 @@ class BuildAlert
         alarm
       when 'commandResult'
         commandResult
+      when 'queuedCommandSent'
+        queuedCommandSent
       else
         nil
       end
@@ -68,14 +70,20 @@ class BuildAlert
     @last_rele_modified = @payload.dig(:last_rele_modified)
   end
 
+  def queuedCommandSent
+    msg1 = "📩 Um comando foi enfileirado para o veículo '#{@veiculo}'."
+    events(@type, 'resposta', msg1)
+    nil
+  end
+
   def ignitionOn
-    msg1 = "O veículo '#{@veiculo}' está com a ignição 🔵LIGADA."
+    msg1 = "🚙 O veículo '#{@veiculo}' está com a ignição 🔵LIGADA."
     events(@type, 'ligado', msg1)
     nil
   end
 
   def ignitionOff
-    msg1 = "O veículo '#{@veiculo}' está com a ignição 🔴DESLIGADA."
+    msg1 = "🚗 O veículo '#{@veiculo}' está com a ignição 🔴DESLIGADA."
     events(@type, 'desligado', msg1)
     nil
   end
@@ -83,7 +91,7 @@ class BuildAlert
   def deviceMoving
     odometro = @odometro ? "\n\nOdômetro: #{@odometro}" : ''
     url = @url ? "\n\nLocal: #{@url}" : ''
-    msg1 = "O veículo '#{@veiculo}' está em MOVIMENTO. 🚗💨.#{odometro}#{url}"
+    msg1 = "🚗💨 O veículo '#{@veiculo}' está em MOVIMENTO. #{odometro}#{url}"
     events(@type, 'movendo', msg1)
 
     return nil unless @detail.send_moving
@@ -93,7 +101,7 @@ class BuildAlert
   def deviceStopped
     odometro = @odometro ? "\n\nOdômetro: #{@odometro}" : ''
     url = @url ? "\n\nLocal: #{@url}" : ''
-    msg1 = "O veículo '#{@veiculo}' está PARADO.#{odometro}#{url}"
+    msg1 = "🚘 O veículo '#{@veiculo}' está PARADO.#{odometro}#{url}"
     events(@type, 'parado', msg1)
 
     return nil unless @detail.send_moving
@@ -101,7 +109,7 @@ class BuildAlert
   end
 
   def geofenceExit
-    msg1 = "Veículo '#{@veiculo}' em uso por '#{@motorista}' SAIU da cerca '#{@cerca}'.\n\nLocal: #{@url}"
+    msg1 = "📌 Veículo '#{@veiculo}' em uso por '#{@motorista}' SAIU da cerca '#{@cerca}'.\n\nLocal: #{@url}"
     msg2 = "⚠️ AVISO! ⚠️\n\n#{msg1}"
 
     events(@type, 'cerca', msg1)
@@ -111,7 +119,7 @@ class BuildAlert
   end
 
   def geofenceEnter
-    msg1 = "Veículo '#{@veiculo}' em uso por '#{@motorista}' ENTROU da cerca '#{@cerca}'.\n\nLocal: #{@url}"
+    msg1 = "📌 Veículo '#{@veiculo}' em uso por '#{@motorista}' ENTROU da cerca '#{@cerca}'.\n\nLocal: #{@url}"
     msg2 = "💬 INFORMAÇÃO 💬\n\n#{msg1}"
 
     events(@type, 'cerca', msg1)

@@ -391,7 +391,7 @@ class HomeController < ApplicationController
     command = Command.find_by(type_device: detail.model, name: command_name)
     send_command = command.present? ? command.command_sms : nil
     return if send_command.nil?
-    response = SendSms.send_sms(detail.cell_number, send_command)
+    response = SendSms.send_sms(detail.cell_number, send_command, detail.device_id)
     msg = "CELL: #{detail.cell_number} | SMS: #{send_command} | Resposta: #{response}"
     SaveLog.new('sleep_motos', msg).save
     response

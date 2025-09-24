@@ -50,7 +50,7 @@ class Admin::DetailsController < Admin::BaseController
     if params[:sms] == '0'
       response = Traccar.command(params[:device_id], send_command)
     elsif params[:sms] == '1'
-      response = SendSms.send_sms(params[:cell_number], send_command)
+      response = SendSms.send_sms(params[:cell_number], send_command, params[:device_id])
     end
 
     if response != 200

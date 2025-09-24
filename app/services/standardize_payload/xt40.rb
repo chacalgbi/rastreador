@@ -31,6 +31,8 @@ class StandardizePayload::Xt40
         deviceUnknown
       when 'commandResult'
         commandResult
+      when 'queuedCommandSent'
+        queuedCommandSent
       when 'alarm'
         alarm
       else
@@ -166,15 +168,23 @@ class StandardizePayload::Xt40
       commandResult_clean_odometro
     elsif commandResult_type.start_with?('CLEAN ACC ONLINE TIME')
       commandResult_clean_horimetro
-    elsif commandResult_type.start_with?('queuedCommandSent')
-      commandResult_queuedCommandSent
+    elsif commandResult_type.start_with?('SLEEP MODE')
+      commandResult_sleep_mode
+    elsif commandResult_type.start_with?('SET ACC TIME')
+      commandResult_set_acc_time
     else
       SaveLog.new('payload_desconhecido', @payload).save
       nil
     end
   end
 
-  def commandResult_queuedCommandSent
+  def commandResult_sleep_mode
+    {
+      **atributos_comuns
+    }
+  end
+
+  def commandResult_set_acc_time
     {
       **atributos_comuns
     }
@@ -273,6 +283,12 @@ class StandardizePayload::Xt40
     result_parsed = "#{result[:network_mode]} #{result[:signal_strength]}% #{result[:signal_quality]} #{result[:frequency_band]} #{result[:operator]}"
     {
       network: result_parsed,
+      **atributos_comuns
+    }
+  end
+
+  def queuedCommandSent
+    {
       **atributos_comuns
     }
   end
