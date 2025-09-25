@@ -2,6 +2,12 @@ Rails.application.routes.draw do
   mount MissionControl::Jobs::Engine, at: "/jobs"
   resources :notifications
   namespace :admin do
+    flipper_app = Flipper::UI.app do |builder|
+      builder.use Rack::Auth::Basic do |user, password|
+        user == ENV["JOB_USER"] && password == ENV["JOB_PASS"]
+      end
+    end
+    mount flipper_app, at: '/flipper'
     get    '/',        to: 'details#index'
     get    'sign_in',  to: 'sessions#new'
     post   'sign_in',  to: 'sessions#create'
