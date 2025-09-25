@@ -17,7 +17,7 @@
       <%= image_tag "timer.svg", size: 20, aria: { hidden: true } %><span>Hori: <%= info.horimetro %></span>
     <% end %>
     <%= button_tag class: "btn btn--plain", data: { field: "ignition", value: info.ignition, device_id: info.device_id } do %>
-      <%= image_tag "key-square.svg", size: 20, aria: { hidden: true } %><span>Igni: <%= info.ignition %></span>
+      <%= image_tag "key-square.svg", size: 20, aria: { hidden: true } %><span> <%= info.ignition %></span>
     <% end %>
   </div>
   <hr>
@@ -47,7 +47,7 @@
       <%= image_tag "arrow-up-from-dot.svg", size: 20, aria: { hidden: true } %><span>Odm: <%= info.odometro %>m</span>
     <% end %>
     <%= button_tag class: "btn btn--plain" do %>
-      <%= image_tag "key-square.svg", size: 20, aria: { hidden: true } %><span>Igni: <%= info.ignition %></span>
+      <%= image_tag "key-square.svg", size: 20, aria: { hidden: true } %><span> <%= info.ignition %></span>
     <% end %>
     <%= button_tag class: "btn btn--plain" do %>
       <%= image_tag "battery-charging.svg", size: 20, aria: { hidden: true } %><span>Bat: <%= info.battery %>v</span>

@@ -1,18 +1,49 @@
 <div class="car_item">
   <div contents data-controller="dialog">
-    <button type="button" class="btn" data-action="dialog#showModal">ACORDAR RASTREADOR</button>
+    <button type="button" class="btn" data-action="dialog#showModal">Despertar</button>
 
     <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc">
       <div class="dialog__content">
-        <h2 class="text-lg font-semibold leading-none mbe-2" id="dialog_label">Deseja acordar o rastreador?</h2>
+        <h2 class="text-lg font-semibold leading-none mbe-2" id="dialog_label">Deseja sair do modo hibernação?</h2>
         <p class="text-lg text-subtle mbe-4" id="dialog_desc">
-          Depois de confirmar, o rastreador receberá o comando para acordar. Aguarde alguns minutos e verifique se o veículo está online.
+          Depois de confirmar, o rastreador receberá o comando para sair do modo economia de bateria. Aguarde alguns instantes e verifique se o veículo está online.
         </p>
 
         <div class="flex items-center justify-end gap">
           <button type="button" class="btn" data-action="click->dialog#close">Cancelar</button>
           <%= button_to "Confirmar",  home_acordar_rastreador_path, method: :post, params: { device_id: device_id }, class: "btn btn--negative", data: { turbo_stream: true, action: "click->dialog#close" }  %>
         </div>
+        <p style="font-size: 0.8em; font-style: italic; margin-top: 8px;">
+          A hibernação é uma função do rastreador para economizar bateria quando o veículo está desligado.
+        </p>
+      </div>
+    </dialog>
+  </div>
+
+  <div contents data-controller="dialog">
+    <button type="button" class="btn btn--help_sms" data-action="dialog#showModal">?</button>
+
+    <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc">
+      <div class="dialog__content">
+        <p class="text-lg text-subtle mbe-4" id="dialog_desc">
+          Caso o botão "Despertar" demore para responder, você pode enviar um SMS para:
+        </p>
+        <h2 class="text-lg font-semibold leading-none mbe-2"><%= info.cell_number %></h2>
+        <p class="text-lg text-subtle mbe-4" id="dialog_desc">
+          Com a seguinte mensagem:
+        </p>
+        <h2 class="text-lg font-semibold leading-none mbe-2">SLPOFF#</h2>
+        <br>
+        <div class="flex items-center justify-end gap">
+          <button type="button" class="btn" data-action="click->dialog#close">Fechar</button>
+          <% if mobile_device? %>
+            <a href="sms:<%= info.cell_number %>?body=SLPOFF%23" class="btn btn--sms" data-action="click->dialog#close">📲 ENVIAR SMS AGORA</a>
+          <% end %>
+        </div>
+        <br>
+        <p style="font-size: 0.8em; font-style: italic; margin-top: 8px;">
+          Esta função pode demorar alguns instantes para fazer efeito dependendo da cobertura do sinal.
+        </p>
       </div>
     </dialog>
   </div>

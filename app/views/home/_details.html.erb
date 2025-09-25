@@ -3,7 +3,7 @@
   <div class="car_container">
     <div class="car_item"><%= msg %></div>
     <% if info.status == 'offline' && info.category == 'motorcycle' %>
-      <%= render 'home/btn_acordar', device_id: device_id %>
+      <%= render 'home/btn_acordar', device_id: device_id, info: info %>
     <% else %>
       <%= render 'home/btn_bloquear_desbloquear', device_id: device_id, status: status, state: state, info: info, user_maintenance: defined?(user_maintenance) ? user_maintenance : nil %>
     <% end %>
