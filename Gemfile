@@ -33,6 +33,7 @@ gem "mission_control-jobs"
 gem 'flipper'
 gem 'flipper-ui'
 gem 'flipper-redis'
+gem 'web-push'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false

@@ -1,0 +1,47 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Showing push subscription" do %>
+    <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+    <li class="breadcrumb-item"><%= link_to "Push subscriptions", admin_push_subscriptions_path %></li>
+  <% end %>
+
+  <%= render "page_header_actions" do %>
+    <%= link_to "Edit push subscription", edit_admin_push_subscription_path(@push_subscription), class: "btn btn-primary" %>
+    <%= form_with url: admin_push_subscription_path(@push_subscription), method: :delete, local: true, style: "display: inline-block;" do |f| %>
+      <%= f.submit "Delete push subscription", class: "btn btn-white", onclick: "return confirm('Are you sure?')" %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Push subscription details</h3>
+      </div>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-md-3">Id</dt>
+          <dd class="col-md-9"><%= @push_subscription.id %></dd>
+          <hr>
+          <dt class="col-md-3">Endpoint</dt>
+          <dd class="col-md-9"><%= @push_subscription.endpoint %></dd>
+          <hr>
+          <dt class="col-md-3">P256dh</dt>
+          <dd class="col-md-9"><%= @push_subscription.p256dh %></dd>
+          <hr>
+          <dt class="col-md-3">Auth</dt>
+          <dd class="col-md-9"><%= @push_subscription.auth %></dd>
+          <hr>
+          <dt class="col-md-3">Subscribed</dt>
+          <dd class="col-md-9"><%= @push_subscription.subscribed ? "Sim" : "Não" %></dd>
+          <hr>
+          <dt class="col-md-3">Created at</dt>
+          <dd class="col-md-9"><%= @push_subscription.created_at %></dd>
+          <hr>
+          <dt class="col-md-3">Updated at</dt>
+          <dd class="col-md-9"><%= @push_subscription.updated_at %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

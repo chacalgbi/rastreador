@@ -1,0 +1,70 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Push notifications" do %>
+    <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+  <% end %>
+
+  <%= render "page_header_actions" do %>
+    <%= link_to "Filtros", "#offcanvas_filters", "data-bs-toggle": "offcanvas", class: "btn btn-white" %>
+    <%= link_to "Nova notificação Push", new_admin_push_notification_path, class: "btn btn-primary" %>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table table-vcenter table-nowrap card-table table-striped">
+          <thead>
+            <tr>
+              <th><%= sort_link @search, :id %></th>
+              <th><%= sort_link @search, :title %></th>
+              <th><%= sort_link @search, :body %></th>
+              <th><%= sort_link @search, :created_at %></th>
+              <th><%= sort_link @search, :updated_at %></th>
+              <th class="w-1"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @push_notifications.each do |push_notification| %>
+              <tr>
+                <td><%= push_notification.id %></td>
+                <td><%= push_notification.title %></td>
+                <td><%= push_notification.body %></td>
+                <td><%= push_notification.created_at %></td>
+                <td><%= push_notification.updated_at %></td>
+                <td>
+                  <%= link_to "View", [:admin, push_notification], class: "btn btn-white btn-sm" %>
+                  <%= link_to "Edit", edit_admin_push_notification_path(push_notification), class: "btn btn-white btn-sm" %>
+                  <%= link_to "Delete", [:admin, push_notification], class: "btn btn-white btn-sm", data: { method: :delete, confirm: "Are you sure?" } %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer d-flex align-items-center fs-5">
+        <div class="d-none d-md-block">
+          <div>Download: <%= link_to "CSV", url_for(format: :csv, q: request.params[:q]) %></div>
+          <%== pagy_info(@pagy) %>
+        </div>
+        <div class="ms-auto">
+          <%== pagy_bootstrap_nav(@pagy) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="offcanvas_filters" tabindex="-1" class="offcanvas offcanvas-end">
+  <div class="offcanvas-header">
+    <h2 class="offcanvas-title">Filters</h2>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <%= search_form_for [:admin, @search], class: "offcanvas-body" do |f| %>
+    <%# f.label :name_cont, class: "form-label" %>
+    <%# f.text_field :name_cont, class: "form-control mb-3" %>
+
+    <%= f.submit "Filter", class: "btn btn-primary" %>
+    <%= link_to "Clear Filter", admin_push_notifications_path, class: "btn btn-white" %>
+  <% end %>
+</div>

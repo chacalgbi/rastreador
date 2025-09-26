@@ -1,0 +1,17 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Editing push subscription" do %>
+  <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+  <li class="breadcrumb-item"><%= link_to "Push subscriptions", admin_push_subscriptions_path %></li>
+  <li class="breadcrumb-item"><%= link_to "Show this push subscription", [:admin, @push_subscription] %></li>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="card">
+      <div class="card-body">
+        <%= render "form", push_subscription: @push_subscription %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Showing push notification" do %>
+    <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+    <li class="breadcrumb-item"><%= link_to "Push notifications", admin_push_notifications_path %></li>
+  <% end %>
+
+  <%= render "page_header_actions" do %>
+    <%= link_to "Edit push notification", edit_admin_push_notification_path(@push_notification), class: "btn btn-primary" %>
+    <%= form_with url: admin_push_notification_path(@push_notification), method: :delete, local: true, style: "display: inline-block;" do |f| %>
+      <%= f.submit "Delete push notification", class: "btn btn-white", onclick: "return confirm('Are you sure?')" %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-xl">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Push notification details</h3>
+      </div>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-md-3">Id</dt>
+          <dd class="col-md-9"><%= @push_notification.id %></dd>
+          <dt class="col-md-3">Title</dt>
+          <dd class="col-md-9"><%= @push_notification.title %></dd>
+          <dt class="col-md-3">Body</dt>
+          <dd class="col-md-9"><%= @push_notification.body %></dd>
+          <dt class="col-md-3">Created at</dt>
+          <dd class="col-md-9"><%= @push_notification.created_at %></dd>
+          <dt class="col-md-3">Updated at</dt>
+          <dd class="col-md-9"><%= @push_notification.updated_at %></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
