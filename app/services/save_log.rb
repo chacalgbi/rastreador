@@ -33,6 +33,8 @@ class SaveLog
         sleep_motos
       when 'notify_error'
         notify_error
+      when 'push_notification_error'
+        push_notification_error
       when 'payload_desconhecido'
         payload_desconhecido
       else
@@ -159,6 +161,18 @@ class SaveLog
   def notify_error
     path = Rails.root.join('log', 'informacao')
     file = File.join(path, "notify_error.log")
+
+    FileUtils.mkdir_p(path) unless File.directory?(path)
+
+    FileUtils.touch(file)
+
+    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger.info("#{@log}\n")
+  end
+
+  def push_notification_error
+    path = Rails.root.join('log', 'informacao')
+    file = File.join(path, "push_notification_error.log")
 
     FileUtils.mkdir_p(path) unless File.directory?(path)
 

@@ -3,23 +3,15 @@
     <div class="sidebar-menu__group">
       <div class="sidebar-menu__group-label">Menu</div>
       <div class="sidebar-menu__items">
-        <details open>
-          <summary class="btn sidebar-menu__button">
-            <%= image_tag "list.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
-            <span class="overflow-ellipsis">Opções</span>
-          </summary>
-          <nav class="sidebar-menu__sub">
-            <% if Current.user %>
-              <%= link_to 'Veículos', root_path, class: "btn sidebar-menu__button", aria: { current: "page" } %>
-              <% if Current.user.admin %>
-                <%= link_to 'Motoristas', driver_index_path, class: "btn sidebar-menu__button" %>
-                <%= link_to 'Config Alertas', details_path, class: "btn sidebar-menu__button" %>
-                <%= link_to 'Notificações', notifications_path, class: "btn sidebar-menu__button" %>
-                <%= link_to 'Relatório Checklists', check_lists_path, class: "btn sidebar-menu__button" %>
-              <% end %>
-            <% end %>
-          </nav>
-        </details>
+        <% if Current.user %>
+          <%= link_to 'Veículos', root_path, class: "btn sidebar-menu__button", aria: { current: "page" } %>
+          <% if Current.user.admin %>
+            <%= link_to 'Motoristas', driver_index_path, class: "btn sidebar-menu__button" %>
+            <%= link_to 'Config Alertas', details_path, class: "btn sidebar-menu__button" %>
+            <%= link_to 'Notificações', notifications_path, class: "btn sidebar-menu__button" %>
+            <%= link_to 'Relatório Checklists', check_lists_path, class: "btn sidebar-menu__button" %>
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>
@@ -27,7 +19,7 @@
     <% if Current.user %>
       <%= link_to session_path(Current.session), data: { turbo_method: :delete }, class: "text-primary" do %>
         <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
-        <%= Current.user.name.truncate(25) %> - Sair
+        <%= Current.user.name.truncate(12) %> - Sair
       <% end %>
     <% end %>
   <% end %>

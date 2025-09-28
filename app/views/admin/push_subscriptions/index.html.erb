@@ -10,7 +10,7 @@
 <% end %>
 
 <div class="page-body">
-  <div class="container-xl">
+  <div class="container-fluid">
     <div class="card">
       <div class="table-responsive">
         <table class="table table-vcenter table-nowrap card-table table-striped">
@@ -18,6 +18,7 @@
             <tr>
               <th class="w-1"></th>
               <th><%= sort_link @search, :id %></th>
+              <th><%= sort_link @search, :user_id %></th>
               <th><%= sort_link @search, :endpoint %></th>
               <th><%= sort_link @search, :p256dh %></th>
               <th><%= sort_link @search, :auth %></th>
@@ -35,8 +36,9 @@
                   <%= link_to "Delete", [:admin, push_subscription], class: "btn btn-white btn-sm", data: { method: :delete, confirm: "Are you sure?" } %>
                 </td>
                 <td><%= push_subscription.id %></td>
-                <td><%= push_subscription.endpoint %></td>
-                <td><%= push_subscription.p256dh %></td>
+                <td><%= push_subscription.user_id %></td>
+                <td><%= truncate(push_subscription.endpoint, length: 50) %></td>
+                <td><%= truncate(push_subscription.p256dh, length: 30) %></td>
                 <td><%= push_subscription.auth %></td>
                 <td><%= push_subscription.subscribed %></td>
                 <td><%= push_subscription.created_at %></td>

@@ -1,19 +1,57 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+  static values = { userId: String }
+  static targets = ["notificationButton"]
+
   connect() {
+    this.checkNotificationPermission();
+    this.startPeriodicPermissionCheck();
+
+    setTimeout(() => {
+      this.initializePushNotifications();
+    }, 3000);
+  }
+
+  checkNotificationPermission() {
+    if ("Notification" in window) {
+      const permission = Notification.permission;
+
+      if (this.hasNotificationButtonTarget) {
+        if (permission === "default") {
+          console.log("Permissão ainda não foi solicitada");
+          this.notificationButtonTarget.style.display = "block";
+        } else if (permission === "granted") {
+          //console.log("Permissão já foi concedida");
+          this.notificationButtonTarget.style.display = "none";
+        } else if (permission === "denied") {
+          console.log("Permissão negada");
+          this.notificationButtonTarget.style.display = "block";
+        }
+      }
+    }
+  }
+
+  initializePushNotifications() {
     if ("Notification" in window) {
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
+          console.log("Permissão concedida para notificações.");
           this.registerServiceWorker();
+          if (this.hasNotificationButtonTarget) {
+            this.notificationButtonTarget.style.display = "none";
+          }
         } else if (permission === "denied") {
-          console.warn("User rejected to allow notifications.");
+          console.warn("Usuário rejeitou a permissão de notificações.");
+          if (this.hasNotificationButtonTarget) {
+            this.notificationButtonTarget.style.display = "block";
+          }
         } else {
-          console.warn("User still didn't give an answer about notifications.");
+          console.warn("O usuário ainda não deu uma resposta sobre as notificações.");
         }
       });
     } else {
-      console.warn("Push notifications not supported.");
+      console.warn("Push notifications não são suportadas.");
     }
   }
 
@@ -22,8 +60,8 @@ export default class extends Controller {
       navigator.serviceWorker
         .register('/service_worker.js')
         .then((serviceWorkerRegistration) => {
-          console.log("Service Worker registered successfully");
-          
+          console.log("Service Worker registrado com sucesso.");
+
           // Aguarda o Service Worker estar ativo
           return this.waitForServiceWorkerActivation(serviceWorkerRegistration);
         })
@@ -49,7 +87,7 @@ export default class extends Controller {
           }
         })
         .catch((error) => {
-          console.error("Error during Service Worker registration or subscription:", error);
+          console.error("Erro durante o registro ou assinatura do Service Worker:", error);
         });
     }
   }
@@ -103,6 +141,15 @@ export default class extends Controller {
       )
     );
 
+    const payload = { endpoint, p256dh, auth };
+
+    if (this.userIdValue && this.userIdValue !== "") { // Adiciona user_id se estiver disponível
+      payload.user_id = this.userIdValue;
+      console.log("Enviando inscrição com user_id:", this.userIdValue);
+    } else {
+      console.log("Enviando inscrição sem user_id (usuário não logado)");
+    }
+
     fetch("/admin/push_notifications/subscribe", {
       method: "POST",
       headers: {
@@ -112,17 +159,63 @@ export default class extends Controller {
           .querySelector('meta[name="csrf-token"]')
           .getAttribute("content"),
       },
-      body: JSON.stringify({ endpoint, p256dh, auth }),
+      body: JSON.stringify(payload),
     })
       .then((response) => {
         if (response.ok) {
-          console.log("Subscription successfully saved on the server.");
+          console.log("Inscrição salva com sucesso no servidor.");
         } else {
-          console.error("Error saving subscription on the server.");
+          console.error("Erro ao salvar inscrição no servidor.");
         }
       })
       .catch((error) => {
-        console.error("Error sending subscription to the server:", error);
+        console.error("Erro ao enviar inscrição para o servidor:", error);
       });
+  }
+
+  updateSubscriptionWithUserId() {
+    if (this.userIdValue && this.userIdValue !== "" && "serviceWorker" in navigator) {
+      navigator.serviceWorker.ready
+        .then((registration) => {
+          return registration.pushManager.getSubscription();
+        })
+        .then((subscription) => {
+          if (subscription) {
+            console.log("Atualizando assinatura existente com user_id:", this.userIdValue);
+            this.saveSubscription(subscription);
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao atualizar assinatura com user_id:", error);
+        });
+    }
+  }
+
+  userIdValueChanged() {
+    // Método chamado quando o valor do userId muda
+    if (this.userIdValue && this.userIdValue !== "") {
+      this.updateSubscriptionWithUserId();
+    }
+  }
+
+  startPeriodicPermissionCheck() {
+    // Método para verificar periodicamente o status das permissões
+    // (útil se o usuário mudar as configurações do navegador)
+
+    if (this.permissionCheckInterval) {
+      // Evita criar múltiplos intervalos
+      clearInterval(this.permissionCheckInterval);
+    }
+
+    this.permissionCheckInterval = setInterval(() => {
+      this.checkNotificationPermission();
+    }, 30000);
+  }
+
+  disconnect() {
+    // Limpa o interval quando o controller é desconectado
+    if (this.permissionCheckInterval) {
+      clearInterval(this.permissionCheckInterval);
+    }
   }
 }

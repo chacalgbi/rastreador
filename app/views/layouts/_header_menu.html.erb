@@ -22,7 +22,15 @@
 
 <div class="flex items-center gap">
   <% if Current.user %>
-    <%= Current.user.name.truncate(25) %>
+    <button data-push-target="notificationButton" 
+            data-action="click->push#initializePushNotifications"
+            class="flex items-center gap text-primary text-sm"
+            style="display: block;"
+            title="Ativar notificações">
+      <%= image_tag "message-circle-warning.svg", size: 30, aria: { hidden: true }, class: "invertible" %>
+    </button>
+
+    <%= Current.user.name.truncate(12) %>
     <%= link_to session_path(Current.session), data: { turbo_method: :delete }, class: "text-primary" do %>
       <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
       Sair

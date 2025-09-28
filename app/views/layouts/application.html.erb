@@ -25,7 +25,9 @@
     <%= debugbar_head  if defined? Debugbar %>
   </head>
 
-  <body data-controller="push" data-application-server-key="<%= ENV['DEFAULT_APPLICATION_SERVER_KEY'] %>">
+  <body data-controller="push" 
+        data-application-server-key="<%= ENV['DEFAULT_APPLICATION_SERVER_KEY'] %>"
+        data-push-user-id-value="<%= Current.user&.id %>">
 
     <!-- Flash Controller para SweetAlert2 -->
     <div data-controller="flash" 

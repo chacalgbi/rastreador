@@ -4,6 +4,6 @@ class PushSubscription < ApplicationRecord
   validates :auth, presence: true
 
   def self.ransackable_attributes(auth_object = nil)
-    ["id", "endpoint", "p256dh", "auth", "created_at", "updated_at"]
+    ["id", "endpoint", "p256dh", "auth", "user_id", "created_at", "updated_at"]
   end
 end
