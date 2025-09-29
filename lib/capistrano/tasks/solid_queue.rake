@@ -8,8 +8,11 @@ namespace :solid_queue do
           execute :nohup, "/home/deploy/.rbenv/shims/bundle exec #{current_path}/bin/jobs >> #{shared_path}/log/solid_queue.log 2>&1 &"
           execute "sleep 15"
           execute "ps aux | grep -i solid-queue || true"
-          execute "/home/deploy/.rbenv/shims/bundle exec rails runner 'SearchStoppedMotorcyclesJob.start_recurring' -e #{fetch(:rails_env)}"
         end
+      end
+
+      within current_path do
+        execute "/home/deploy/.rbenv/shims/bundle exec rails runner 'SearchStoppedMotorcyclesJob.start_recurring' -e #{fetch(:rails_env)}"
       end
     end
   end
