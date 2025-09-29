@@ -56,9 +56,11 @@ class HomeController < ApplicationController
     @event = Detail.find_by(device_id: device_id)
     @events_last_x_hours = query_events(device_id).count
 
-    send_command('Status')
-    send_command('network')
-    send_command('parametros')
+    if @event.status == 'online'
+      send_command('Status')
+      send_command('network')
+      send_command('parametros')
+    end
 
     info = @event
     msg = define_text(@event, params[:status])
@@ -374,7 +376,6 @@ class HomeController < ApplicationController
     send_command = send_command.gsub('XXXX', @event.imei) if @event.model == 'st8310u'
 
     SendCommandJob.perform_later({device_id: @event.device_id, command: send_command})
-    #Traccar.command(@event.device_id, send_command) # Temporariamente até ver o problema do job
   end
 
   def send_command_person(command_name, detail)
@@ -384,7 +385,6 @@ class HomeController < ApplicationController
     send_command = send_command.gsub('XXXX', detail.imei) if detail.model == 'st8310u'
 
     SendCommandJob.perform_later({device_id: detail.device_id, command: send_command})
-    #Traccar.command(detail.device_id, send_command) # Temporariamente até ver o problema do job
   end
 
   def send_command_sms(command_name, detail)

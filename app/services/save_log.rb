@@ -37,6 +37,8 @@ class SaveLog
         push_notification_error
       when 'payload_desconhecido'
         payload_desconhecido
+      when 'search_stopped_motorcycles'
+        search_stopped_motorcycles
       else
         nil
       end
@@ -197,6 +199,18 @@ class SaveLog
   def payload_desconhecido
     path = Rails.root.join('log', 'informacao')
     file = File.join(path, "payload_desconhecido.log")
+
+    FileUtils.mkdir_p(path) unless File.directory?(path)
+
+    FileUtils.touch(file)
+
+    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger.info("#{@log}\n")
+  end
+
+  def search_stopped_motorcycles
+    path = Rails.root.join('log', 'informacao')
+    file = File.join(path, "search_stopped_motorcycles.log")
 
     FileUtils.mkdir_p(path) unless File.directory?(path)
 
