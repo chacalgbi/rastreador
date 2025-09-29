@@ -14,14 +14,5 @@ module Rastreador
     config.i18n.default_locale = :'pt-BR'
     config.autoload_lib(ignore: %w[assets tasks])
     config.eager_load_paths << Rails.root.join("app/jobs")
-
-    config.solid_queue.recurring_tasks = [
-      {
-        class_name: "SearchStoppedMotorcyclesJob",
-        command: "perform_later",
-        schedule: "*/30 * * * *",
-        args: []
-      }
-    ]
   end
 end
