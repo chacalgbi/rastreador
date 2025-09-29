@@ -398,6 +398,7 @@ class HomeController < ApplicationController
   end
 
   def define_text(event, status)
+    return "Veículo hibernando" if status == 'offline' && event.sleeping == true
     return "Veículo off-line" if status == 'offline'
     return "Veículo sem histórico. Você pode bloquear/desbloquear." if event.nil?
     return "Em uso por #{event.last_user}." if event.rele_state == 'off'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_26_190042) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_29_201714) do
   create_table "action_mailbox_inbound_emails", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
@@ -154,6 +154,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_190042) do
     t.string "iccid"
     t.string "category"
     t.string "cell_number"
+    t.boolean "sleeping", default: false
   end
 
   create_table "events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

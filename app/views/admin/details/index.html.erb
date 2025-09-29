@@ -25,6 +25,7 @@
               <th style="width: 80px;"><%= sort_link @search, "Ign" %></th>
               <th style="width: 90px;"><%= sort_link @search, "Sts" %></th>
               <th style="width: 80px;"><%= sort_link @search, "Uso" %></th>
+              <th>Slp?</th>
               <th>Lig/Desl</th>
               <th style="width: 100px;"><%= sort_link @search, "Event" %></th>
               <th style="width: 100px;"><%= sort_link @search, "Update" %></th>
@@ -77,6 +78,7 @@
                 <td style="width: 80px; background-color:<%= detail.ignition == 'on' ? '#00FA9A' : '#e6727e' %>;"><%= detail.ignition %></td>
                 <td style="width: 90px; background-color:<%= detail.status == 'online' ? '#32CD32' : '#e6727e' %>;"><%= detail.status %></td>
                 <td style="width: 90px; background-color:<%= detail.rele_state == 'on' ? '#9ACD32' : '#e6727e' %>;"><%= detail.rele_state == 'on' ? 'Livre' : 'Ocupado' %></td>
+                <td><%= detail.sleeping ? '👍🏻' : '' %></td>
                 <td style="display: flex; gap: 3px;">
                   <%= form_with url: admin_details_rele_path, method: :post, local: true do |f| %>
                     <%= f.hidden_field :device_id, value: detail.device_id %>
