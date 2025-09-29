@@ -1,7 +1,7 @@
 class SearchStoppedMotorcyclesJob < ApplicationJob
   queue_as :search_stopped_motorcycles
 
-  def self.perform
+  def perform
     begin
       Rails.logger.info("SearchStoppedMotorcyclesJob.perform")
       SaveLog.new('search_stopped_motorcycles', "Iniciando verificação de motocicletas paradas com ignição desligada.").save
@@ -11,6 +11,7 @@ class SearchStoppedMotorcyclesJob < ApplicationJob
       SaveLog.new('error', error_message).save
       raise e
     ensure
+      # Reagenda para 30 minutos
       self.class.set(wait: 30.minutes).perform_later
     end
   end
