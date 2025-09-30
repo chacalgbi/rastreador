@@ -6,7 +6,6 @@ class TraccarUpdateDevice
 
   def update
     update_detail
-    sleeping_mode
     update_view
     update_admin_view
     recover_level_battery if criteria_for_obtaining_battery_voltage
@@ -27,14 +26,6 @@ class TraccarUpdateDevice
     @changed_fields = detect_changed_fields(filtered_params)
 
     @detail.update(filtered_params)
-  end
-
-  def sleeping_mode
-    if @params.dig(:last_event_type) == 'commandResult' && @params.dig(:command) == 'SLEEP MODE: ON!'
-      @detail.update(sleeping: true, status: 'offline')
-    elsif @params.dig(:last_event_type) == 'deviceOnline'
-      @detail.update(sleeping: false)
-    end
   end
 
   def update_view
