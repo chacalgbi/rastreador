@@ -94,7 +94,9 @@
           ['geofenceEnter', 'geofenceEnter'],
           ['geofenceExit', 'geofenceExit'],
           ['ignitionOn', 'ignitionOn'],
-          ['ignitionOff', 'ignitionOff']
+          ['ignitionOff', 'ignitionOff'],
+          ['sms_callback', 'sms_callback'],
+          ['queuedCommandSent', 'queuedCommandSent']
         ], f.object.event_type_eq), 
         {}, 
         { class: "form-select mb-3" } %>
@@ -119,10 +121,17 @@
           ['rele', 'rele'],
           ['resposta', 'resposta'],
           ['sos', 'sos'],
-          ['velocidade', 'velocidade']
+          ['velocidade', 'velocidade'],
+          ['vibration', 'vibration']
         ], f.object.event_name_eq),
         {}, 
         { class: "form-select mb-3" } %>
+
+    <%= f.label :updated_at_gteq, "Data de atualização (a partir de)", class: "form-label" %>
+    <%= f.datetime_local_field :updated_at_gteq, class: "form-control mb-3" %>
+
+    <%= f.label :updated_at_lteq, "Data de atualização (até)", class: "form-label" %>
+    <%= f.datetime_local_field :updated_at_lteq, class: "form-control mb-3" %>
 
     <%= f.submit "Filtrar", class: "btn btn-primary" %>
     <%= link_to "Limpar Filtro", admin_events_path, class: "btn btn-white" %>

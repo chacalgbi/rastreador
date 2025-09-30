@@ -159,7 +159,7 @@ class BuildAlert
 
     events(@type, @alarme_type, msg1)
 
-    return nil unless @detail.send_battery
+    # return nil unless @detail.send_battery
     payload_job_send_alert(msg2, @alarme_type)
   end
 
@@ -217,6 +217,8 @@ class BuildAlert
       '🚀Aceleração brusca'
     when 'jamming'
       '📡Interferência'
+    when 'vibration'
+      '🚷Movimentação'
     else
       alarme_type
     end

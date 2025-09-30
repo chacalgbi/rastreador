@@ -18,7 +18,7 @@ class SendAlertJob < ApplicationJob
 
       save_log(arg)
 
-      send_telegram if arg[:alert_telegram]
+      send_telegram if arg[:alert_telegram] # Enviado pelo BOT @RastreadoresBahiaEventos
       send_whatsapp if arg[:alert_whatsApp]
       send_email    if arg[:alert_email]
 
