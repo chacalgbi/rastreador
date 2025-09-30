@@ -1,11 +1,11 @@
 <%= render "page_header" do %>
-  <%= render "page_header_breadcrumb", title: "Events" do %>
+  <%= render "page_header_breadcrumb", title: "Eventos" do %>
     <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
   <% end %>
 
   <%= render "page_header_actions" do %>
-    <%= link_to "Filters", "#offcanvas_filters", "data-bs-toggle": "offcanvas", class: "btn btn-white" %>
-    <%= link_to "New event", new_admin_event_path, class: "btn btn-primary" %>
+    <%= link_to "Filtros", "#offcanvas_filters", "data-bs-toggle": "offcanvas", class: "btn btn-white" %>
+    <%= link_to "Novo evento", new_admin_event_path, class: "btn btn-primary" %>
   <% end %>
 <% end %>
 
