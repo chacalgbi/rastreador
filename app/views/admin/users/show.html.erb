@@ -1,12 +1,12 @@
 <%= render "page_header" do %>
-  <%= render "page_header_breadcrumb", title: "Showing user" do %>
+  <%= render "page_header_breadcrumb", title: "Exibir usuário" do %>
     <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
     <li class="breadcrumb-item"><%= link_to "Users", admin_users_path %></li>
   <% end %>
 
   <%= render "page_header_actions" do %>
-    <%= link_to "Edit user", edit_admin_user_path(@user), class: "btn btn-primary" %>
-    <%= link_to "Delete user", [:admin, @user], class: "btn btn-white", data: { method: :delete, confirm: "Are you sure?" } %>
+    <%= link_to "Editar usuário", edit_admin_user_path(@user), class: "btn btn-primary" %>
+    <%= link_to "Deletar usuário", [:admin, @user], class: "btn btn-white", data: { method: :delete, confirm: "Você tem certeza?" } %>
   <% end %>
 <% end %>
 
@@ -14,35 +14,35 @@
   <div class="container-xl">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">User details</h3>
+        <h3 class="card-title">Detalhes do usuário</h3>
       </div>
       <div class="card-body">
         <dl class="row">
-          <dt class="col-md-3">Email address</dt>
+          <dt class="col-md-3">Email</dt>
           <dd class="col-md-9"><%= @user.email_address %></dd>
-          <dt class="col-md-3">Name</dt>
+          <dt class="col-md-3">Nome</dt>
           <dd class="col-md-9"><%= @user.name %></dd>
           <dt class="col-md-3">CPF</dt>
           <dd class="col-md-9"><%= @user.cpf %></dd>
-          <dt class="col-md-3">Phone</dt>
+          <dt class="col-md-3">Telefone</dt>
           <dd class="col-md-9"><%= @user.phone %></dd>
-          <dt class="col-md-3">Password digest</dt>
+          <dt class="col-md-3">Senha</dt>
           <dd class="col-md-9"><%= @user.password_digest %></dd>
-          <dt class="col-md-3">Active(*)</dt>
+          <dt class="col-md-3">Ativo(*)</dt>
           <dd class="col-md-9"><%= @user.active %></dd>
           <dt class="col-md-3">Admin</dt>
           <dd class="col-md-9"><%= @user.admin %></dd>
-          <dt class="col-md-3">Maintenance</dt>
+          <dt class="col-md-3">Manutenção</dt>
           <dd class="col-md-9"><%= @user.maintenance %></dd>
           <dt class="col-md-3">Pessoal</dt>
           <dd class="col-md-9"><%= @user.pessoal %></dd>
-          <dt class="col-md-3">View Only</dt>
+          <dt class="col-md-3">Visualização</dt>
           <dd class="col-md-9"><%= @user.view_only %></dd>
-          <dt class="col-md-3">Cars</dt>
+          <dt class="col-md-3">Veículos</dt>
           <dd class="col-md-9"><%= @user.cars %></dd>
-          <dt class="col-md-3">Created at</dt>
+          <dt class="col-md-3">Criado em</dt>
           <dd class="col-md-9"><%= @user.created_at.strftime("%H:%M:%S %d/%m/%Y") %></dd>
-          <dt class="col-md-3">Updated at</dt>
+          <dt class="col-md-3">Atualizado em</dt>
           <dd class="col-md-9"><%= @user.updated_at.strftime("%H:%M:%S %d/%m/%Y") %></dd>
         </dl>
       </div>

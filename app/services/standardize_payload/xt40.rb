@@ -174,8 +174,14 @@ class StandardizePayload::Xt40
       commandResult_set_acc_time
     else
       SaveLog.new('payload_desconhecido', @payload).save
-      nil
+      commandResult_unknown
     end
+  end
+
+  def commandResult_unknown
+    {
+      **atributos_comuns
+    }
   end
 
   def commandResult_sleep_mode
