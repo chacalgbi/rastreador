@@ -15,28 +15,32 @@
       <table class="details-table">
         <thead>
           <tr>
-            <th>Dispositivo</th>
+            <th>Veículo</th>
+            <th>Ações</th>
             <th>Status</th>
             <th>Alertas</th>
             <th>Notificações</th>
-            <th>Ações</th>
           </tr>
         </thead>
         <tbody>
           <% @details.each do |detail| %>
             <tr class="detail-row">
-              <td class="device-info">
+              <td>
                 <div class="device-name">
-                  <%= detail.device_name.present? ? detail.device_name : "Dispositivo #{detail.device_id}" %>
+                  <%= detail.device_name.present? ? detail.device_name : "Veículo #{detail.device_id}" %>
                 </div>
-                <div class="device-id">ID: <%= detail.device_id %></div>
               </td>
-              <td class="status-cell">
+              <td class="actions-cell">
+                <%= link_to edit_settings_detail_path(detail), class: "btn btn--primary btn-small" do %>
+                  ⚙️ Configurar
+                <% end %>
+              </td>
+              <td>
                 <span class="status-badge status-<%= detail.status&.downcase || 'offline' %>">
                   <%= detail.status&.capitalize || "Offline" %>
                 </span>
               </td>
-              <td class="alerts-cell">
+              <td>
                 <div class="settings-badges">
                   <% if detail.alert_whatsApp %>
                     <span class="badge badge-whatsapp">WhatsApp</span>
@@ -73,11 +77,6 @@
                     <span class="no-config">Nenhuma</span>
                   <% end %>
                 </div>
-              </td>
-              <td class="actions-cell">
-                <%= link_to edit_settings_detail_path(detail), class: "btn btn--primary btn-small" do %>
-                  ⚙️ Configurar
-                <% end %>
               </td>
             </tr>
           <% end %>
@@ -184,10 +183,6 @@
     vertical-align: top;
   }
 
-  .device-info {
-    min-width: 200px;
-  }
-
   .device-name {
     font-weight: 600;
     color: #2c3e50;
@@ -202,10 +197,6 @@
     color: #7f8c8d;
     font-family: monospace;
     display: inline-block;
-  }
-
-  .status-cell {
-    text-align: center;
   }
 
   .status-badge {
