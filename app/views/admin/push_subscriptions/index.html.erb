@@ -34,7 +34,7 @@
                   <%= link_to "Delete", [:admin, push_subscription], class: "btn btn-white btn-sm", data: { method: :delete, confirm: "Are you sure?" } %>
                 </td>
                 <td>
-                  <%= push_subscription.user_id %> - <%= push_subscription.user.name %>
+                  <%= push_subscription.user_id %> - <%= push_subscription&.user&.name %>
                 </td>
                 <td><%= truncate(push_subscription.endpoint, length: 50) %></td>
                 <td><%= truncate(push_subscription.p256dh, length: 20) %></td>
