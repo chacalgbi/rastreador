@@ -7,6 +7,9 @@
   <%= render "page_header_actions" do %>
     <%= link_to "Editar usuário", edit_admin_user_path(@user), class: "btn btn-primary" %>
     <%= link_to "Deletar usuário", [:admin, @user], class: "btn btn-white", data: { method: :delete, confirm: "Você tem certeza?" } %>
+    <%= form_with url: admin_user_path(@user), method: :delete, local: true, style: "display: inline-block;" do |f| %>
+      <%= f.submit "Deletar Usuário", class: "btn btn-white", onclick: "return confirm('Você tem certeza?')" %>
+    <% end %>
   <% end %>
 <% end %>
 

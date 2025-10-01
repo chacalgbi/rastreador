@@ -1,12 +1,14 @@
 <%= render "page_header" do %>
-  <%= render "page_header_breadcrumb", title: "Showing event" do %>
+  <%= render "page_header_breadcrumb", title: "Mostrando evento" do %>
     <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
-    <li class="breadcrumb-item"><%= link_to "Events", admin_events_path %></li>
+    <li class="breadcrumb-item"><%= link_to "Eventos", admin_events_path %></li>
   <% end %>
 
   <%= render "page_header_actions" do %>
-    <%= link_to "Edit event", edit_admin_event_path(@event), class: "btn btn-primary" %>
-    <%= link_to "Delete event", [:admin, @event], class: "btn btn-white", data: { method: :delete, confirm: "Are you sure?" } %>
+    <%= link_to "Editar evento", edit_admin_event_path(@event), class: "btn btn-primary" %>
+    <%= form_with url: admin_event_path(@event), method: :delete, local: true, style: "display: inline-block;" do |f| %>
+      <%= f.submit "Deletar Evento", class: "btn btn-white", onclick: "return confirm('Você tem certeza?')" %>
+    <% end %>
   <% end %>
 <% end %>
 
