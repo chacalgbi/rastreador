@@ -4,11 +4,11 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title><%= title %></title>
+    <title><%= title %> <%= ENV['APPLICATION_NAME'] %> Admin <%= ENV['SERVIDOR'] %></title>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" href="/<%= icon(ENV['SERVIDOR']) %>.png" type="image/png">
+    <link rel="icon" href="/<%= icon(ENV['SERVIDOR']) %>.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/<%= icon(ENV['SERVIDOR']) %>.png">
 
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
