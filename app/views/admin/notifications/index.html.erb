@@ -10,28 +10,32 @@
 <% end %>
 
 <div class="page-body">
-  <div class="container-xl">
+  <div class="container-fluid">
     <div class="card">
       <div class="table-responsive">
         <table class="table table-vcenter table-nowrap card-table table-striped">
           <thead>
             <tr>
-              <th><%= sort_link @search, :user_id %></th>
+              <th><%= sort_link @search, :user_id, "Usuário" %></th>
               <th><%= sort_link @search, :whatsapp %></th>
               <th><%= sort_link @search, :email %></th>
               <th><%= sort_link @search, :telegram %></th>
               <th><%= sort_link @search, :updated_at %></th>
+              <th><%= sort_link @search, :created_at %></th>
               <th class="w-1"></th>
             </tr>
           </thead>
           <tbody>
             <% @notifications.each do |notification| %>
               <tr>
-                <td><%= notification.user_id %></td>
+                <td>
+                  <%= notification.user_id %> - <%= notification.user.name %>
+                </td>
                 <td><%= notification.whatsapp %></td>
                 <td><%= notification.email %></td>
                 <td><%= notification.telegram %></td>
                 <td><%= notification.updated_at %></td>
+                <td><%= notification.created_at %></td>
                 <td>
                   <%= link_to "Ver", [:admin, notification], class: "btn btn-white btn-sm" %>
                   <%= link_to "Editar", edit_admin_notification_path(notification), class: "btn btn-white btn-sm" %>

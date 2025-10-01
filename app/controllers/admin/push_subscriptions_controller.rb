@@ -2,7 +2,7 @@ class Admin::PushSubscriptionsController < Admin::BaseController
   before_action :set_push_subscription, only: %i[ show edit update destroy ]
 
   def index
-    @search = PushSubscription.all.ransack(params[:q])
+    @search = PushSubscription.includes(:user).ransack(params[:q])
 
     respond_to do |format|
       format.html { @pagy, @push_subscriptions = pagy(@search.result) }

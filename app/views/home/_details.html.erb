@@ -20,16 +20,6 @@
         Localização
       <% end %>
     </div>
-    <div class="car_item">
-      <% if events_count != 0 %>
-        <%= button_to home_last_events_path(device_id: device_id, open: 'true'), method: :post, class: "btn btn--borderless", data: { turbo_stream: true } do %>
-          <%= image_tag "select-arrow.svg", size: 25, aria: { hidden: true } %>
-          <span>Eventos: <%= events_count %></span>
-        <% end %>
-      <% else %>
-        <%= button_tag "Sem eventos", class: "btn btn--borderless", disabled: true %>
-      <% end %>
-    </div>
   </div>
   <% if @user_admin %>
     <br>
@@ -74,6 +64,19 @@
   <% end %>
   <div id="detail_<%= device_id %>" > <!-- Será substituida quando o evento de Status for enviado pelo rastreador -->
     <%= render 'details/information', info: info %>
+  </div>
+  <br>
+  <div class="car_container">
+    <div class="car_item">
+      <% if events_count != 0 %>
+        <%= button_to home_last_events_path(device_id: device_id, open: 'true'), method: :post, class: "btn btn--borderless", data: { turbo_stream: true } do %>
+          <%= image_tag "select-arrow.svg", size: 25, aria: { hidden: true } %>
+          <span>Eventos: <%= events_count %></span>
+        <% end %>
+      <% else %>
+        <%= button_tag "Sem eventos", class: "btn btn--borderless", disabled: true %>
+      <% end %>
+    </div>
   </div>
 
 <% end %>

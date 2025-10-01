@@ -11,13 +11,13 @@
   <hr>
   <div class="car_container">
     <%= button_tag class: "btn btn--plain", data: { field: "odometro", value: info.odometro, device_id: info.device_id } do %>
-      <%= image_tag "arrow-up-from-dot.svg", size: 20, aria: { hidden: true } %><span>Odm: <%= info.odometro %></span>
+      <%= image_tag "arrow-up-from-dot.svg", size: 20, aria: { hidden: true } %><span><%= info.odometro %></span>
     <% end %>
     <%= button_tag class: "btn btn--plain", data: { field: "horimetro", value: info.horimetro, device_id: info.device_id } do %>
-      <%= image_tag "timer.svg", size: 20, aria: { hidden: true } %><span>Hori: <%= info.horimetro %></span>
+      <%= image_tag "timer.svg", size: 20, aria: { hidden: true } %><span><%= info.horimetro %></span>
     <% end %>
     <%= button_tag class: "btn btn--plain", data: { field: "ignition", value: info.ignition, device_id: info.device_id } do %>
-      <%= image_tag "key-square.svg", size: 20, aria: { hidden: true } %><span> <%= info.ignition %></span>
+      <%= image_tag "key-square.svg", size: 20, aria: { hidden: true } %><span><%= info.ignition %></span>
     <% end %>
   </div>
   <hr>

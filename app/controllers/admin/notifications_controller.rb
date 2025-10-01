@@ -2,7 +2,7 @@ class Admin::NotificationsController < Admin::BaseController
   before_action :set_notification, only: %i[ show edit update destroy ]
 
   def index
-    @search = Notification.all.ransack(params[:q])
+    @search = Notification.includes(:user).ransack(params[:q])
 
     respond_to do |format|
       format.html { @pagy, @notifications = pagy(@search.result) }

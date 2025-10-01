@@ -4,8 +4,8 @@
   <% end %>
 
   <%= render "page_header_actions" do %>
-    <%= link_to "Filters", "#offcanvas_filters", "data-bs-toggle": "offcanvas", class: "btn btn-white" %>
-    <%= link_to "New push subscription", new_admin_push_subscription_path, class: "btn btn-primary" %>
+    <%= link_to "Filtros", "#offcanvas_filters", "data-bs-toggle": "offcanvas", class: "btn btn-white" %>
+    <%= link_to "Novo push subscription", new_admin_push_subscription_path, class: "btn btn-primary" %>
   <% end %>
 <% end %>
 
@@ -17,8 +17,7 @@
           <thead>
             <tr>
               <th class="w-1"></th>
-              <th><%= sort_link @search, :id %></th>
-              <th><%= sort_link @search, :user_id %></th>
+              <th><%= sort_link @search, :user_id, "Usuário" %></th>
               <th><%= sort_link @search, :endpoint %></th>
               <th><%= sort_link @search, :p256dh %></th>
               <th><%= sort_link @search, :auth %></th>
@@ -32,13 +31,13 @@
               <tr>
                 <td>
                   <%= link_to "View", [:admin, push_subscription], class: "btn btn-white btn-sm" %>
-                  <%= link_to "Edit", edit_admin_push_subscription_path(push_subscription), class: "btn btn-white btn-sm" %>
                   <%= link_to "Delete", [:admin, push_subscription], class: "btn btn-white btn-sm", data: { method: :delete, confirm: "Are you sure?" } %>
                 </td>
-                <td><%= push_subscription.id %></td>
-                <td><%= push_subscription.user_id %></td>
+                <td>
+                  <%= push_subscription.user_id %> - <%= push_subscription.user.name %>
+                </td>
                 <td><%= truncate(push_subscription.endpoint, length: 50) %></td>
-                <td><%= truncate(push_subscription.p256dh, length: 30) %></td>
+                <td><%= truncate(push_subscription.p256dh, length: 20) %></td>
                 <td><%= push_subscription.auth %></td>
                 <td><%= push_subscription.subscribed %></td>
                 <td><%= push_subscription.created_at %></td>
