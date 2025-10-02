@@ -43,6 +43,20 @@ class Admin::PushSubscriptionsController < Admin::BaseController
     redirect_to admin_push_subscriptions_url, notice: "Push subscription was successfully destroyed."
   end
 
+  def send_notification
+    id = params[:id]
+    title = params[:title]
+    body = params[:body]
+    icon = params[:icon]
+
+    if SendPushNotification.new(title, body, icon).one(id)
+      redirect_to admin_push_subscriptions_path, notice: "Notificação enviada com sucesso."
+    else
+      redirect_to admin_push_subscriptions_path, alert: "Falha ao enviar notificação. Olhe os logs para mais detalhes."
+    end
+  end
+
+
   private
     def set_push_subscription
       @push_subscription = PushSubscription.find(params[:id])

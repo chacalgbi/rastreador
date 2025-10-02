@@ -26,7 +26,7 @@ class Admin::PushNotificationsController < Admin::BaseController
     @push_notification = PushNotification.new(push_notification_params)
 
     if @push_notification.save
-      SendPushNotification.new(@push_notification).all
+      SendPushNotification.new(@push_notification.title, @push_notification.body, 'note').all
       redirect_to [:admin, @push_notification], notice: "Push notification was successfully created."
     else
       render :new, status: :unprocessable_entity

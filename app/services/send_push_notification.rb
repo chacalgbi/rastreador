@@ -1,6 +1,8 @@
 class SendPushNotification
-  def initialize(push_notification)
-    @push_notification = push_notification
+  def initialize(title, body, icon)
+    @title = title
+    @body = body
+    @icon = icon
   end
 
   def all
@@ -32,6 +34,23 @@ class SendPushNotification
     end
   end
 
+  def one(id)
+    begin
+      subscription = PushSubscription.find_by(id: id)
+      return if subscription.nil?
+      message = build_push_message
+      vapid_details = build_vapid_details
+      Rails.logger.info("Enviando push notification para a subscription #{subscription.id}")
+      send_web_push_notification(message, subscription, vapid_details)
+      true
+    rescue StandardError => e
+      msg = "Erro ao enviar push notification para o subscription #{subscription.id}: #{e.message} Backtrace:\n#{e.backtrace.first(5).join("\n")}\n"
+      Rails.logger.error(msg)
+      SaveLog.new('push_notification_error', msg).save
+      false
+    end
+  end
+
   private
 
   def active_push_subscriptions
@@ -40,14 +59,10 @@ class SendPushNotification
 
   def build_push_message
     {
-      title: @push_notification.title,
-      body: @push_notification.body,
-      icon: push_notification_icon_url
+      title: @title,
+      body: @body,
+      icon: ActionController::Base.helpers.image_url("#{@icon}.png")
     }
-  end
-
-  def push_notification_icon_url
-    ActionController::Base.helpers.image_url("note.png")
   end
 
   def build_vapid_details

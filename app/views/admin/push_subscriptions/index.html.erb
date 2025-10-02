@@ -16,6 +16,7 @@
         <table class="table table-vcenter table-nowrap card-table table-striped">
           <thead>
             <tr>
+              <th>Enviar</th>
               <th class="w-1"></th>
               <th><%= sort_link @search, :user_id, "Usuário" %></th>
               <th><%= sort_link @search, :endpoint %></th>
@@ -29,6 +30,23 @@
           <tbody>
             <% @push_subscriptions.each do |push_subscription| %>
               <tr>
+                <td>
+                  <button type="button" 
+                          class="btn btn-info btn-sm" 
+                          data-bs-toggle="modal" 
+                          data-bs-target="#sendNotificationModal"
+                          data-subscription-id="<%= push_subscription.id %>"
+                          data-user-name="<%= push_subscription&.user&.name %>"
+                          title="Enviar notificação personalizada">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bell-plus" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                      <path stroke="none" d="m0 0h24v24H0z" fill="none"/>
+                      <path d="M12.5 17h-8.5a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6a2 2 0 1 1 4 0a7 7 0 0 1 4 6v2"/>
+                      <path d="M9 17v1a3 3 0 0 0 3 3c.408 0 .792 -.081 1.146 -.23"/>
+                      <path d="M16 19h6"/>
+                      <path d="M19 16v6"/>
+                    </svg>
+                  </button>
+                </td>
                 <td>
                   <%= link_to "View", [:admin, push_subscription], class: "btn btn-white btn-sm" %>
                   <%= link_to "Delete", [:admin, push_subscription], class: "btn btn-white btn-sm", data: { method: :delete, confirm: "Are you sure?" } %>
@@ -73,3 +91,130 @@
     <%= link_to "Clear Filter", admin_push_subscriptions_path, class: "btn btn-white" %>
   <% end %>
 </div>
+
+<!-- Modal para envio de notificação personalizada -->
+<div class="modal fade" id="sendNotificationModal" tabindex="-1" aria-labelledby="sendNotificationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sendNotificationModalLabel">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bell-plus me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="m0 0h24v24H0z" fill="none"/>
+            <path d="M12.5 17h-8.5a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6a2 2 0 1 1 4 0a7 7 0 0 1 4 6v2"/>
+            <path d="M9 17v1a3 3 0 0 0 3 3c.408 0 .792 -.081 1.146 -.23"/>
+            <path d="M16 19h6"/>
+            <path d="M19 16v6"/>
+          </svg>
+          Enviar Notificação Personalizada
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_with url: "", method: :post, local: true, id: "sendCustomNotificationForm", class: "needs-validation" do |form| %>
+        <div class="modal-body" style="overflow-x: hidden;">
+          <div class="mb-3">
+            <label class="form-label">Destinatário:</label>
+            <div id="userInfo" class="alert alert-info"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="title" class="form-label">Título da Notificação <span class="text-danger">*</span></label>
+            <%= form.text_field :title, value: "Título da Notificação", class: "form-control", placeholder: "Digite o título da notificação...", required: true, maxlength: 50 %>
+            <div class="form-text">Máximo de 50 caracteres</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="icon" class="form-label">Ícone <span class="text-danger">*</span></label>
+            <%= form.select :icon, 
+                options_for_select([
+                  ['📝 Nota', 'note'],
+                  ['ℹ️ Informação', 'info'],
+                  ['⚠️ Atenção', 'warning'],
+                  ['❌ Perigo', 'danger'],
+                  ['✅ Sucesso', 'success'],
+                  ['📋 Padrão', 'default']
+                ], 'note'), 
+                {}, 
+                { class: "form-select", required: true } %>
+          </div>
+
+          <div class="mb-3">
+            <label for="body" class="form-label">Mensagem <span class="text-danger">*</span></label>
+            <%= form.text_area :body, value: "Um teste de notificação do sistema de rastreamento", class: "form-control", rows: 4, placeholder: "Digite a mensagem da notificação...", required: true, maxlength: 200 %>
+            <div class="form-text">Máximo de 200 caracteres</div>
+          </div>
+
+          <div class="alert alert-warning">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-info-circle me-2" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="m0 0h24v24H0z" fill="none"/>
+              <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/>
+              <path d="M12 9h.01"/>
+              <path d="M11 12h1v4h1"/>
+            </svg>
+            <strong>Atenção:</strong> Esta notificação será enviada instantaneamente para o usuário selecionado.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x me-1" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="m0 0h24v24H0z" fill="none"/>
+              <path d="M18 6l-12 12"/>
+              <path d="M6 6l12 12"/>
+            </svg>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-send me-1" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path stroke="none" d="m0 0h24v24H0z" fill="none"/>
+              <path d="m10 14l11 -11"/>
+              <path d="m21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5"/>
+            </svg>
+            Enviar Notificação
+          </button>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sendNotificationModal = document.getElementById('sendNotificationModal');
+    const sendCustomNotificationForm = document.getElementById('sendCustomNotificationForm');
+    const userInfo = document.getElementById('userInfo');
+
+    sendNotificationModal.addEventListener('show.bs.modal', function(event) {
+      const button = event.relatedTarget;
+      const subscriptionId = button.getAttribute('data-subscription-id');
+      const userName = button.getAttribute('data-user-name');
+
+      sendCustomNotificationForm.action = `/admin/push_subscriptions/${subscriptionId}/send_notification`;
+
+      userInfo.innerHTML = `<strong>Enviando para:</strong> ${userName || 'Usuário sem nome'} <br><strong>Subscription ID:</strong> ${subscriptionId}`;
+    });
+
+    sendNotificationModal.addEventListener('hidden.bs.modal', function() {
+      sendCustomNotificationForm.reset();
+    });
+
+    const titleField = document.querySelector('#sendCustomNotificationForm input[name="title"]');
+    const bodyField = document.querySelector('#sendCustomNotificationForm textarea[name="body"]');
+
+    if (titleField) {
+      titleField.addEventListener('input', function() {
+        const remaining = 50 - this.value.length;
+        const helpText = this.parentNode.querySelector('.form-text');
+        helpText.textContent = `${remaining} caracteres restantes`;
+        helpText.className = remaining < 10 ? 'form-text text-warning' : 'form-text';
+      });
+    }
+
+    if (bodyField) {
+      bodyField.addEventListener('input', function() {
+        const remaining = 200 - this.value.length;
+        const helpText = this.parentNode.querySelector('.form-text');
+        helpText.textContent = `${remaining} caracteres restantes`;
+        helpText.className = remaining < 20 ? 'form-text text-warning' : 'form-text';
+      });
+    }
+  });
+</script>

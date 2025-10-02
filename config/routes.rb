@@ -23,7 +23,9 @@ Rails.application.routes.draw do
     resources :commands
     resources :batteries
     resources :notifications
-    resources :push_subscriptions
+    resources :push_subscriptions do
+      post "send_notification", on: :member
+    end
     resources :push_notifications do
       post "send_notification", on: :member
       post "subscribe", on: :collection
