@@ -193,7 +193,13 @@
     });
 
     sendNotificationModal.addEventListener('hidden.bs.modal', function() {
-      sendCustomNotificationForm.reset();
+      const titleField = document.querySelector('#sendCustomNotificationForm input[name="title"]');
+      const iconField = document.querySelector('#sendCustomNotificationForm select[name="icon"]');
+      const bodyField = document.querySelector('#sendCustomNotificationForm textarea[name="body"]');
+
+      if (titleField) titleField.value = "Título da Notificação";
+      if (iconField) iconField.value = "note";
+      if (bodyField) bodyField.value = "Um teste de notificação do sistema de rastreamento";
     });
 
     const titleField = document.querySelector('#sendCustomNotificationForm input[name="title"]');
