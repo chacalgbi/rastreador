@@ -14,7 +14,7 @@ class NetworkParserXt40
     '724-11' => 'Vivo',
     '724-15' => 'Sercomtel',
     '724-16' => 'Oi',
-    '724-17' => 'Correios Celular',
+    '724-17' => 'CorreiosCel',
     '724-18' => 'Datora',
     '724-23' => 'Vivo',
     '724-24' => 'Oi',
@@ -149,11 +149,13 @@ class NetworkParserXt40
     return 'Desconhecido' unless rxlev
 
     case rxlev
-    when 0..20
+    when 0..15
       'Muito Ruim'
-    when 21..40
+    when 16..35
       'Ruim'
-    when 41..60
+    when 36..50
+      'Regular'
+    when 51..60
       'Boa'
     when 61..63
       'Excelente'
