@@ -151,13 +151,13 @@ class NetworkParserXt40
     case rxlev
     when 0..15
       'Muito Ruim'
-    when 16..35
+    when 16..30
       'Ruim'
-    when 36..50
+    when 31..45
       'Regular'
-    when 51..60
+    when 46..55
       'Boa'
-    when 61..63
+    when 56..63
       'Excelente'
     else
       'Desconhecido'

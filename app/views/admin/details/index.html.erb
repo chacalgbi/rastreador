@@ -16,7 +16,7 @@
         <table class="table table-vcenter table-nowrap card-table">
           <thead>
             <tr>
-              <th><%= sort_link @search, :id %></th>
+              <th>Editar</th>
               <th><%= sort_link @search, :device_id %></th>
               <th style="width: 120px;"><%= sort_link @search, :device_name %></th>
               <th style="width: 120px;"><%= sort_link @search, "Em uso por" %></th>
@@ -68,7 +68,7 @@
           <tbody>
             <% @details.each do |detail| %>
               <tr>
-                <td><%= link_to "#{detail.id} Editar", edit_admin_detail_path(detail), class: "btn btn-white btn-sm" %></td>
+                <td><%= link_to "Editar", edit_admin_detail_path(detail), class: "btn btn-white btn-sm" %></td>
                 <td><%= detail.device_id %></td>
                 <td style="width: 120px; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<%= detail.device_name %>"><%= detail.device_name %></td>
                 <td style="width: 120px; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<%= detail.last_user %>"><%= detail.last_user %></td>

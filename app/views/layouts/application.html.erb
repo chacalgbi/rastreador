@@ -5,17 +5,23 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <link rel="icon" href="/<%= icon(ENV['SERVIDOR']) %>.png" type="image/png">
     <link rel="icon" href="/<%= icon(ENV['SERVIDOR']) %>.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/<%= icon(ENV['SERVIDOR']) %>.png">
+    
+    <!-- PWA iOS Support -->
+    <meta name="apple-mobile-web-app-title" content="<%= ENV['APPLICATION_NAME'] || 'Rastreador' %>">
+    <link rel="apple-touch-startup-image" href="/<%= icon(ENV['SERVIDOR']) %>.png">
 
     <%= stylesheet_link_tag "css-zero/reset", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag "css-zero/variables", "data-turbo-track": "reload" %>
@@ -63,5 +69,20 @@
     </div>
     <div id="battery_history_modal"></div>
     <%= debugbar_body if defined? Debugbar %>
+    
+    <script>
+      // Registra o service worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('<%= pwa_service_worker_path %>')
+            .then(function(registration) {
+              console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function(err) {
+              console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+      }
+
+    </script>
   </body>
 </html>

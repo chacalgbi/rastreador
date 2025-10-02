@@ -19,7 +19,9 @@
   </nav>
 </div>
 
-<div class="flex items-center gap">
+<div class="flex items-center gap" 
+     data-controller="pwa-install"
+     data-pwa-install-auto-prompt-value="false">
   <% if Current.user %>
     <button data-push-target="notificationButton" 
             data-action="click->push#initializePushNotifications"
@@ -27,6 +29,14 @@
             style="display: block;"
             title="Ativar notificações">
       <%= image_tag "message-circle-warning.svg", size: 30, aria: { hidden: true }, class: "invertible" %>
+    </button>
+
+    <button data-pwa-install-target="installButton"
+            data-action="click->pwa-install#install"
+            class="flex items-center gap text-primary text-sm"
+            style="display: none;"
+            title="Instalar aplicativo">
+      <%= image_tag "download.svg", size: 30, aria: { hidden: true }, class: "invertible" %>
     </button>
 
     <%= Current.user.name.truncate(12) %>

@@ -6,7 +6,7 @@ export default class extends Controller {
 
   connect() {
     this.checkNotificationPermission();
-    this.startPeriodicPermissionCheck();
+    //this.startPeriodicPermissionCheck();
 
     setTimeout(() => {
       this.initializePushNotifications();

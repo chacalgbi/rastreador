@@ -1,22 +1,37 @@
 {
-  "name": "S3 DataLink",
-  "icons": [
-    {
-      "src": "/icon.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    },
-    {
-      "src": "/icon.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "maskable"
-    }
-  ],
+  "name": "<%= ENV['APPLICATION_NAME'] %>",
+  "short_name": "<%= ENV['APPLICATION_NAME'] %>",
+  "description": "Sistema de gerenciamento de veículos.",
   "start_url": "/",
   "display": "standalone",
   "scope": "/",
-  "description": "Sistema de gerenciamento de frotas.",
-  "theme_color": "red",
-  "background_color": "red"
+  "orientation": "portrait-primary",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/<%= icon(ENV['SERVIDOR']) %>.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "/<%= icon(ENV['SERVIDOR']) %>.png", 
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/<%= icon(ENV['SERVIDOR']) %>192.png",
+      "type": "image/png", 
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "/<%= icon(ENV['SERVIDOR']) %>192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
+    }
+  ]
 }
