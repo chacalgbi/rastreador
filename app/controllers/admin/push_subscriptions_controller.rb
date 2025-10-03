@@ -63,6 +63,6 @@ class Admin::PushSubscriptionsController < Admin::BaseController
     end
 
     def push_subscription_params
-      params.require(:push_subscription).permit(:id, :endpoint, :p256dh, :auth, :user_id, :subscribed, :created_at, :updated_at)
+      params.require(:push_subscription).permit(:id, :endpoint, :p256dh, :auth, :user_id, :subscribed, :info, :created_at, :updated_at)
     end
 end

@@ -19,10 +19,9 @@
               <th>Enviar</th>
               <th class="w-1"></th>
               <th><%= sort_link @search, :user_id, "Usuário" %></th>
-              <th><%= sort_link @search, :endpoint %></th>
-              <th><%= sort_link @search, :p256dh %></th>
-              <th><%= sort_link @search, :auth %></th>
+              <th><%= sort_link @search, :info, "Dispositivo" %></th>
               <th><%= sort_link @search, :subscribed %></th>
+              <th><%= sort_link @search, :endpoint %></th>
               <th><%= sort_link @search, :created_at %></th>
               <th><%= sort_link @search, :updated_at %></th>
             </tr>
@@ -54,12 +53,25 @@
                 <td>
                   <%= push_subscription.user_id %> - <%= push_subscription&.user&.name %>
                 </td>
+                <td>
+                  <% if push_subscription.info.present? %>
+                    <% begin %>
+                      <% device_info = JSON.parse(push_subscription.info) %>
+                      <small>
+                        <strong><%= device_info['browser'] %></strong> - <%= device_info['device_type'] %> - <%= device_info['operating_system'] %><br>
+                        <%= device_info['language'] %> - <%= device_info['screen_resolution'] %>
+                      </small>
+                    <% rescue JSON::ParserError %>
+                      <%= truncate(push_subscription.info, length: 50) %>
+                    <% end %>
+                  <% else %>
+                    <em>-</em>
+                  <% end %>
+                </td>
+                <td><%= push_subscription.subscribed ? "✓" : "✗" %></td>
                 <td><%= truncate(push_subscription.endpoint, length: 50) %></td>
-                <td><%= truncate(push_subscription.p256dh, length: 20) %></td>
-                <td><%= push_subscription.auth %></td>
-                <td><%= push_subscription.subscribed %></td>
-                <td><%= push_subscription.created_at %></td>
-                <td><%= push_subscription.updated_at %></td>
+                <td><%= push_subscription.created_at.strftime("%d/%m/%Y %H:%M") %></td>
+                <td><%= push_subscription.updated_at.strftime("%d/%m/%Y %H:%M") %></td>
               </tr>
             <% end %>
           </tbody>

@@ -9,6 +9,22 @@
   </div>
 
   <div class="form-group row mb-2">
+    <%= form.label :info, "Informações do Dispositivo", class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_area :info, class: "form-control", rows: 3, placeholder: "Informações sobre navegador, dispositivo, SO, etc." %>
+      <%= tag.div push_subscription.errors[:info].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :subscribed, class: "form-check-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.checkbox :subscribed, class: "form-check-input" %>
+      <%= tag.div push_subscription.errors[:subscribed].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
     <%= form.label :endpoint, class: "form-label col-md-3 col-form-label" %>
     <div class="col-md px-0">
       <%= form.text_field :endpoint, class: "form-control" %>
@@ -29,14 +45,6 @@
     <div class="col-md px-0">
       <%= form.text_field :auth, class: "form-control" %>
       <%= tag.div push_subscription.errors[:auth].first, class: "invalid-feedback" %>
-    </div>
-  </div>
-
-  <div class="form-group row mb-2">
-    <%= form.label :subscribed, class: "form-check-label col-md-3 col-form-label" %>
-    <div class="col-md px-0">
-      <%= form.checkbox :subscribed, class: "form-check-input" %>
-      <%= tag.div push_subscription.errors[:subscribed].first, class: "invalid-feedback" %>
     </div>
   </div>
 

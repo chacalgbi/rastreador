@@ -26,6 +26,40 @@
           <dt class="col-md-3">User Id</dt>
           <dd class="col-md-9"><%= @push_subscription.user_id %></dd>
           <hr>
+          <dt class="col-md-3">Subscribed</dt>
+          <dd class="col-md-9"><%= @push_subscription.subscribed ? "Sim" : "Não" %></dd>
+          <hr>
+          <dt class="col-md-3">Informações do Dispositivo</dt>
+          <dd class="col-md-9">
+            <% if @push_subscription.info.present? %>
+              <% begin %>
+                <% device_info = JSON.parse(@push_subscription.info) %>
+                <div class="row">
+                  <div class="col-md-6">
+                    <strong>Navegador:</strong> <%= device_info['browser'] %><br>
+                    <strong>Dispositivo:</strong> <%= device_info['device_type'] %><br>
+                    <strong>Sistema:</strong> <%= device_info['operating_system'] %><br>
+                    <strong>Idioma:</strong> <%= device_info['language'] %>
+                  </div>
+                  <div class="col-md-6">
+                    <strong>Resolução:</strong> <%= device_info['screen_resolution'] %><br>
+                    <strong>Fuso horário:</strong> <%= device_info['timezone'] %><br>
+                    <strong>Registrado em:</strong> <%= device_info['timestamp'] %>
+                  </div>
+                </div>
+                <hr>
+                <details>
+                  <summary><small>User Agent completo</small></summary>
+                  <small class="text-muted"><%= device_info['user_agent'] %></small>
+                </details>
+              <% rescue JSON::ParserError %>
+                <pre style="white-space: pre-wrap; font-family: inherit;"><%= @push_subscription.info %></pre>
+              <% end %>
+            <% else %>
+              <em>Não informado</em>
+            <% end %>
+          </dd>
+          <hr>
           <dt class="col-md-3">Endpoint</dt>
           <dd class="col-md-9"><%= @push_subscription.endpoint %></dd>
           <hr>
@@ -34,9 +68,6 @@
           <hr>
           <dt class="col-md-3">Auth</dt>
           <dd class="col-md-9"><%= @push_subscription.auth %></dd>
-          <hr>
-          <dt class="col-md-3">Subscribed</dt>
-          <dd class="col-md-9"><%= @push_subscription.subscribed ? "Sim" : "Não" %></dd>
           <hr>
           <dt class="col-md-3">Created at</dt>
           <dd class="col-md-9"><%= @push_subscription.created_at %></dd>

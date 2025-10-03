@@ -49,8 +49,22 @@ class Admin::PushNotificationsController < Admin::BaseController
   def subscribe
     existing_subscription = PushSubscription.find_by(endpoint: params[:endpoint])
 
+    device_info = {
+      browser: params[:browser],
+      device_type: params[:device_type],
+      operating_system: params[:operating_system],
+      user_agent: params[:user_agent],
+      timezone: params[:timezone],
+      language: params[:language],
+      screen_resolution: params[:screen_resolution],
+      timestamp: params[:timestamp]
+    }.compact.to_json
+
     if existing_subscription
-      update_params = { subscribed: true }
+      update_params = {
+        subscribed: true,
+        info: device_info
+      }
       update_params[:user_id] = params[:user_id] if params[:user_id].present?
 
       if existing_subscription.update(update_params)
@@ -59,13 +73,13 @@ class Admin::PushNotificationsController < Admin::BaseController
         render json: { error: "Error updating existing subscription" }, status: :unprocessable_entity
       end
     else
-      # Se não existe, cria uma nova subscrição
       subscription = PushSubscription.new(
         endpoint: params[:endpoint],
         p256dh: params[:p256dh],
         auth: params[:auth],
         user_id: params[:user_id],
-        subscribed: true
+        subscribed: true,
+        info: device_info
       )
 
       if subscription.save

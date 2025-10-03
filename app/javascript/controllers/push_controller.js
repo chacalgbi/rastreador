@@ -126,6 +126,62 @@ export default class extends Controller {
     return outputArray;
   }
 
+  getDeviceInfo() {
+    const userAgent = navigator.userAgent;
+
+    let browser = 'Unknown';
+    if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) {
+      browser = 'Chrome';
+    } else if (userAgent.includes('Firefox')) {
+      browser = 'Firefox';
+    } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+      browser = 'Safari';
+    } else if (userAgent.includes('Edg')) {
+      browser = 'Edge';
+    } else if (userAgent.includes('Opera') || userAgent.includes('OPR')) {
+      browser = 'Opera';
+    }
+
+    let deviceType = 'Desktop';
+    if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
+      if (/iPad/i.test(userAgent)) {
+        deviceType = 'Tablet';
+      } else if (/iPhone|iPod|Android.*Mobile/i.test(userAgent)) {
+        deviceType = 'Mobile';
+      } else {
+        deviceType = 'Mobile';
+      }
+    }
+
+    let os = 'Unknown';
+    if (userAgent.includes('Windows')) {
+      os = 'Windows';
+    } else if (userAgent.includes('Mac OS')) {
+      os = 'macOS';
+    } else if (userAgent.includes('Linux')) {
+      os = 'Linux';
+    } else if (userAgent.includes('Android')) {
+      os = 'Android';
+    } else if (userAgent.includes('iOS') || userAgent.includes('iPhone') || userAgent.includes('iPad')) {
+      os = 'iOS';
+    }
+
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const language = navigator.language || navigator.userLanguage;
+    const screenResolution = `${screen.width}x${screen.height}`;
+
+    return {
+      browser,
+      device_type: deviceType,
+      operating_system: os,
+      user_agent: userAgent,
+      timezone,
+      language,
+      screen_resolution: screenResolution,
+      timestamp: new Date().toISOString()
+    };
+  }
+
   saveSubscription(subscription) {
     const endpoint = subscription.endpoint;
     const p256dh = btoa(
@@ -141,7 +197,14 @@ export default class extends Controller {
       )
     );
 
-    const payload = { endpoint, p256dh, auth };
+    const deviceInfo = this.getDeviceInfo();
+
+    const payload = { 
+      endpoint, 
+      p256dh, 
+      auth,
+      ...deviceInfo
+    };
 
     if (this.userIdValue && this.userIdValue !== "") { // Adiciona user_id se estiver disponível
       payload.user_id = this.userIdValue;
@@ -149,6 +212,9 @@ export default class extends Controller {
     } else {
       console.log("Enviando inscrição sem user_id (usuário não logado)");
     }
+
+    // Log das informações do dispositivo para debug
+    console.log("Informações do dispositivo:", deviceInfo);
 
     fetch("/admin/push_notifications/subscribe", {
       method: "POST",
