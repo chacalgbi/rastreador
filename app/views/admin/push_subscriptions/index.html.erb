@@ -189,50 +189,129 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  function initializeNotificationModal() {
     const sendNotificationModal = document.getElementById('sendNotificationModal');
     const sendCustomNotificationForm = document.getElementById('sendCustomNotificationForm');
     const userInfo = document.getElementById('userInfo');
+    
+    if (!sendNotificationModal || !sendCustomNotificationForm || !userInfo) {
+      return;
+    }
 
-    sendNotificationModal.addEventListener('show.bs.modal', function(event) {
-      const button = event.relatedTarget;
+    window.currentNotificationData = null;
+
+    document.body.removeEventListener('click', handleNotificationButtonClick);
+    document.body.addEventListener('click', handleNotificationButtonClick);
+
+    sendNotificationModal.removeEventListener('show.bs.modal', handleModalShow);
+    sendNotificationModal.removeEventListener('hidden.bs.modal', handleModalHidden);
+    
+    sendNotificationModal.addEventListener('show.bs.modal', handleModalShow);
+    sendNotificationModal.addEventListener('hidden.bs.modal', handleModalHidden);
+
+    setupCharacterCounters();
+  }
+
+  function handleNotificationButtonClick(event) {
+    const button = event.target.closest('[data-bs-target="#sendNotificationModal"]');
+    if (button) {
       const subscriptionId = button.getAttribute('data-subscription-id');
       const userName = button.getAttribute('data-user-name');
 
-      sendCustomNotificationForm.action = `/admin/push_subscriptions/${subscriptionId}/send_notification`;
+      window.currentNotificationData = {
+        subscriptionId: subscriptionId,
+        userName: userName
+      };
+    }
+  }
 
-      userInfo.innerHTML = `<strong>Enviando para:</strong> ${userName || 'Usuário sem nome'} <br><strong>Subscription ID:</strong> ${subscriptionId}`;
-    });
+  function handleModalShow(event) {
+    const sendCustomNotificationForm = document.getElementById('sendCustomNotificationForm');
+    const userInfo = document.getElementById('userInfo');
 
-    sendNotificationModal.addEventListener('hidden.bs.modal', function() {
-      const titleField = document.querySelector('#sendCustomNotificationForm input[name="title"]');
-      const iconField = document.querySelector('#sendCustomNotificationForm select[name="icon"]');
-      const bodyField = document.querySelector('#sendCustomNotificationForm textarea[name="body"]');
+    if (window.currentNotificationData && window.currentNotificationData.subscriptionId) {
+      const { subscriptionId, userName } = window.currentNotificationData;
+
+      if (sendCustomNotificationForm) {
+        sendCustomNotificationForm.action = `/admin/push_subscriptions/${subscriptionId}/send_notification`;
+      }
+
+      if (userInfo) {
+        userInfo.innerHTML = `<strong>Enviando para:</strong> ${userName || 'Usuário sem nome'} <br><strong>Subscription ID:</strong> ${subscriptionId}`;
+      }
+    } else {
+      const button = event.relatedTarget;
+      if (button) {
+        const subscriptionId = button.getAttribute('data-subscription-id');
+        const userName = button.getAttribute('data-user-name');
+
+        if (subscriptionId && sendCustomNotificationForm) {
+          sendCustomNotificationForm.action = `/admin/push_subscriptions/${subscriptionId}/send_notification`;
+        }
+
+        if (userInfo) {
+          userInfo.innerHTML = `<strong>Enviando para:</strong> ${userName || 'Usuário sem nome'} <br><strong>Subscription ID:</strong> ${subscriptionId}`;
+        }
+      }
+    }
+  }
+
+  function handleModalHidden(event) {
+    const sendCustomNotificationForm = document.getElementById('sendCustomNotificationForm');
+
+    if (sendCustomNotificationForm) {
+      const titleField = sendCustomNotificationForm.querySelector('input[name="title"]');
+      const iconField = sendCustomNotificationForm.querySelector('select[name="icon"]');
+      const bodyField = sendCustomNotificationForm.querySelector('textarea[name="body"]');
 
       if (titleField) titleField.value = "Título da Notificação";
       if (iconField) iconField.value = "note";
       if (bodyField) bodyField.value = "Um teste de notificação do sistema de rastreamento";
-    });
+    }
+  }
 
-    const titleField = document.querySelector('#sendCustomNotificationForm input[name="title"]');
-    const bodyField = document.querySelector('#sendCustomNotificationForm textarea[name="body"]');
+  function setupCharacterCounters() {
+    const sendCustomNotificationForm = document.getElementById('sendCustomNotificationForm');
+    if (!sendCustomNotificationForm) return;
+
+    const titleField = sendCustomNotificationForm.querySelector('input[name="title"]');
+    const bodyField = sendCustomNotificationForm.querySelector('textarea[name="body"]');
 
     if (titleField) {
-      titleField.addEventListener('input', function() {
-        const remaining = 50 - this.value.length;
-        const helpText = this.parentNode.querySelector('.form-text');
-        helpText.textContent = `${remaining} caracteres restantes`;
-        helpText.className = remaining < 10 ? 'form-text text-warning' : 'form-text';
-      });
+      titleField.removeEventListener('input', handleTitleInput);
+      titleField.addEventListener('input', handleTitleInput);
     }
 
     if (bodyField) {
-      bodyField.addEventListener('input', function() {
-        const remaining = 200 - this.value.length;
-        const helpText = this.parentNode.querySelector('.form-text');
-        helpText.textContent = `${remaining} caracteres restantes`;
-        helpText.className = remaining < 20 ? 'form-text text-warning' : 'form-text';
-      });
+      bodyField.removeEventListener('input', handleBodyInput);
+      bodyField.addEventListener('input', handleBodyInput);
     }
-  });
+  }
+
+  function handleTitleInput(event) {
+    const remaining = 50 - event.target.value.length;
+    const helpText = event.target.parentNode.querySelector('.form-text');
+    if (helpText) {
+      helpText.textContent = `${remaining} caracteres restantes`;
+      helpText.className = remaining < 10 ? 'form-text text-warning' : 'form-text';
+    }
+  }
+
+  function handleBodyInput(event) {
+    const remaining = 200 - event.target.value.length;
+    const helpText = event.target.parentNode.querySelector('.form-text');
+    if (helpText) {
+      helpText.textContent = `${remaining} caracteres restantes`;
+      helpText.className = remaining < 20 ? 'form-text text-warning' : 'form-text';
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeNotificationModal);
+  } else {
+    initializeNotificationModal();
+  }
+
+  document.addEventListener('turbo:load', initializeNotificationModal);
+  document.addEventListener('turbolinks:load', initializeNotificationModal);
 </script>
