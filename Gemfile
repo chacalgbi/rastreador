@@ -49,6 +49,10 @@ gem "thruster", require: false
 gem 'rails_autolink'
 gem 'kaminari'
 gem 'sweetalert2-rails'
+gem 'rails_performance'
+gem "sys-filesystem"
+gem "sys-cpu"
+gem "get_process_mem"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
