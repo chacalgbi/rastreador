@@ -5,5 +5,6 @@ import "jquery"
 import "notify"
 import "sweetalert2"
 
-window.jQuery = window.$ = jQuery;import "echarts"
-import "echarts/theme/dark"
+window.jQuery = window.$ = jQuery;
+
+import "echarts"

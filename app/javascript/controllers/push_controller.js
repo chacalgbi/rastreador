@@ -5,6 +5,7 @@ export default class extends Controller {
   static targets = ["notificationButton"]
 
   connect() {
+    this.subscriptionSent = false;
     this.checkNotificationPermission();
     //this.startPeriodicPermissionCheck();
 
@@ -62,7 +63,6 @@ export default class extends Controller {
         .then((serviceWorkerRegistration) => {
           console.log("Service Worker registrado com sucesso.");
 
-          // Aguarda o Service Worker estar ativo
           return this.waitForServiceWorkerActivation(serviceWorkerRegistration);
         })
         .then((serviceWorkerRegistration) => {
@@ -183,6 +183,10 @@ export default class extends Controller {
   }
 
   saveSubscription(subscription) {
+    if (this.subscriptionSent) {
+      return;
+    }
+
     const endpoint = subscription.endpoint;
     const p256dh = btoa(
       String.fromCharCode.apply(
@@ -206,15 +210,15 @@ export default class extends Controller {
       ...deviceInfo
     };
 
-    if (this.userIdValue && this.userIdValue !== "") { // Adiciona user_id se estiver disponível
+    if (this.userIdValue && this.userIdValue !== "") {
       payload.user_id = this.userIdValue;
       console.log("Enviando inscrição com user_id:", this.userIdValue);
     } else {
       console.log("Enviando inscrição sem user_id (usuário não logado)");
     }
 
-    // Log das informações do dispositivo para debug
-    console.log("Informações do dispositivo:", deviceInfo);
+    // Marca como enviado antes da requisição
+    this.subscriptionSent = true;
 
     fetch("/admin/push_notifications/subscribe", {
       method: "POST",
@@ -232,22 +236,28 @@ export default class extends Controller {
           console.log("Inscrição salva com sucesso no servidor.");
         } else {
           console.error("Erro ao salvar inscrição no servidor.");
+          this.subscriptionSent = false;
         }
       })
       .catch((error) => {
         console.error("Erro ao enviar inscrição para o servidor:", error);
+        this.subscriptionSent = false;
       });
   }
 
   updateSubscriptionWithUserId() {
     if (this.userIdValue && this.userIdValue !== "" && "serviceWorker" in navigator) {
+
+      if (this.subscriptionSent) {
+        return;
+      }
+
       navigator.serviceWorker.ready
         .then((registration) => {
           return registration.pushManager.getSubscription();
         })
         .then((subscription) => {
           if (subscription) {
-            console.log("Atualizando assinatura existente com user_id:", this.userIdValue);
             this.saveSubscription(subscription);
           }
         })
@@ -258,18 +268,13 @@ export default class extends Controller {
   }
 
   userIdValueChanged() {
-    // Método chamado quando o valor do userId muda
     if (this.userIdValue && this.userIdValue !== "") {
       this.updateSubscriptionWithUserId();
     }
   }
 
   startPeriodicPermissionCheck() {
-    // Método para verificar periodicamente o status das permissões
-    // (útil se o usuário mudar as configurações do navegador)
-
     if (this.permissionCheckInterval) {
-      // Evita criar múltiplos intervalos
       clearInterval(this.permissionCheckInterval);
     }
 
@@ -279,9 +284,10 @@ export default class extends Controller {
   }
 
   disconnect() {
-    // Limpa o interval quando o controller é desconectado
     if (this.permissionCheckInterval) {
       clearInterval(this.permissionCheckInterval);
     }
+
+    this.subscriptionSent = false;
   }
 }

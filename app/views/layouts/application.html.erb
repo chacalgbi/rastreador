@@ -12,14 +12,12 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <link rel="icon" href="/<%= icon(ENV['SERVIDOR']) %>.png" type="image/png">
     <link rel="icon" href="/<%= icon(ENV['SERVIDOR']) %>.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/<%= icon(ENV['SERVIDOR']) %>.png">
-    
-    <!-- PWA iOS Support -->
+
     <meta name="apple-mobile-web-app-title" content="<%= ENV['APPLICATION_NAME'] || 'Rastreador' %>">
     <link rel="apple-touch-startup-image" href="/<%= icon(ENV['SERVIDOR']) %>.png">
 
@@ -35,7 +33,6 @@
         data-application-server-key="<%= ENV['DEFAULT_APPLICATION_SERVER_KEY'] %>"
         data-push-user-id-value="<%= Current.user&.id %>">
 
-    <!-- Flash Controller para SweetAlert2 -->
     <div data-controller="flash" 
          data-flash-alert-value="<%= flash[:alert] %>" 
          data-flash-notice-value="<%= flash[:notice] %>">
@@ -69,16 +66,15 @@
     </div>
     <div id="battery_history_modal"></div>
     <%= debugbar_body if defined? Debugbar %>
-    
+
     <script>
       // Registra o service worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('<%= pwa_service_worker_path %>')
             .then(function(registration) {
-              console.log('ServiceWorker registration successful with scope: ', registration.scope);
             }, function(err) {
-              console.log('ServiceWorker registration failed: ', err);
+              console.log('Falha ao registrar o ServiceWorker: ', err);
             });
         });
       }
