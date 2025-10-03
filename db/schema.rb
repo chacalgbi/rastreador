@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_03_101832) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_03_112204) do
   create_table "action_mailbox_inbound_emails", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
@@ -186,15 +186,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_03_101832) do
   end
 
   create_table "push_subscriptions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "endpoint"
-    t.string "p256dh"
-    t.string "auth"
+    t.text "endpoint"
+    t.text "p256dh"
+    t.text "auth"
     t.boolean "subscribed"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.text "info"
-    t.index ["endpoint"], name: "index_push_subscriptions_on_endpoint", unique: true
+    t.index ["endpoint"], name: "index_push_subscriptions_on_endpoint", unique: true, length: 700
   end
 
   create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
