@@ -69,7 +69,7 @@ class HomeController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
-          turbo_stream.replace("details_#{device_id}", partial: "home/details", locals: {status: params[:status], info: info, msg: msg, device_id: device_id, state: state, events_count: @events_last_x_hours, user_maintenance: Current.user.maintenance?}),
+          turbo_stream.replace("details_#{device_id}", partial: "home/details", locals: {status: params[:status], info: info, msg: msg, device_id: device_id, state: state, events_count: @events_last_x_hours}),
           turbo_stream.replace("details_button_#{device_id}", partial: "home/details_button", locals: { device_id: device_id, show_details: true, status_car: @event.status })
         ]
       end

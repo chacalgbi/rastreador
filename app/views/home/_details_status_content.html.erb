@@ -5,7 +5,7 @@
     <% if status == 'offline' && info.category == 'motorcycle' %>
       Ligue a ignição para acordar o rastreador.
     <% else %>
-      <%= render 'home/btn_bloquear_desbloquear', device_id: device_id, status: status, state: state, info: info, user_maintenance: defined?(user_maintenance) ? user_maintenance : nil %>
+      <%= render 'home/btn_bloquear_desbloquear', device_id: device_id, status: status, state: state, info: info %>
     <% end %>
   </div>
 </div>

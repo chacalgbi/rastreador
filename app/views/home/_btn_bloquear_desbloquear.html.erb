@@ -8,12 +8,9 @@
           <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc" style="max-width: 600px; max-height: 80vh; overflow-y: auto;">
             <div class="dialog__content">
               <h2 class="text-lg font-semibold leading-none mbe-2" id="dialog_label">Tem certeza que deseja DESBLOQUEAR o veículo?</h2>
-                <% if defined?(user_maintenance) && user_maintenance %>
-                <% else %>
-                  <p class="text-lg text-subtle mbe-4" id="dialog_desc">
-                    Esta ação irá desbloquear o veículo, permitindo que ele seja utilizado e irá registrar que você é o usuário.
-                  </p>
-                <% end %>
+              <p class="text-lg text-subtle mbe-4 checklist-description" id="dialog_desc">
+                Esta ação irá desbloquear o veículo, permitindo que ele seja utilizado e irá registrar que você é o usuário.
+              </p>
 
               <%= form_with url: home_block_and_desblock_path, method: :post, local: false, 
                           data: { turbo_stream: true }, 
@@ -23,14 +20,15 @@
                 <%= hidden_field_tag :model, info.model %>
                 <%= hidden_field_tag :imei, info.imei %>
 
-                <% unless defined?(user_maintenance) && user_maintenance %>
+                <div class="checklist-container">
                   <%= render 'home/checklist_form', device_id: device_id, action_type: 'desbloquear' %>
-                <% end %>
+                </div>
 
                 <div class="flex items-center justify-end gap">
                   <button type="button" class="btn" data-action="click->dialog#close">Cancelar</button>
                   <%= f.submit "Confirmar Desbloqueio", class: "btn btn--positive" %>
                 </div>
+
               <% end %>
             </div>
           </dialog>
@@ -54,9 +52,9 @@
                 <%= hidden_field_tag :model, info.model %>
                 <%= hidden_field_tag :imei, info.imei %>
 
-                <% unless defined?(user_maintenance) && user_maintenance %>
+                <div class="checklist-container">
                   <%= render 'home/checklist_form', device_id: device_id, action_type: 'bloquear' %>
-                <% end %>
+                </div>
 
                 <div class="flex items-center justify-end gap">
                   <button type="button" class="btn" data-action="click->dialog#close">Cancelar</button>

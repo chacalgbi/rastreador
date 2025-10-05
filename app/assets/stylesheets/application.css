@@ -59,3 +59,13 @@
   height: 30px;
   object-fit: contain;
 }
+
+/* Oculta o checklist para usuários de manutenção */
+body[data-user-maintenance="true"] .checklist-container {
+  display: none !important;
+}
+
+/* Oculta a descrição do checklist para usuários de manutenção apenas no dialog de desbloquear */
+body[data-user-maintenance="true"] .checklist-description {
+  display: none !important;
+}
