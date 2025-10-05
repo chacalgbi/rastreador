@@ -24,6 +24,7 @@ class TraccarUpdateDevice
     ).to_h.reject { |_, v| v.blank? }
 
     @changed_fields = detect_changed_fields(filtered_params)
+    @status_changed = filtered_params.key?('status') && @detail.status != filtered_params['status']
 
     @detail.update(filtered_params)
   end
@@ -53,6 +54,9 @@ class TraccarUpdateDevice
         locals: { device_id: @detail.device_id, changed_fields: @changed_fields }
       )
     end
+
+    # Atualiza a view quando o status mudar
+    update_status_view if @status_changed
   end
 
   def update_admin_view
@@ -103,5 +107,38 @@ class TraccarUpdateDevice
     @params&.[](:alarme_type) == 'lowBattery' ||
     @params&.[](:alarme_type) == 'powerCut' ||
     @params&.[](:last_event_type) == 'deviceStopped'
+  end
+
+  def update_status_view
+
+    # Para deixar o botão disponível para uso, é necessário que o dispositivo esteja online e responda a um comando
+    SendCommandJob.perform_later({device_id: @detail.device_id, command: 'STATUS#'}) if @detail.status == 'online'
+
+    # Atualiza o badge de status no card principal (_car.html.erb)
+    Turbo::StreamsChannel.broadcast_action_to(
+      "home_stream",
+      action: "replace",
+      target: "status_badge_#{@detail.device_id}",
+      partial: "home/status_badge",
+      locals: { detail: @detail }
+    )
+
+    # Atualiza o conteúdo de detalhes se estiver aberto (_details.html.erb e _btn_bloquear_desbloquear.html.erb)
+    msg = StatusHelper.define_text(@detail, @detail.status)
+    state = StatusHelper.define_state(@detail)
+
+    Turbo::StreamsChannel.broadcast_action_to(
+      "home_stream",
+      action: "replace",
+      target: "details_status_content_#{@detail.device_id}",
+      partial: "home/details_status_content",
+      locals: {
+        device_id: @detail.device_id,
+        status: @detail.status,
+        msg: msg,
+        info: @detail,
+        state: state
+      }
+    )
   end
 end

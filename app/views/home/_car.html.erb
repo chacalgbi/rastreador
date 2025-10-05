@@ -2,18 +2,7 @@
 <div class="p-5 rounded-lg i-full" style="background: linear-gradient(to right, var(--indigo-300), transparent)">
   <div class="car_container">
     <div class="car_item">
-      <% if car.status == 'online' %>
-        <div class="badge badge--positive">
-          <%= image_tag "satellite-dish.svg", size: 17, aria: { hidden: true } %>  Online
-        </div>
-      <% else %>
-        <div class="badge badge--negative">
-        <%= image_tag "navigation-off.svg", size: 17, aria: { hidden: true } %>  Offline 
-        </div>
-        <div class="badge badge--negative">
-        <%= image_tag "timer.svg", size: 17, aria: { hidden: true } %> Última atualização: <%= car.updated_at.getlocal("-03:00").strftime("%H:%M - %d/%m/%Y") %> 
-        </div>
-      <% end %>
+      <%= render 'home/status_badge', detail: car %>
     </div>
     <div class="car_item">
       V. Máx: <%= car.velo_max %>

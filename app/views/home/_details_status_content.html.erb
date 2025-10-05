@@ -1,0 +1,11 @@
+<div id="details_status_content_<%= device_id %>">
+  <br>
+  <div class="car_container">
+    <div class="car_item"><%= msg %></div>
+    <% if status == 'offline' && info.category == 'motorcycle' %>
+      Ligue a ignição para acordar o rastreador.
+    <% else %>
+      <%= render 'home/btn_bloquear_desbloquear', device_id: device_id, status: status, state: state, info: info, user_maintenance: defined?(user_maintenance) ? user_maintenance : nil %>
+    <% end %>
+  </div>
+</div>

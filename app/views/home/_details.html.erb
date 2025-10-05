@@ -1,13 +1,5 @@
 <%= turbo_frame_tag "details_#{device_id}" do %>
-  <br>
-  <div class="car_container">
-    <div class="car_item"><%= msg %></div>
-    <% if info.status == 'offline' && info.category == 'motorcycle' %>
-      Ligue a ignição para acordar o rastreador.
-    <% else %>
-      <%= render 'home/btn_bloquear_desbloquear', device_id: device_id, status: status, state: state, info: info, user_maintenance: defined?(user_maintenance) ? user_maintenance : nil %>
-    <% end %>
-  </div>
+  <%= render 'home/details_status_content', device_id: device_id, status: status, msg: msg, info: info, state: state, user_maintenance: defined?(user_maintenance) ? user_maintenance : nil %>
   <br>
   <div class="car_container">
     <div class="car_item">

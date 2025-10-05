@@ -399,6 +399,8 @@ class HomeController < ApplicationController
     return "not_user" # se chegar aqui, é porque o evento é desbloquear e o motorista é diferente do que desbloqueou, então ele não pode bloquear
   end
 
+  helper_method :define_text, :define_state
+
   def get_info_device
     response = Traccar.get_info_device(params[:device_id])
 
