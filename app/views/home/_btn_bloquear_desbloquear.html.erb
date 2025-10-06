@@ -2,7 +2,7 @@
   <%= turbo_frame_tag "button_#{device_id}" do %>
     <% if status == 'online' %>
       <% if state == 'desbloquear' %>
-        <div contents data-controller="dialog">
+        <div contents data-controller="dialog checklist-maintenance">
           <button type="button" id="button_block_device_<%= device_id %>" class="btn btn--positive" data-action="dialog#showModal" disabled>Desbloquear</button>
 
           <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc" style="max-width: 600px; max-height: 80vh; overflow-y: auto;">
@@ -13,7 +13,7 @@
               </p>
 
               <%= form_with url: home_block_and_desblock_path, method: :post, local: false, 
-                          data: { turbo_stream: true }, 
+                          data: { turbo_stream: true, action: "submit->checklist-maintenance#beforeSubmit" }, 
                           html: { id: "checklist_form_desbloquear_#{device_id}" } do |f| %>
                 <%= hidden_field_tag :id, device_id %>
                 <%= hidden_field_tag :action_type, 'desbloquear' %>
@@ -34,7 +34,7 @@
           </dialog>
         </div>
       <% elsif state == 'bloquear' %>
-        <div contents data-controller="dialog">
+        <div contents data-controller="dialog checklist-maintenance">
           <button type="button" id="button_block_device_<%= device_id %>" class="btn btn--negative" data-action="dialog#showModal" disabled>Bloquear</button>
 
           <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc" style="max-width: 600px; max-height: 80vh; overflow-y: auto;">
@@ -45,7 +45,7 @@
               </p>
 
               <%= form_with url: home_block_and_desblock_path, method: :post, local: false, 
-                          data: { turbo_stream: true }, 
+                          data: { turbo_stream: true, action: "submit->checklist-maintenance#beforeSubmit" }, 
                           html: { id: "checklist_form_bloquear_#{device_id}" } do |f| %>
                 <%= hidden_field_tag :id, device_id %>
                 <%= hidden_field_tag :action_type, 'bloquear' %>
