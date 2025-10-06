@@ -123,6 +123,19 @@ class TraccarUpdateDevice
       locals: { detail: @detail }
     )
 
+    # Atualiza o botão de detalhes com o status correto
+    Turbo::StreamsChannel.broadcast_action_to(
+      "home_stream",
+      action: "replace",
+      target: "details_button_#{@detail.device_id}",
+      partial: "details/button_details",
+      locals: {
+        show_details: false,
+        device_id: @detail.device_id,
+        status: @detail.status
+      }
+    )
+
     # Atualiza o conteúdo de detalhes se estiver aberto (_details.html.erb e _btn_bloquear_desbloquear.html.erb)
     msg = StatusHelper.define_text(@detail, @detail.status)
     state = StatusHelper.define_state(@detail)

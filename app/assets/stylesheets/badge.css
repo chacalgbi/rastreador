@@ -38,3 +38,59 @@
   --badge-box-shadow: var(--shadow-sm);
   --badge-color: white;
 }
+
+/* Tooltip wrapper */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+  cursor: help;
+}
+
+.tooltip-wrapper::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: normal;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.tooltip-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 115%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Desktop: hover */
+.tooltip-wrapper:hover::before,
+.tooltip-wrapper:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mobile: click/touch */
+.tooltip-wrapper.active::before,
+.tooltip-wrapper.active::after {
+  opacity: 1;
+  visibility: visible;
+}

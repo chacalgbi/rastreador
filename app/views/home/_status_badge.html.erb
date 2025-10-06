@@ -8,7 +8,10 @@
       <%= image_tag "navigation-off.svg", size: 17, aria: { hidden: true } %>  Offline 
     </div>
     <div class="badge badge--negative">
-      <%= image_tag "timer.svg", size: 17, aria: { hidden: true } %> Última atualização: <%= detail.updated_at.getlocal("-03:00").strftime("%H:%M - %d/%m/%Y") %> 
+      <span class="tooltip-wrapper" data-tooltip="Última atualização">
+        <%= image_tag "timer.svg", size: 17, aria: { label: "Última atualização" } %>
+        <%= detail.updated_at.getlocal("-03:00").strftime("%H:%M - %d/%m/%Y") %> 
+      </span>
     </div>
   <% end %>
 </div>

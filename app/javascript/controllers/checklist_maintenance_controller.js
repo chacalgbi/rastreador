@@ -29,10 +29,7 @@ export default class extends Controller {
       const form = event.target
       const checklistContainer = form.querySelector('.checklist-container')
       if (checklistContainer) {
-        console.log('Removendo checklist container no submit...')
         checklistContainer.remove()
-      } else {
-        console.log('Checklist container já foi removido anteriormente (OK)')
       }
     }
   }
