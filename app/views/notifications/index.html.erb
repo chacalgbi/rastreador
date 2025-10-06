@@ -13,7 +13,6 @@
         <th>Whatsapp</th>
         <th>Email</th>
         <th>Telegram</th>
-        <th>Usuário</th>
         <th>Atualizado em</th>
         <th>Editar</th>
       </tr>
@@ -25,7 +24,6 @@
           <td><%= notification.whatsapp %></td>
           <td><%= notification.email %></td>
           <td><%= notification.telegram %></td>
-          <td><%= notification.user_id %></td>
           <td><%= notification.updated_at.strftime("%H:%M:%S %d/%m/%Y") %></td>
           <td>
             <%= link_to "#", notification, class: "btn btn--secondary" %>

@@ -1,0 +1,24 @@
+<div contents data-controller="dialog">
+  <button type="button" style="background: none; border: none; color: #cf692dff; font-size: 0.9rem; font-style: italic; text-decoration: underline; cursor: pointer; padding: 0;" data-action="dialog#showModal">Como receber alertas pelo Telegram?</button>
+
+  <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc">
+    <div class="dialog__content">
+      <h2 class="text-lg font-semibold leading-none mbe-2" id="dialog_label">Para receber alertas pelo Telegram, siga estas etapas:</h2>
+      <br>
+      <ol style="list-style-type: decimal; padding-left: 2rem; margin-left: 1rem;">
+        <li style="margin-bottom: 0.5rem;">Abra o aplicativo Telegram.</li>
+        <li style="margin-bottom: 0.5rem;">Pesquise pelo nosso bot: <strong style="color: #16a34a; font-weight: bold;">@RastreadoresBahiaEventos</strong>
+          <%= image_tag "telegram.jpg", size: 350, aria: { hidden: true }, style: "border-radius: 20px; margin-top: 0.9rem;" %>
+        </li>
+        <li style="margin-bottom: 0.5rem;">Inicie uma conversa e siga as instruções.</li>
+        <li style="margin-bottom: 0.5rem;">Digite o id do chat no campo "Telegram" deste formulário.</li>
+        <li style="margin-bottom: 0.5rem;">Salve as alterações.</li>
+      </ol>
+
+      <br>
+      <div class="flex items-center justify-end gap">
+        <button type="button" class="btn" data-action="click->dialog#close">Fechar</button>
+      </div>
+    </div>
+  </dialog>
+</div>

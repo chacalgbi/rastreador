@@ -14,6 +14,7 @@ class HomeController < ApplicationController
 
   def set_global_variables
     @user_admin = Current.user.admin?
+    @pessoal = Current.user&.pessoal?
   end
 
   def index

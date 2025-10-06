@@ -11,13 +11,4 @@
     <h4 class="font-medium leading-none text-lg">Telegram:</h4>
     <p class="leading-none ml-2"><%= notification.telegram %></p>
   </div>
-  <div class="flex gap-half items-center">
-    <h4 class="font-medium leading-none text-lg">Usuário:</h4>
-    <p class="leading-none ml-2">
-      <%= notification.user_id %>
-      <% if notification.user_id.present? && (user = User.find_by(id: notification.user_id)) %>
-        - <%= user.name %>
-      <% end %>
-    </p>
-  </div>
 </div>
