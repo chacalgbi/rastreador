@@ -45,7 +45,19 @@ namespace :solid_queue do
       invoke "solid_queue:start"
     end
   end
+
+  desc "Create deploy event in RailsPerformance"
+  task :create_deploy_event do
+    on roles(:app) do
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          execute "cd #{current_path} && /home/deploy/.rbenv/shims/bundle exec rails runner 'RailsPerformance.create_event(name: \"Deploy\", options: { borderColor: \"#00E396\", label: { borderColor: \"#00E396\", orientation: \"horizontal\", text: \"Deploy\" } })'"
+        end
+      end
+    end
+  end
 end
 
 # Hooks para rodar após cada deploy
 after "deploy:published", "solid_queue:restart"
+after "solid_queue:restart", "solid_queue:create_deploy_event"

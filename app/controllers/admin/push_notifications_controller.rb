@@ -83,6 +83,7 @@ class Admin::PushNotificationsController < Admin::BaseController
       )
 
       if subscription.save
+        create_log_rails_performance_subscription
         render json: { message: "Subscription successfully saved" }, status: :ok
       else
         render json: { error: "Error in storing subscription" }, status: :unprocessable_entity
@@ -97,5 +98,16 @@ class Admin::PushNotificationsController < Admin::BaseController
 
   def push_notification_params
     params.require(:push_notification).permit(:id, :title, :body, :created_at, :updated_at)
+  end
+
+  def create_log_rails_performance_subscription
+    RailsPerformance.create_event(name: "Subscription", options: {
+      borderColor: "#FFA500",
+      label: {
+        borderColor: "#FFA500",
+        orientation: "horizontal",
+        text: "Subscription"
+      }
+    })
   end
 end

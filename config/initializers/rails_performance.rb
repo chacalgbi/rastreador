@@ -24,7 +24,7 @@ if defined?(RailsPerformance)
     # protect your Performance Dashboard with HTTP BASIC password
     config.http_basic_authentication_enabled = true
     config.http_basic_authentication_user_name = ENV['JOB_USER']
-    config.http_basic_authentication_password = "#{ENV['JOB_PASS']}"
+    config.http_basic_authentication_password = ENV['JOB_PASS']
 
     # if you need an additional rules to check user permissions
     config.verify_access_proc = proc { |controller| true }

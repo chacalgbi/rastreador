@@ -53,6 +53,7 @@ gem 'rails_performance'
 gem "sys-filesystem"
 gem "sys-cpu"
 gem "get_process_mem"
+gem 'sweet_staging'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
