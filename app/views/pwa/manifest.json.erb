@@ -2,12 +2,14 @@
   "name": "<%= ENV['APPLICATION_NAME'] %>",
   "short_name": "<%= ENV['APPLICATION_NAME'] %>",
   "description": "Sistema de gerenciamento de veículos.",
+  "lang": "pt-BR",
   "start_url": "/",
   "display": "standalone",
   "scope": "/",
   "orientation": "portrait-primary",
-  "theme_color": "#000000",
-  "background_color": "#ffffff",
+  "categories": ["business", "productivity", "utilities"],
+  "theme_color": "#1f2937",
+  "background_color": "#999292ff",
   "icons": [
     {
       "src": "/<%= icon(ENV['SERVIDOR']) %>.png",
