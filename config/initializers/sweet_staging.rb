@@ -3,6 +3,8 @@ SweetStaging.setup do |config|
   config.fetch_timeout = 3000
   config.console = true
 
+  log_base_path = Rails.root.join("log")
+
   config.logs = [
     {
       name: "production.log",
