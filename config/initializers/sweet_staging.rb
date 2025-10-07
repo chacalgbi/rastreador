@@ -17,7 +17,7 @@ SweetStaging.setup do |config|
   config.logs = [
     {
       name: "production.log",
-      path: "#{log_base_path}/production.log"
+      path: "log/production.log"
     },
     {
       name: "Traccar",
