@@ -43,6 +43,60 @@ class Admin::NotificationsController < Admin::BaseController
     redirect_to admin_notifications_url, notice: "Notification was successfully destroyed."
   end
 
+  def test_email
+    email = params[:email]
+    if email.present?
+      result = Notify.email(email, "Teste de Email", "Esta é uma mensagem de teste do sistema de rastreamento.")
+
+      if result && result["erroGeral"] == "nao"
+        render json: { success: true, message: "Email de teste enviado com sucesso!", result: result }
+      else
+        error_msg = result && result["msg"] ? result["msg"] : "Erro ao enviar email"
+        render json: { success: false, message: "Falha ao enviar email: #{error_msg}", result: result }, status: :unprocessable_entity
+      end
+    else
+      render json: { success: false, message: "Por favor, informe um email válido." }, status: :unprocessable_entity
+    end
+  rescue StandardError => e
+    render json: { success: false, message: "Erro ao enviar email: #{e.message}" }, status: :unprocessable_entity
+  end
+
+  def test_whatsapp
+    whatsapp = params[:whatsapp]
+    if whatsapp.present?
+      result = Notify.whatsapp(whatsapp, "Teste de WhatsApp: Esta é uma mensagem de teste do sistema de rastreamento.")
+
+      if result && result["erroGeral"] == "nao"
+        render json: { success: true, message: "Mensagem de WhatsApp enviada com sucesso!", result: result }
+      else
+        error_msg = result && result["msg"] ? result["msg"] : "Erro ao enviar WhatsApp"
+        render json: { success: false, message: "Falha ao enviar WhatsApp: #{error_msg}", result: result }, status: :unprocessable_entity
+      end
+    else
+      render json: { success: false, message: "Por favor, informe um número de WhatsApp válido." }, status: :unprocessable_entity
+    end
+  rescue StandardError => e
+    render json: { success: false, message: "Erro ao enviar WhatsApp: #{e.message}" }, status: :unprocessable_entity
+  end
+
+  def test_telegram
+    telegram = params[:telegram]
+    if telegram.present?
+      result = Notify.telegram(telegram, "Teste de Telegram: Esta é uma mensagem de teste do sistema de rastreamento.")
+
+      if result && result["ok"] == true
+        render json: { success: true, message: "Mensagem de Telegram enviada com sucesso!", result: result }
+      else
+        error_msg = result && result["description"] ? result["description"] : "Erro ao enviar Telegram"
+        render json: { success: false, message: "Falha ao enviar Telegram: #{error_msg}", result: result }, status: :unprocessable_entity
+      end
+    else
+      render json: { success: false, message: "Por favor, informe um chat_id de Telegram válido." }, status: :unprocessable_entity
+    end
+  rescue StandardError => e
+    render json: { success: false, message: "Erro ao enviar Telegram: #{e.message}" }, status: :unprocessable_entity
+  end
+
   private
     def set_notification
       @notification = Notification.find(params[:id])

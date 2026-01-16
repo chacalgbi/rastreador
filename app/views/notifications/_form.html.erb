@@ -14,21 +14,127 @@
 
   <div class="flex flex-col items-start gap-half mbe-4">
     <%= form.label :whatsapp, class: "text-sm font-medium leading-none" %>
-    <%= form.textarea :whatsapp, class: "input" %>
+    <div class="flex gap-2 w-full">
+      <%= form.textarea :whatsapp, class: "input flex-1", id: "notification_whatsapp_field", rows: 2 %>
+      <button type="button" class="btn btn--primary" onclick="testWhatsApp()" title="Testar WhatsApp">
+        Testar
+      </button>
+    </div>
+    <div id="whatsapp_test_result" class="w-full"></div>
   </div>
 
   <div class="flex flex-col items-start gap-half mbe-4">
     <%= form.label :email, class: "text-sm font-medium leading-none" %>
-    <%= form.textarea :email, class: "input" %>
+    <div class="flex gap-2 w-full">
+      <%= form.textarea :email, class: "input flex-1", id: "notification_email_field", rows: 2 %>
+      <button type="button" class="btn btn--primary" onclick="testEmail()" title="Testar Email">
+        Testar
+      </button>
+    </div>
+    <div id="email_test_result" class="w-full"></div>
   </div>
 
   <div class="flex flex-col items-start gap-half mbe-4">
     <%= form.label :telegram, class: "text-sm font-medium leading-none" %>
     <%= render 'shared/help_telegram' %>
-    <%= form.textarea :telegram, class: "input" %>
+    <div class="flex gap-2 w-full">
+      <%= form.textarea :telegram, class: "input flex-1", id: "notification_telegram_field", rows: 2 %>
+      <button type="button" class="btn btn--primary" onclick="testTelegram()" title="Testar Telegram">
+        Testar
+      </button>
+    </div>
+    <div id="telegram_test_result" class="w-full"></div>
   </div>
 
   <div class="inline-flex items-center mbs-2 mie-1">
     <%= form.submit "Salvar", class: "btn btn--primary" %>
   </div>
 <% end %>
+
+<script>
+  function getCsrfToken() {
+    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  }
+
+  function showResult(elementId, message, isSuccess) {
+    const resultDiv = document.getElementById(elementId);
+    resultDiv.innerHTML = `<div class="alert ${isSuccess ? 'alert--positive' : 'alert--negative'} mbs-2 text-sm" role="alert" style="background-color: ${isSuccess ? '#d4edda' : '#f8d7da'}; color: ${isSuccess ? '#155724' : '#721c24'}; border: 1px solid ${isSuccess ? '#c3e6cb' : '#f5c6cb'}; padding: 0.75rem; border-radius: 0.25rem;">
+      ${message}
+    </div>`;
+    setTimeout(() => {
+      resultDiv.innerHTML = '';
+    }, 5000);
+  }
+
+  function testEmail() {
+    const email = document.getElementById('notification_email_field').value;
+    if (!email) {
+      showResult('email_test_result', 'Por favor, preencha o campo de email antes de testar.', false);
+      return;
+    }
+
+    fetch('<%= test_email_notifications_path %>', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': getCsrfToken()
+      },
+      body: JSON.stringify({ email: email })
+    })
+    .then(response => response.json())
+    .then(data => {
+      showResult('email_test_result', data.message, data.success);
+    })
+    .catch(error => {
+      showResult('email_test_result', 'Erro ao testar email: ' + error, false);
+    });
+  }
+
+  function testWhatsApp() {
+    const whatsapp = document.getElementById('notification_whatsapp_field').value;
+    if (!whatsapp) {
+      showResult('whatsapp_test_result', 'Por favor, preencha o campo de WhatsApp antes de testar.', false);
+      return;
+    }
+
+    fetch('<%= test_whatsapp_notifications_path %>', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': getCsrfToken()
+      },
+      body: JSON.stringify({ whatsapp: whatsapp })
+    })
+    .then(response => response.json())
+    .then(data => {
+      showResult('whatsapp_test_result', data.message, data.success);
+    })
+    .catch(error => {
+      showResult('whatsapp_test_result', 'Erro ao testar WhatsApp: ' + error, false);
+    });
+  }
+
+  function testTelegram() {
+    const telegram = document.getElementById('notification_telegram_field').value;
+    if (!telegram) {
+      showResult('telegram_test_result', 'Por favor, preencha o campo de Telegram antes de testar.', false);
+      return;
+    }
+
+    fetch('<%= test_telegram_notifications_path %>', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': getCsrfToken()
+      },
+      body: JSON.stringify({ telegram: telegram })
+    })
+    .then(response => response.json())
+    .then(data => {
+      showResult('telegram_test_result', data.message, data.success);
+    })
+    .catch(error => {
+      showResult('telegram_test_result', 'Erro ao testar Telegram: ' + error, false);
+    });
+  }
+</script>

@@ -11,24 +11,45 @@
   <div class="form-group row mb-2">
     <%= form.label :whatsapp, class: "form-label col-md-3 col-form-label" %>
     <div class="col-md px-0">
-      <%= form.textarea :whatsapp, class: "form-control" %>
+      <div class="input-group">
+        <%= form.textarea :whatsapp, class: "form-control", id: "notification_whatsapp_field", rows: 2 %>
+        <button type="button" class="btn btn-primary" onclick="testWhatsApp()" title="Testar WhatsApp">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 20l1.3 -3.9a9 8 0 1 1 3.4 2.9l-4.7 1" /><path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" /></svg>
+          Testar
+        </button>
+      </div>
       <%= tag.div notification.errors[:whatsapp].first, class: "invalid-feedback" %>
+      <div id="whatsapp_test_result" class="mt-1"></div>
     </div>
   </div>
 
   <div class="form-group row mb-2">
     <%= form.label :email, class: "form-label col-md-3 col-form-label" %>
     <div class="col-md px-0">
-      <%= form.textarea :email, class: "form-control" %>
+      <div class="input-group">
+        <%= form.textarea :email, class: "form-control", id: "notification_email_field", rows: 2 %>
+        <button type="button" class="btn btn-primary" onclick="testEmail()" title="Testar Email">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="5" width="18" height="14" rx="2" /><polyline points="3 7 12 13 21 7" /></svg>
+          Testar
+        </button>
+      </div>
       <%= tag.div notification.errors[:email].first, class: "invalid-feedback" %>
+      <div id="email_test_result" class="mt-1"></div>
     </div>
   </div>
 
   <div class="form-group row mb-2">
     <%= form.label :telegram, class: "form-label col-md-3 col-form-label" %>
     <div class="col-md px-0">
-      <%= form.textarea :telegram, class: "form-control" %>
+      <div class="input-group">
+        <%= form.textarea :telegram, class: "form-control", id: "notification_telegram_field", rows: 2 %>
+        <button type="button" class="btn btn-primary" onclick="testTelegram()" title="Testar Telegram">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4" /></svg>
+          Testar
+        </button>
+      </div>
       <%= tag.div notification.errors[:telegram].first, class: "invalid-feedback" %>
+      <div id="telegram_test_result" class="mt-1"></div>
     </div>
   </div>
 
@@ -37,3 +58,91 @@
     <%= link_to "Cancelar", admin_notifications_path, class: "btn btn-white" %>
   </div>
 <% end %>
+
+<script>
+  function getCsrfToken() {
+    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  }
+
+  function showResult(elementId, message, isSuccess) {
+    const resultDiv = document.getElementById(elementId);
+    resultDiv.innerHTML = `<div class="alert alert-${isSuccess ? 'success' : 'danger'} alert-dismissible" role="alert">
+      <div class="d-flex">
+        <div>${message}</div>
+      </div>
+      <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+    </div>`;
+  }
+
+  function testEmail() {
+    const email = document.getElementById('notification_email_field').value;
+    if (!email) {
+      showResult('email_test_result', 'Por favor, preencha o campo de email antes de testar.', false);
+      return;
+    }
+
+    fetch('<%= test_email_admin_notifications_path %>', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': getCsrfToken()
+      },
+      body: JSON.stringify({ email: email })
+    })
+    .then(response => response.json())
+    .then(data => {
+      showResult('email_test_result', data.message, data.success);
+    })
+    .catch(error => {
+      showResult('email_test_result', 'Erro ao testar email: ' + error, false);
+    });
+  }
+
+  function testWhatsApp() {
+    const whatsapp = document.getElementById('notification_whatsapp_field').value;
+    if (!whatsapp) {
+      showResult('whatsapp_test_result', 'Por favor, preencha o campo de WhatsApp antes de testar.', false);
+      return;
+    }
+
+    fetch('<%= test_whatsapp_admin_notifications_path %>', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': getCsrfToken()
+      },
+      body: JSON.stringify({ whatsapp: whatsapp })
+    })
+    .then(response => response.json())
+    .then(data => {
+      showResult('whatsapp_test_result', data.message, data.success);
+    })
+    .catch(error => {
+      showResult('whatsapp_test_result', 'Erro ao testar WhatsApp: ' + error, false);
+    });
+  }
+
+  function testTelegram() {
+    const telegram = document.getElementById('notification_telegram_field').value;
+    if (!telegram) {
+      showResult('telegram_test_result', 'Por favor, preencha o campo de Telegram antes de testar.', false);
+      return;
+    }
+
+    fetch('<%= test_telegram_admin_notifications_path %>', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': getCsrfToken()
+      },
+      body: JSON.stringify({ telegram: telegram })
+    })
+    .then(response => response.json())
+    .then(data => {
+      showResult('telegram_test_result', data.message, data.success);
+    })
+    .catch(error => {
+      showResult('telegram_test_result', 'Erro ao testar Telegram: ' + error, false);
+    });
+  }
+</script>

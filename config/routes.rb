@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   mount MissionControl::Jobs::Engine, at: "/jobs"
-  resources :notifications
+  resources :notifications do
+    post 'test_email', on: :collection
+    post 'test_whatsapp', on: :collection
+    post 'test_telegram', on: :collection
+  end
   namespace :admin do
     flipper_app = Flipper::UI.app do |builder|
       builder.use Rack::Auth::Basic do |user, password|
@@ -26,7 +30,11 @@ Rails.application.routes.draw do
     resources :batteries do
       delete 'destroy_old_batteries', on: :collection
     end
-    resources :notifications
+    resources :notifications do
+      post 'test_email', on: :collection
+      post 'test_whatsapp', on: :collection
+      post 'test_telegram', on: :collection
+    end
     resources :push_subscriptions do
       post "send_notification", on: :member
     end
