@@ -44,6 +44,19 @@ class Admin::BatteriesController < Admin::BaseController
     redirect_to admin_batteries_url, notice: "Battery was successfully destroyed."
   end
 
+  def destroy_old_batteries
+    if params[:delete_before_date].present?
+      delete_before_date = params[:delete_before_date].to_datetime
+      deleted_count = Battery.where("updated_at < ?", delete_before_date).delete_all
+
+      redirect_to admin_batteries_url, notice: "#{deleted_count} registro(s) de bateria foram deletados com sucesso."
+    else
+      redirect_to admin_batteries_url, alert: "Por favor, selecione uma data válida."
+    end
+  rescue ArgumentError
+    redirect_to admin_batteries_url, alert: "Data inválida. Por favor, selecione uma data válida."
+  end
+
   private
     def set_battery
       @battery = Battery.find(params[:id])

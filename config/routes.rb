@@ -23,7 +23,9 @@ Rails.application.routes.draw do
       delete 'destroy_old_events', on: :collection
     end
     resources :commands
-    resources :batteries
+    resources :batteries do
+      delete 'destroy_old_batteries', on: :collection
+    end
     resources :notifications
     resources :push_subscriptions do
       post "send_notification", on: :member
