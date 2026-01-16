@@ -16,7 +16,33 @@ export default class extends Controller {
   }
 
   connect() {
+    // Gera um ID único para esta notificação baseado no deviceId, event e timestamp
+    const notificationId = `${this.deviceidValue}-${this.eventValue}-${Date.now()}`;
+
+    // Verifica se já existe uma notificação com este ID nos últimos 500ms
+    if (this.constructor.recentNotifications?.has(notificationId.split('-').slice(0, 2).join('-'))) {
+      return; // Evita notificação duplicada
+    }
+
+    // Inicializa o Set de notificações recentes se não existir
+    if (!this.constructor.recentNotifications) {
+      this.constructor.recentNotifications = new Set();
+    }
+
+    // Adiciona ao Set e remove após 500ms
+    const baseId = `${this.deviceidValue}-${this.eventValue}`;
+    this.constructor.recentNotifications.add(baseId);
+
+    setTimeout(() => {
+      this.constructor.recentNotifications.delete(baseId);
+    }, 500);
+
     this.showNotification();
+  }
+
+  disconnect() {
+    // Garante limpeza ao desconectar o controller
+    this.element.dataset.notificationConnected = 'false';
   }
 
   showNotification() {
@@ -44,7 +70,7 @@ export default class extends Controller {
       Veículo:${this.vehicleValue}
       Evento:${this.eventValue}`,
       {
-        autoHideDelay: 15000,
+        autoHideDelay: 10000,
         className: notificationtype
       });
       // Relé:${this.relayValue} Ign:${this.ignitionValue} Odm:${this.odometroValue} Bateria:${this.batteryValue} Gsm:${this.signalgsmValue} Gps:${this.signalgpsValue}
