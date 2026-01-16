@@ -44,6 +44,19 @@ class Admin::EventsController < Admin::BaseController
     redirect_to admin_events_url, notice: "Event was successfully destroyed."
   end
 
+  def destroy_old_events
+    if params[:delete_before_date].present?
+      delete_before_date = params[:delete_before_date].to_datetime
+      deleted_count = Event.where("updated_at < ?", delete_before_date).delete_all
+
+      redirect_to admin_events_url, notice: "#{deleted_count} evento(s) foram deletados com sucesso."
+    else
+      redirect_to admin_events_url, alert: "Por favor, selecione uma data válida."
+    end
+  rescue ArgumentError
+    redirect_to admin_events_url, alert: "Data inválida. Por favor, selecione uma data válida."
+  end
+
   private
     def set_event
       @event = Event.find(params[:id])
