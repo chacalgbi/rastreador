@@ -149,7 +149,7 @@ class Admin::CommandsController < Admin::BaseController
           results << "(#{device_id}, ERRO: Número de celular não encontrado)"
           next
         end
-        response = SendSms.send(cell_number, comando, device_id)
+        response = SendSms.send(cell_number, comando, device_id, 'COMMAND')
         results << "(#{device_id}, #{response})"
       rescue => e
         results << "(#{device_id}, ERRO: #{e.message})"

@@ -35,14 +35,26 @@ class EventController < PublicController
 
   def build_sms
     result = params[:message].split('_')
-    response = result[0] == '1' ? 'Sucesso' : 'Falha' # status do envio do sms pelo ESP12-E
-    tag = result[0] == '1' ? '🟢' : '🔴'
-    detail = Detail.find_by(device_id: result[1])
-    comando = result[2] # comando enviado
+    status = result[0] == '1' ? '🟢' : '🔴' # '1' para sucesso, '0' para falha
+    response = result[0] == '1' ? 'Sucesso' : 'Falha'
+    celular = result[1]
+    device_id = result[2]
+    message = result[3] # comando ou mensagem enviada
+    servidor = result[4] # LOCAL, CTE, QA
+    type = result[5] # GENERIC ou COMMAND
+    status_message = result[6] # mensagem de sucesso ou falha do envio do sms
+    log_msg = "#{status} #{type} | Status: #{response} | Mensagem: #{message} | Número: #{celular} | Servidor: #{servidor} | Detalhe: #{status_message}"
+
+    if type == 'GENERIC'
+      SaveLog.new('enviar_sms', log_msg).save
+      return
+    end
+
+    detail = Detail.find_by(device_id: device_id)
 
     return if detail.nil?
 
-    msg = "#{tag} RESPOSTA SMS >> Status: #{response} | Comando: #{comando} | Veículo #{detail.device_name}(#{detail.device_id}) | Número: #{detail.cell_number}"
+    msg = "#{log_msg} | Veículo #{detail.device_name}(#{detail.device_id})"
     SaveLog.new('enviar_sms', msg).save
 
     Event.create(
@@ -54,8 +66,9 @@ class EventController < PublicController
       message: msg
     )
 
+    true
   rescue StandardError => e
-    error_message = "EventController.build_sms | | Error: #{e.message}\nBacktrace:\n#{e.backtrace.first(5).join("\n")}"
+    error_message = "EventController.build_sms | | Error: #{e.message}\nBacktrace:\n#{e.backtrace.first(6).join("\n")}"
     Rails.logger.error(error_message)
     SaveLog.new('error', error_message).save
     nil
