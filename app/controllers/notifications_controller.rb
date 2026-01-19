@@ -113,6 +113,24 @@ class NotificationsController < ApplicationController
     render json: { success: false, message: "Erro ao enviar Telegram: #{e.message}" }, status: :unprocessable_entity
   end
 
+  def test_sms
+    sms = params[:sms]
+    if sms.present?
+      result = SendSms.send(sms, "Teste de SMS: Esta é uma mensagem de teste do sistema de rastreamento.", '1', 'GENERIC')
+
+      if result && result["erroGeral"] == "nao"
+        render json: { success: true, message: "Mensagem de SMS enviada com sucesso!", result: result }
+      else
+        error_msg = result && result["msg"] ? result["msg"] : "Erro ao enviar SMS"
+        render json: { success: false, message: "Falha ao enviar SMS: #{error_msg}", result: result }, status: :unprocessable_entity
+      end
+    else
+      render json: { success: false, message: "Por favor, informe um número de telefone válido." }, status: :unprocessable_entity
+    end
+  rescue StandardError => e
+    render json: { success: false, message: "Erro ao enviar SMS: #{e.message}" }, status: :unprocessable_entity
+  end
+
   private
 
   def set_notification
@@ -120,7 +138,7 @@ class NotificationsController < ApplicationController
   end
 
   def notification_params
-    params.require(:notification).permit(:whatsapp, :email, :telegram)
+    params.require(:notification).permit(:whatsapp, :email, :telegram, :sms)
   end
 
   def check_main_or_pessoal_user

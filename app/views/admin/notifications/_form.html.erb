@@ -53,6 +53,21 @@
     </div>
   </div>
 
+  <div class="form-group row mb-2">
+    <%= form.label :sms, class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <div class="input-group">
+        <%= form.textarea :sms, class: "form-control", id: "notification_sms_field", rows: 2 %>
+        <button type="button" class="btn btn-primary" onclick="testSms()" title="Testar SMS">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 20l1.5 -4.5a7 7 0 1 1 3 3l-4.5 1.5" /><path d="M9 10h.01" /><path d="M15 10h.01" /><path d="M9.5 15a3.5 3.5 0 0 0 5 0" /></svg>
+          Testar
+        </button>
+      </div>
+      <%= tag.div notification.errors[:sms].first, class: "invalid-feedback" %>
+      <div id="sms_test_result" class="mt-1"></div>
+    </div>
+  </div>
+
   <div class="form-footer">
     <%= form.submit class: "btn btn-primary" %>
     <%= link_to "Cancelar", admin_notifications_path, class: "btn btn-white" %>
@@ -143,6 +158,30 @@
     })
     .catch(error => {
       showResult('telegram_test_result', 'Erro ao testar Telegram: ' + error, false);
+    });
+  }
+
+  function testSms() {
+    const sms = document.getElementById('notification_sms_field').value;
+    if (!sms) {
+      showResult('sms_test_result', 'Por favor, preencha o campo de SMS antes de testar.', false);
+      return;
+    }
+
+    fetch('<%= test_sms_admin_notifications_path %>', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': getCsrfToken()
+      },
+      body: JSON.stringify({ sms: sms })
+    })
+    .then(response => response.json())
+    .then(data => {
+      showResult('sms_test_result', data.message, data.success);
+    })
+    .catch(error => {
+      showResult('sms_test_result', 'Erro ao testar SMS: ' + error, false);
     });
   }
 </script>

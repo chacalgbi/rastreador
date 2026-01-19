@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     post 'test_email', on: :collection
     post 'test_whatsapp', on: :collection
     post 'test_telegram', on: :collection
+    post 'test_sms', on: :collection
   end
   namespace :admin do
     flipper_app = Flipper::UI.app do |builder|
@@ -34,6 +35,7 @@ Rails.application.routes.draw do
       post 'test_email', on: :collection
       post 'test_whatsapp', on: :collection
       post 'test_telegram', on: :collection
+      post 'test_sms', on: :collection
     end
     resources :push_subscriptions do
       post "send_notification", on: :member
