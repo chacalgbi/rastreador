@@ -3,38 +3,6 @@ require 'uri'
 require 'json'
 
 class SendSms
-  # def self.send_sms(cell, message, device_id)
-  #   # Este método usa o mqtt para enviar sms pelo ESP8266 e o SIM800L
-  #   # Ele envia para http://ip_de_qa:8087/sms_rastreador que por sua vez envia para o broker mqtt
-  #   # no tópico '/mini_monit/device4550/terminal_IN' a mensagem abaixo.
-  #   # No esp8266 ele verifica se a mensagem começa com 'sms_rastreador:' e envia o sms
-  #   # caso o módulo SIM800L envie a mensagem ele responde no tópico '/rastreadores/sms_response'
-  #   # Dentro do node ele recebe a resposta e trata sucesso/erro e manda o webHook para os endereços abaixo:
-  #   # API_WEBHOOK_LOCAL = 'http://127.0.0.1:3000/event/webhook_traccar_sms' # LOCALHOST
-  #   # API_WEBHOOK_CTE = 'https://url_cte/event/webhook_traccar_sms' # PRODUCAO CTE
-  #   # API_WEBHOOK_QA = 'https://url_qa/event/webhook_traccar_sms' # PRODUCAO QA
-  #   payload = {
-  #     message: "#{cell}_#{message}_#{device_id}_#{ENV["SERVIDOR"]}"
-  #   }
-
-  #   uri = URI("#{ENV["SMS_API_URL"]}/sms_rastreador")
-  #   http = Net::HTTP.new(uri.host, uri.port)
-  #   http.use_ssl = false
-  #   request = Net::HTTP::Post.new(uri.path, { 'Content-Type' => 'application/json' })
-  #   request.body = payload.to_json
-  #   response = http.request(request)
-
-  #   if response.is_a?(Net::HTTPSuccess)
-  #     log("send_sms SUCESSO | Response: #{response.code.to_i}")
-  #   else
-  #     log("send_sms ERRO | #{response.code} #{response.body}")
-  #   end
-
-  #   SaveLog.new('enviar_sms', "Payload: #{payload[:message]} Response: #{response.code} #{response.body}").save
-
-  #   response.code.to_i
-  # end
-
   def self.send(cell, message, device_id, type)
     # type deve ter dois valores: "GENERIC ou COMMAND" para indicar que é uma mensagem genérica, ou seja sem salvar na tabela
     # de retorno no EVENTS de um veículo específico. será apenas salvo o log.
@@ -46,7 +14,7 @@ class SendSms
     # O Node.js recebe na rota /alertaSms e publica na fila /thome_lucas/send_sms
     # O celular sansung com o termux instalado fica escutando essa fila e envia o sms
     # Devolve o callback na fila mqtt /rastreadores/sms_response
-    # Um serviço node.js no servidor de QA escuta essa fila e manda o webHook para o WebHook definido.
+    # Um serviço node.js no servidor de QA (rastreador.js) escuta essa fila e manda para o WebHook definido no .env.
     # Padrão da mensagem de callback: "status_celular_deviceid_message_servidor_type_statusMessage"
 
     begin

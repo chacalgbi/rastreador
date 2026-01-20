@@ -6,31 +6,14 @@ require 'cgi'
 class Notify
 
   def self.email(email, titulo, corpo)
-    payload = {
-      email: email,
-      titulo: titulo,
-      corpo: corpo,
-      identidade: "Notify.email #{email}",
-      userAdmin: ENV["NOTIFY_USER"],
-      passAdmin: ENV["NOTIFY_PASS"]
-    }
-
-    uri = URI(ENV["NOTIFY_EMAIL"])
-    http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Post.new(uri.path, { 'Content-Type' => 'application/json' })
-    request.body = payload.to_json
-    response = http.request(request)
-    data = JSON.parse(response.body)
-
-    if response.is_a?(Net::HTTPSuccess)
-      log("email SUCCESS | Enviado para #{email}")
-    else
-      log_msg = "email ERRO | Email: #{email}, Msg: #{corpo}, Response_code: #{response.code}, Response_body: #{data}"
-      log(log_msg)
-      SaveLog.new('notify_error', "Notify.#{log_msg}").save
-    end
-
-    data
+    NotifyMailer.notify(email, titulo, corpo).deliver_later
+    log("email SUCCESS | Enviado para #{email}")
+    { "erroGeral" => "nao", "msg" => "Email enviado com sucesso" }
+  rescue StandardError => e
+    msg = "email ERRO | To: #{email}, Title: #{titulo}, Body: #{corpo}, Exception: #{e.message} | #<#{e.backtrace.first(6).join("\n")}>"
+    log(msg)
+    SaveLog.new('notify_error', "Notify.#{msg}").save
+    { "erroGeral" => "sim", "msg" => "Erro ao enviar email: #{e.message}" }
   end
 
   def self.telegram(chat_id, corpo)

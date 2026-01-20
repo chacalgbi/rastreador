@@ -1,5 +1,5 @@
 class NotifyMailer < ApplicationMailer
-  default from: "envio@dealerta.com.br"
+  default from: "#{ENV['APPLICATION_NAME']} <#{ENV['EMAIL']}>"
 
   def notify(email, title, body)
     @body = body
