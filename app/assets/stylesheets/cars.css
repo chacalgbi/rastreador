@@ -59,7 +59,19 @@
   border-color: #10b981;
 }
 
-/* Estilos específicos para containers de veículos na lista */
 .car_container:has(.car_item_list .checkbox) {
   margin-bottom: 8px;
+}
+
+.map-container {
+  height: 400px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .map-container {
+    height: 300px;
+  }
 }

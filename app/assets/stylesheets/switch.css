@@ -34,3 +34,23 @@
     cursor: not-allowed; opacity: var(--opacity-50);
   }
 }
+
+.switch--green {
+  background-color: #fa6b6b;
+
+  &::before {
+    background-color: #ffffff;
+  }
+
+  &:checked {
+    background-color: #10b981;
+  }
+
+  &:checked::before {
+    background-color: #ffffff;
+  }
+
+  &:focus-visible {
+    outline: var(--border-2) solid #059669;
+  }
+}

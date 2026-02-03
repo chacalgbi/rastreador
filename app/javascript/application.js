@@ -4,8 +4,10 @@ import "controllers"
 import "jquery"
 import "notify"
 import "sweetalert2"
+import * as L from "leaflet"
 
 window.jQuery = window.$ = jQuery;
+window.L = L;
 
 import "echarts"
 

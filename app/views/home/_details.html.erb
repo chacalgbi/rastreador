@@ -9,7 +9,7 @@
     </div>
     <div class="car_item">
       <%= link_to home_location_path(car_id: device_id, url: info.url), class: "btn", data: { turbo_stream: true, turbo_prefetch: false } do %>
-        Localização
+        Ver no Google Maps
       <% end %>
     </div>
   </div>
@@ -71,4 +71,27 @@
     </div>
   </div>
 
+  <div data-controller="map-toggle">
+    <div class="car_container" style="justify-content: flex-start; padding: 8px 0;">
+      <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+        <input type="checkbox" class="switch switch--green" data-action="change->map-toggle#toggle" data-map-toggle-target="checkbox">
+        <span>Mostrar veículo no Mapa</span>
+      </label>
+    </div>
+
+    <% coords = info.url.to_s.match(/q=(-?\d+\.?\d*),(-?\d+\.?\d*)/) %>
+    <% lat = coords ? coords[1] : "-14.225129" %>
+    <% lng = coords ? coords[2] : "-42.784456" %>
+
+    <div id="map"
+         class="map-container"
+         style="display: none;"
+         data-controller="map"
+         data-map-latitude-value="<%= lat %>"
+         data-map-longitude-value="<%= lng %>"
+         data-map-zoom-value="16"
+         data-map-popup-value="<%= info.device_name %>"
+         data-map-toggle-target="map">
+    </div>
+  </div>
 <% end %>

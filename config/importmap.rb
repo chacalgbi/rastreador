@@ -9,3 +9,4 @@ pin "notify", to: "notify.js"
 pin "sweetalert2", to: "https://ga.jspm.io/npm:sweetalert2@11.14.4/dist/sweetalert2.all.js"
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin "echarts", to: "echarts.min.js"
+pin "leaflet" # @1.9.4
