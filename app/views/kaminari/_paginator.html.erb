@@ -1,15 +1,9 @@
 <%= paginator.render do -%>
-  <nav class="flex items-center justify-between">
-    <div class="flex-1 flex justify-between sm:hidden">
-      <%= prev_page_tag unless current_page.first? %>
-      <%= next_page_tag unless current_page.last? %>
-    </div>
-
-    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+  <nav class="flex items-center justify-end">
+    <div class="flex-1 flex items-center justify-between">
       <div>
         <p class="text-bg text-gray-700">
-          Página <span class="font-medium"><%= current_page.number %></span> de 
-          <span class="font-medium"><%= total_pages %></span>
+          Página <span class="font-medium"><%= current_page.number %></span> de <span class="font-medium"><%= total_pages %></span>
         </p>
       </div>
 
