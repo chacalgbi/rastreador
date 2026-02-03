@@ -27,8 +27,8 @@ pt-BR:
           zero: Nenhum %{entry_name} encontrado
   views:
     pagination:
-      first: "&laquo; Primeiro"
-      last: "Último &raquo;"
-      next: Próximo &rsaquo;
-      previous: "&lsaquo; Anterior"
+      first: "&laquo; Pri"
+      last: "Últ &raquo;"
+      next: Pró &rsaquo;
+      previous: "&lsaquo; Ant"
       truncate: "&hellip;"
