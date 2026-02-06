@@ -4,14 +4,14 @@ if defined?(RailsPerformance)
     config.redis = Redis.new(url: ENV["REDIS_URL"].presence || "redis://127.0.0.1:6379/0")
 
     # All data we collect
-    config.duration = 8.hours
+    config.duration = 7.days
 
     # Recent Requests configuration
-    config.recent_requests_time_window = 60.minutes
+    config.recent_requests_time_window = 7.days
     # config.recent_requests_limit = nil # number of recent requests
 
     # Slow Requests configuration
-    config.slow_requests_time_window = 4.hours
+    config.slow_requests_time_window = 7.days
     # config.slow_requests_limit = 500 # number of slow requests
     config.slow_requests_threshold = 500 # ms
 
