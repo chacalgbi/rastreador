@@ -85,6 +85,7 @@ Rails.application.routes.draw do
   post "home/odometro"
   post "home/block_and_desblock"
   post "home/acordar_rastreador"
+  post "home/toggle_layout"
   post "event/webhook_traccar"
   post "event/webhook_traccar_sms"
   # resources :registrations, only: [:new, :create] # Removido para desabilitar auto-registro

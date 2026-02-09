@@ -1,0 +1,92 @@
+<!-- https://lucide.dev/icons/ -->
+<% if info.model == 'xt40' %>
+  <div class="telemetry-grid">
+    <%= button_tag class: "telemetry-item", data: { field: "signal_gps", value: info.signal_gps, device_id: info.device_id } do %>
+      <%= image_tag "satellite-dish.svg", size: 18, aria: { hidden: true } %>
+      <span>
+        <span class="telemetry-item__label">GPS</span>
+        <span class="telemetry-item__value"><%= info.signal_gps %></span>
+      </span>
+    <% end %>
+    <%= button_tag class: "telemetry-item", data: { field: "signal_gsm", value: info.signal_gsm, device_id: info.device_id } do %>
+      <%= image_tag "card-sim.svg", size: 18, aria: { hidden: true } %>
+      <span>
+        <span class="telemetry-item__label">GSM</span>
+        <span class="telemetry-item__value"><%= info.signal_gsm %></span>
+      </span>
+    <% end %>
+    <%= button_tag class: "telemetry-item", data: { field: "odometro", value: info.odometro, device_id: info.device_id } do %>
+      <%= image_tag "arrow-up-from-dot.svg", size: 18, aria: { hidden: true } %>
+      <span>
+        <span class="telemetry-item__label">Odômetro</span>
+        <span class="telemetry-item__value"><%= info.odometro %></span>
+      </span>
+    <% end %>
+    <%= button_tag class: "telemetry-item", data: { field: "horimetro", value: info.horimetro, device_id: info.device_id } do %>
+      <%= image_tag "timer.svg", size: 18, aria: { hidden: true } %>
+      <span>
+        <span class="telemetry-item__label">Horímetro</span>
+        <span class="telemetry-item__value"><%= info.horimetro %></span>
+      </span>
+    <% end %>
+    <%= button_tag class: "telemetry-item", data: { field: "ignition", value: info.ignition, device_id: info.device_id } do %>
+      <%= image_tag "key-square.svg", size: 18, aria: { hidden: true } %>
+      <span>
+        <span class="telemetry-item__label">Ignição</span>
+        <span class="telemetry-item__value"><%= info.ignition %></span>
+      </span>
+    <% end %>
+    <%= button_tag class: "telemetry-item", data: { field: "battery", value: info.battery, device_id: info.device_id } do %>
+      <%= image_tag "battery-charging.svg", size: 18, aria: { hidden: true } %>
+      <span>
+        <span class="telemetry-item__label">Bateria</span>
+        <span class="telemetry-item__value"><%= info.battery %>v</span>
+      </span>
+    <% end %>
+    <%= button_tag class: "telemetry-item", data: { field: "bat_bck", value: info.bat_bck, device_id: info.device_id } do %>
+      <%= image_tag "battery-medium.svg", size: 18, aria: { hidden: true } %>
+      <span>
+        <span class="telemetry-item__label">Backup</span>
+        <span class="telemetry-item__value"><%= info.bat_bck %>v</span>
+      </span>
+    <% end %>
+    <%= button_tag class: "telemetry-item", data: { field: "network", value: info.network, device_id: info.device_id } do %>
+      <%= image_tag "radio-tower.svg", size: 18, aria: { hidden: true } %>
+      <span>
+        <span class="telemetry-item__label">Rede</span>
+        <span class="telemetry-item__value"><%= info.network %></span>
+      </span>
+    <% end %>
+  </div>
+<% else %>
+  <div class="telemetry-grid">
+    <%= button_tag class: "telemetry-item" do %>
+      <%= image_tag "battery-medium.svg", size: 18, aria: { hidden: true } %>
+      <span>
+        <span class="telemetry-item__label">Backup</span>
+        <span class="telemetry-item__value"><%= info.bat_bck %>v</span>
+      </span>
+    <% end %>
+    <%= button_tag class: "telemetry-item" do %>
+      <%= image_tag "arrow-up-from-dot.svg", size: 18, aria: { hidden: true } %>
+      <span>
+        <span class="telemetry-item__label">Odômetro</span>
+        <span class="telemetry-item__value"><%= info.odometro %>m</span>
+      </span>
+    <% end %>
+    <%= button_tag class: "telemetry-item" do %>
+      <%= image_tag "key-square.svg", size: 18, aria: { hidden: true } %>
+      <span>
+        <span class="telemetry-item__label">Ignição</span>
+        <span class="telemetry-item__value"><%= info.ignition %></span>
+      </span>
+    <% end %>
+    <%= button_tag class: "telemetry-item" do %>
+      <%= image_tag "battery-charging.svg", size: 18, aria: { hidden: true } %>
+      <span>
+        <span class="telemetry-item__label">Bateria</span>
+        <span class="telemetry-item__value"><%= info.battery %>v</span>
+      </span>
+    <% end %>
+  </div>
+<% end %>

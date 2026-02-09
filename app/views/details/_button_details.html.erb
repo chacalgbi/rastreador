@@ -1,11 +1,26 @@
-<% if show_details %>
-  <%= link_to home_hide_details_path(device_id: device_id, status: status), class: "btn", data: { turbo_stream: true } do %>
-    <%= image_tag "undo-2.svg", size: 20, aria: { hidden: true } %>
-    <span>Ocultar</span>
+<div class="layout-v1">
+  <% if show_details %>
+    <%= link_to home_hide_details_path(device_id: device_id, status: status), class: "btn", data: { turbo_stream: true } do %>
+      <%= image_tag "undo-2.svg", size: 20, aria: { hidden: true } %>
+      <span>Ocultar</span>
+    <% end %>
+  <% else %>
+    <%= link_to home_details_path(device_id: device_id, status: status), class: "btn", data: { turbo_stream: true }, onclick: "this.querySelector('span').innerText = 'Aguarde...'" do %>
+      <%= image_tag "select-arrow.svg", size: 25, aria: { hidden: true } %>
+      <span>Detalhes</span>
+    <% end %>
   <% end %>
-<% else %>
-  <%= link_to home_details_path(device_id: device_id, status: status), class: "btn", data: { turbo_stream: true }, onclick: "this.querySelector('span').innerText = 'Aguarde...'" do %>
-    <%= image_tag "select-arrow.svg", size: 25, aria: { hidden: true } %>
-    <span>Detalhes</span>
+</div>
+<div class="layout-v2">
+  <% if show_details %>
+    <%= link_to home_hide_details_path(device_id: device_id, status: status), class: "btn btn--secondary", style: "font-size: 0.8rem;", data: { turbo_stream: true } do %>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      <span>Ocultar</span>
+    <% end %>
+  <% else %>
+    <%= link_to home_details_path(device_id: device_id, status: status), class: "btn", style: "font-size: 0.8rem;", data: { turbo_stream: true }, onclick: "this.querySelector('span').innerText = 'Aguarde...'" do %>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <span>Detalhes</span>
+    <% end %>
   <% end %>
-<% end %>
+</div>

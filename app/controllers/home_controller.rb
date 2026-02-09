@@ -15,11 +15,33 @@ class HomeController < ApplicationController
   def set_global_variables
     @user_admin = Current.user.admin?
     @pessoal = Current.user&.pessoal?
+    @layout_version = Current.user&.respond_to?(:layout_version) ? Current.user.layout_version : 'v1'
+  end
+
+  # Helper para resolver o path do partial conforme a versão do layout
+  def resolve_partial(base_partial)
+    if @layout_version == 'v2'
+      # Tenta o caminho v2, ex: "home/details" => "home/v2/details"
+      parts = base_partial.split('/')
+      parts.insert(-2, 'v2') if parts.length >= 2
+      v2_partial = parts.join('/')
+      # Verifica se o partial v2 existe
+      lookup_context.exists?(v2_partial, [], true) ? v2_partial : base_partial
+    else
+      base_partial
+    end
+  end
+  helper_method :resolve_partial
+
+  def toggle_layout
+    new_version = Current.user.layout_version == 'v2' ? 'v1' : 'v2'
+    Current.user.update(layout_version: new_version)
+    redirect_to root_path
   end
 
   def index
     @devices = Current.user.admin? ? devices_admin : devices_user
-    return render partial: "indexpartial", locals: { devices: @devices } if turbo_frame_request?
+    return render partial: resolve_partial("home/indexpartial"), locals: { devices: @devices } if turbo_frame_request?
     @search_query = params[:query].present?
     @devices = Kaminari.paginate_array(@devices).page(params[:page]).per(10)
   end
@@ -70,8 +92,8 @@ class HomeController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
-          turbo_stream.replace("details_#{device_id}", partial: "home/details", locals: {status: params[:status], info: info, msg: msg, device_id: device_id, state: state, events_count: @events_last_x_hours}),
-          turbo_stream.replace("details_button_#{device_id}", partial: "home/details_button", locals: { device_id: device_id, show_details: true, status_car: @event.status })
+          turbo_stream.replace("details_#{device_id}", partial: resolve_partial("home/details"), locals: {status: params[:status], info: info, msg: msg, device_id: device_id, state: state, events_count: @events_last_x_hours}),
+          turbo_stream.replace("details_button_#{device_id}", partial: resolve_partial("home/details_button"), locals: { device_id: device_id, show_details: true, status_car: @event.status })
         ]
       end
     end
@@ -83,8 +105,8 @@ class HomeController < ApplicationController
     respond_to do |format|
       format.turbo_stream do
         render turbo_stream: [
-          turbo_stream.replace("details_#{device_id}", partial: "home/details_blank", locals: {device_id: device_id}),
-          turbo_stream.replace("details_button_#{device_id}", partial: "home/details_button", locals: { device_id: device_id, show_details: false, status_car: params[:status] })
+          turbo_stream.replace("details_#{device_id}", partial: resolve_partial("home/details_blank"), locals: {device_id: device_id}),
+          turbo_stream.replace("details_button_#{device_id}", partial: resolve_partial("home/details_button"), locals: { device_id: device_id, show_details: false, status_car: params[:status] })
         ]
       end
     end
@@ -216,7 +238,7 @@ class HomeController < ApplicationController
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
             "events_#{device_id}",
-            partial: "home/events",
+            partial: resolve_partial("home/events"),
             locals: { device_id: device_id, events: @events }
           )
         end
@@ -226,7 +248,7 @@ class HomeController < ApplicationController
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
             "events_#{device_id}",
-            partial: "home/events_blank",
+            partial: resolve_partial("home/events_blank"),
             locals: { device_id: device_id }
           )
         end

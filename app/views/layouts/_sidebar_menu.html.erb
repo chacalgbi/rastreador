@@ -10,12 +10,24 @@
       <%= link_to 'Config Alertas', details_path, class: "btn sidebar-menu__button" %>
       <%= link_to 'Notificações', notifications_path, class: "btn sidebar-menu__button" %>
     <% end %>
+<!--
+    <%= form_with url: home_toggle_layout_path, method: :post, data: { turbo: false }, class: "sidebar-menu__button", style: "padding: 0.5rem 0.75rem;" do %>
+      <label style="display: flex; align-items: center; cursor: pointer; font-size: 0.85rem; gap: 0.5rem;">
+        <input type="checkbox"
+               class="switch switch--green"
+               onchange="this.form.requestSubmit()"
+               <%= 'checked' if Current.user&.layout_version == 'v2' %>
+        >
+        <span>Mudar layout</span>
+      </label>
+    <% end %>
+-->
   <% end %>
   <%= link_to "#", class: "btn sidebar-menu__button mbs-auto" do %>
     <% if Current.user %>
       <%= link_to session_path(Current.session), data: { turbo_method: :delete }, class: "text-primary" do %>
         <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
-        <%= Current.user.name.truncate(12) %> - Sair
+        <%= Current.user.name.truncate(18) %> - Sair
       <% end %>
     <% end %>
   <% end %>

@@ -34,7 +34,8 @@
   <body data-controller="push" 
         data-application-server-key="<%= ENV['DEFAULT_APPLICATION_SERVER_KEY'] %>"
         data-push-user-id-value="<%= Current.user&.id %>"
-        data-user-maintenance="<%= Current.user&.maintenance? %>">
+        data-user-maintenance="<%= Current.user&.maintenance? %>"
+        data-layout="<%= Current.user&.layout_version || 'v1' %>">
 
     <div data-controller="flash" 
          data-flash-alert-value="<%= flash[:alert] %>" 

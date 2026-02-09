@@ -1,3 +1,4 @@
 <div id="detail_<%= detail.device_id %>">
-  <%= render 'details/information', info: detail %>
+  <div class="layout-v1"><%= render 'details/information', info: detail %></div>
+  <div class="layout-v2"><%= render 'details/v2/information', info: detail %></div>
 </div>

@@ -1,0 +1,19 @@
+<div id="status_badge_<%= detail.device_id %>">
+  <% if detail.status == 'online' %>
+    <div class="status-indicator status-indicator--online">
+      <span class="status-dot"></span> Online
+    </div>
+  <% else %>
+    <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+      <div class="status-indicator status-indicator--offline">
+        <span class="status-dot"></span> Offline
+      </div>
+      <span class="status-timestamp">
+        <span class="tooltip-wrapper" data-tooltip="Última atualização">
+          <%= image_tag "timer.svg", size: 12, aria: { label: "Última atualização" } %>
+          <%= detail.updated_at.getlocal("-03:00").strftime("%H:%M - %d/%m/%Y") %> 
+        </span>
+      </span>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,99 @@
+<%= turbo_frame_tag "details_#{device_id}" do %>
+  <div class="details-panel">
+    <%= render 'home/v2/details_status_content', device_id: device_id, status: status, msg: msg, info: info, state: state, user_maintenance: defined?(user_maintenance) ? user_maintenance : nil %>
+
+    <div class="details-panel__actions-row">
+      <%= button_to home_battery_history_path(car_id: device_id), method: :post, class: "btn", data: { turbo_stream: true } do %>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg>
+        Bateria
+      <% end %>
+      <%= link_to home_location_path(car_id: device_id, url: info.url), class: "btn", data: { turbo_stream: true, turbo_prefetch: false } do %>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Google Maps
+      <% end %>
+    </div>
+
+    <% if @user_admin || @pessoal %>
+      <div class="details-panel__actions-row">
+        <div contents data-controller="dialog">
+          <button type="button" class="btn" data-action="dialog#showModal">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Zerar Odômetro
+          </button>
+          <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc">
+            <div class="dialog__content">
+              <h2 class="text-lg font-semibold leading-none mbe-2" id="dialog_label">Tem certeza que deseja ZERAR o Odômetro?</h2>
+              <p class="text-lg text-subtle mbe-4" id="dialog_desc">
+                Esta ação não pode ser desfeita. Isso irá apagar permanentemente a contagem do Odômetro do seu veículo.
+              </p>
+              <div class="flex items-center justify-end gap">
+                <button type="button" class="btn" data-action="click->dialog#close">Cancelar</button>
+                <%= button_to "Confirmar",  home_odometro_path, method: :post, params: { device_id: info.device_id, model: info.model, command: "zerar_hodometro", imei: info.imei }, class: "btn btn-primary btn-sm", data: { turbo_stream: true, action: "click->dialog#close" }  %>
+              </div>
+            </div>
+          </dialog>
+        </div>
+
+        <div contents data-controller="dialog">
+          <button type="button" class="btn" data-action="dialog#showModal">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Zerar Horímetro
+          </button>
+          <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="dialog_label" aria-describedby="dialog_desc">
+            <div class="dialog__content">
+              <h2 class="text-lg font-semibold leading-none mbe-2" id="dialog_label">Tem certeza que deseja ZERAR o Horímetro?</h2>
+              <p class="text-lg text-subtle mbe-4" id="dialog_desc">
+                Esta ação não pode ser desfeita. Isso irá apagar permanentemente a contagem do Horímetro do seu veículo.
+              </p>
+              <div class="flex items-center justify-end gap">
+                <button type="button" class="btn" data-action="click->dialog#close">Cancelar</button>
+                <%= button_to "Confirmar",  home_odometro_path, method: :post, params: { device_id: info.device_id, model: info.model, command: "zerar_horimetro", imei: info.imei }, class: "btn btn-primary btn-sm", data: { turbo_stream: true, action: "click->dialog#close" }  %>
+              </div>
+            </div>
+          </dialog>
+        </div>
+      </div>
+    <% end %>
+
+    <div id="detail_<%= device_id %>" > <!-- Será substituida quando o evento de Status for enviado pelo rastreador -->
+      <%= render 'details/v2/information', info: info %>
+    </div>
+
+    <div style="margin-top: 0.75rem;">
+      <% if events_count != 0 %>
+        <%= button_to home_last_events_path(device_id: device_id, open: 'true'), method: :post, class: "btn btn--borderless", data: { turbo_stream: true } do %>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <span>Eventos: <%= events_count %></span>
+        <% end %>
+      <% else %>
+        <%= button_tag class: "btn btn--borderless", disabled: true do %>
+          <span style="opacity: 0.5;">Sem eventos</span>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div data-controller="map-toggle">
+      <div class="map-toggle-row">
+        <label>
+          <input type="checkbox" class="switch switch--green" data-action="change->map-toggle#toggle" data-map-toggle-target="checkbox">
+          <span>Mostrar no Mapa</span>
+        </label>
+      </div>
+
+      <% coords = info.url.to_s.match(/q=(-?\d+\.?\d*),(-?\d+\.?\d*)/) %>
+      <% lat = coords ? coords[1] : "-14.225129" %>
+      <% lng = coords ? coords[2] : "-42.784456" %>
+
+      <div id="map"
+           class="map-container"
+           style="display: none; border-radius: var(--rounded-lg); margin-top: 0.5rem;"
+           data-controller="map"
+           data-map-latitude-value="<%= lat %>"
+           data-map-longitude-value="<%= lng %>"
+           data-map-zoom-value="16"
+           data-map-popup-value="<%= info.device_name %>"
+           data-map-toggle-target="map">
+      </div>
+    </div>
+  </div>
+<% end %>

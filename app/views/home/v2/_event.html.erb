@@ -1,0 +1,19 @@
+<tr>
+  <td><strong><%= event.driver_name %></strong></td>
+  <td><%= event.created_at.in_time_zone('America/Sao_Paulo').strftime('%d/%m/%Y %H:%M') %></td>
+  <td style="text-align: end;">
+    <% if event.message.include?("https://www.google.com/maps?q=") %>
+      <% url = event.message.match(/https:\/\/www\.google\.com\/maps\?q=[^ ]+/)[0] %>
+      <% message1 = event.message.gsub(url, '') %>
+      <% message2 = message1.gsub('Local:', '') %>
+      <%= simple_format(sanitize(message2, tags: %w(br a))) %>
+      <p>
+        <b>
+          <%= link_to "📍 Ver no mapa", url, target: "_blank", style: "color: #3b82f6;" %>
+        </b>
+      </p>
+    <% else %>
+      <%= simple_format(sanitize(event.message, tags: %w(br))) %>
+    <% end %>
+  </td>
+</tr>
