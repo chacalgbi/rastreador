@@ -1,0 +1,116 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Histórico" do %>
+    <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+  <% end %>
+
+  <%= render "page_header_actions" do %>
+    <%= link_to "Filtros", "#offcanvas_filters", "data-bs-toggle": "offcanvas", class: "btn btn-white" %>
+    <%= link_to "Excluir Registros Antigos", "#offcanvas_delete_old", "data-bs-toggle": "offcanvas", class: "btn btn-danger" %>
+    <%= link_to "Novo registro", new_admin_historico_path, class: "btn btn-primary" %>
+  <% end %>
+<% end %>
+
+<div class="page-body">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table table-vcenter table-nowrap card-table table-striped">
+          <thead>
+            <tr>
+              <th><%= sort_link @search, :id, "ID" %></th>
+              <th><%= sort_link @search, :device_id, "Device ID" %></th>
+              <th><%= sort_link @search, :tipo, "Tipo" %></th>
+              <th><%= sort_link @search, :descricao, "Descrição" %></th>
+              <th><%= sort_link @search, :numero, "Número" %></th>
+              <th><%= sort_link @search, :ano, "Ano" %></th>
+              <th><%= sort_link @search, :odometro, "Odômetro" %></th>
+              <th><%= sort_link @search, :horimetro, "Horímetro" %></th>
+              <th><%= sort_link @search, :odometro_inicio, "Odôm. Início" %></th>
+              <th><%= sort_link @search, :horimetro_inicio, "Horim. Início" %></th>
+              <th>Observação</th>
+              <th><%= sort_link @search, :created_at, "Criado em" %></th>
+              <th><%= sort_link @search, :updated_at, "Atualizado em" %></th>
+              <th class="w-1"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @historicos.each do |historico| %>
+              <tr>
+                <td><%= historico.id %></td>
+                <td><%= historico.device_id %></td>
+                <td><span class="badge text-white <%= historico.tipo == 'semanal' ? 'bg-blue' : 'bg-green' %>"><%= historico.tipo.capitalize %></span></td>
+                <td><%= historico.descricao %></td>
+                <td><%= historico.numero %></td>
+                <td><%= historico.ano %></td>
+                <td><%= historico.odometro_formatado %></td>
+                <td><%= historico.horimetro_formatado %></td>
+                <td><%= historico.odometro_inicio %> km</td>
+                <td><%= historico.horimetro_inicio %> min</td>
+                <td><%= truncate(historico.observacao.to_s, length: 30) %></td>
+                <td><%= historico.created_at&.strftime("%d/%m/%Y %H:%M") %></td>
+                <td><%= historico.updated_at&.strftime("%d/%m/%Y %H:%M") %></td>
+                <td>
+                  <%= link_to "Ver", [:admin, historico], class: "btn btn-white btn-sm" %>
+                  <%= link_to "Editar", edit_admin_historico_path(historico), class: "btn btn-white btn-sm" %>
+                  <%= link_to "Deletar", [:admin, historico], class: "btn btn-white btn-sm", data: { method: :delete, confirm: "Tem certeza que deseja deletar?" } %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer d-flex align-items-center fs-5">
+        <div class="d-none d-md-block">
+          <div>Download: <%= link_to "CSV", url_for(format: :csv, q: request.params[:q]) %></div>
+          <%== pagy_info(@pagy) %>
+        </div>
+        <div class="ms-auto">
+          <%== pagy_bootstrap_nav(@pagy) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="offcanvas_filters" tabindex="-1" class="offcanvas offcanvas-end">
+  <div class="offcanvas-header">
+    <h2 class="offcanvas-title">Filtros</h2>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <%= search_form_for [:admin, @search], class: "offcanvas-body" do |f| %>
+    <%= f.label :device_id_eq, "Device ID", class: "form-label" %>
+    <%= f.text_field :device_id_eq, placeholder: "Digite o Device ID", class: "form-control mb-3" %>
+
+    <%= f.label :tipo_eq, "Tipo", class: "form-label" %>
+    <%= f.select :tipo_eq, [["Todos", ""], ["Semanal", "semanal"], ["Mensal", "mensal"]], {}, class: "form-select mb-3" %>
+
+    <%= f.label :ano_eq, "Ano", class: "form-label" %>
+    <%= f.number_field :ano_eq, placeholder: "Ex: 2026", class: "form-control mb-3" %>
+
+    <%= f.label :numero_eq, "Número (semana ou mês)", class: "form-label" %>
+    <%= f.number_field :numero_eq, placeholder: "Ex: 1", class: "form-control mb-3" %>
+
+    <%= f.submit "Filtrar", class: "btn btn-primary" %>
+    <%= link_to "Limpar Filtros", admin_historicos_path, class: "btn btn-white" %>
+  <% end %>
+</div>
+
+<div id="offcanvas_delete_old" tabindex="-1" class="offcanvas offcanvas-end">
+  <div class="offcanvas-header">
+    <h2 class="offcanvas-title">Excluir Registros Antigos</h2>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <%= form_with url: destroy_old_historicos_admin_historicos_path, method: :delete, local: true do |f| %>
+      <div class="alert alert-warning" role="alert">
+        <strong>Atenção!</strong> Esta ação não pode ser desfeita. Todos os registros de histórico com data de atualização anterior à data selecionada serão permanentemente excluídos.
+      </div>
+
+      <%= f.label :delete_before_date, "Excluir registros anteriores a:", class: "form-label" %>
+      <%= f.datetime_local_field :delete_before_date, class: "form-control mb-3", required: true %>
+
+      <%= f.submit "Excluir Registros", class: "btn btn-danger", data: { confirm: "Tem certeza que deseja excluir todos os registros de histórico anteriores à data selecionada? Esta ação não pode ser desfeita." } %>
+      <button type="button" class="btn btn-white" data-bs-dismiss="offcanvas">Cancelar</button>
+    <% end %>
+  </div>
+</div>

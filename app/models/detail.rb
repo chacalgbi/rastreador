@@ -1,6 +1,7 @@
 class Detail < ApplicationRecord
   before_validation :set_default_values
   after_update :create_battery_record, if: :battery_changed?
+  after_update :atualizar_historico, if: :odometro_ou_horimetro_changed?
 
   def self.ransackable_associations(auth_object = nil)
     %w[device_id device_name model ignition rele_state url velo_max battery bat_bck horimetro odometro cercas satelites version imei iccid bat_nivel signal_gps signal_gsm acc acc_virtual charge heartbeat obs status network params last_event_type last_user apn ip_and_port alert_whatsApp alert_telegram alert_email send_exit_cerca send_battery send_moving send_velo_max send_rele created_at updated_at category cell_number]
@@ -26,6 +27,10 @@ class Detail < ApplicationRecord
     saved_change_to_battery? || saved_change_to_bat_bck?
   end
 
+  def odometro_ou_horimetro_changed?
+    saved_change_to_odometro? || saved_change_to_horimetro?
+  end
+
   def create_battery_record
     Battery.create(
       device_id: device_id,
@@ -35,5 +40,30 @@ class Detail < ApplicationRecord
       bat: battery.to_f,
       bkp: bat_bck.to_f
     )
+  end
+
+  def atualizar_historico
+    odometro_km = parse_odometro(odometro)
+    horimetro_min = parse_horimetro(horimetro)
+    return if odometro_km.nil? && horimetro_min.nil?
+
+    Historico.atualizar_historico(device_id, odometro_km || 0, horimetro_min || 0)
+  end
+
+  # Converte string "123.45km" para Float 123.45
+  def parse_odometro(valor)
+    return nil if valor.blank?
+    valor.to_s.gsub(/[^0-9.]/, '').to_f
+  end
+
+  # Converte string "5h 30m" para Float em minutos (330.0)
+  def parse_horimetro(valor)
+    return nil if valor.blank?
+    match = valor.to_s.match(/(\d+)h\s*(\d+)m/)
+    return nil unless match
+
+    horas = match[1].to_i
+    minutos = match[2].to_i
+    (horas * 60 + minutos).to_f
   end
 end

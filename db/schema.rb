@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_06_180848) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_09_120000) do
   create_table "action_mailbox_inbound_emails", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
@@ -167,6 +167,23 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_06_180848) do
     t.text "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "historicos", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "device_id", null: false
+    t.string "tipo", null: false
+    t.string "descricao"
+    t.integer "numero", null: false
+    t.integer "ano", null: false
+    t.decimal "odometro", precision: 10, scale: 2, default: "0.0"
+    t.decimal "horimetro", precision: 10, scale: 2, default: "0.0"
+    t.decimal "odometro_inicio", precision: 10, scale: 2, default: "0.0"
+    t.decimal "horimetro_inicio", precision: 10, scale: 2, default: "0.0"
+    t.text "observacao"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["device_id", "tipo", "numero", "ano"], name: "idx_historicos_unique", unique: true
+    t.index ["device_id"], name: "index_historicos_on_device_id"
   end
 
   create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

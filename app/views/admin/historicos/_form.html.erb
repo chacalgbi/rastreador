@@ -1,0 +1,86 @@
+<%= form_with(model: [:admin, historico]) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :device_id, "Device ID", class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :device_id, class: "form-control" %>
+      <%= tag.div historico.errors[:device_id].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :tipo, "Tipo", class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.select :tipo, [["Semanal", "semanal"], ["Mensal", "mensal"]], {}, class: "form-select" %>
+      <%= tag.div historico.errors[:tipo].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :descricao, "Descrição", class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_field :descricao, class: "form-control", placeholder: "Ex: Semana 1/2026 ou Janeiro/2026" %>
+      <%= tag.div historico.errors[:descricao].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :numero, "Número", class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.number_field :numero, class: "form-control", placeholder: "Semana (1-52) ou Mês (1-12)" %>
+      <%= tag.div historico.errors[:numero].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :ano, "Ano", class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.number_field :ano, class: "form-control", placeholder: "Ex: 2026" %>
+      <%= tag.div historico.errors[:ano].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :odometro, "Odômetro (km)", class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.number_field :odometro, class: "form-control", step: 0.01 %>
+      <%= tag.div historico.errors[:odometro].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :horimetro, "Horímetro (min)", class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.number_field :horimetro, class: "form-control", step: 0.01 %>
+      <%= tag.div historico.errors[:horimetro].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :odometro_inicio, "Odômetro início (km cumulativo)", class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.number_field :odometro_inicio, class: "form-control", step: 0.01 %>
+      <%= tag.div historico.errors[:odometro_inicio].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :horimetro_inicio, "Horímetro início (min cumulativo)", class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.number_field :horimetro_inicio, class: "form-control", step: 0.01 %>
+      <%= tag.div historico.errors[:horimetro_inicio].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :observacao, "Observação", class: "form-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.text_area :observacao, class: "form-control", rows: 3 %>
+      <%= tag.div historico.errors[:observacao].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <%= form.submit class: "btn btn-primary" %>
+    <%= link_to "Cancelar", admin_historicos_path, class: "btn btn-white" %>
+  </div>
+<% end %>

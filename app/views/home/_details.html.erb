@@ -8,11 +8,17 @@
       <% end %>
     </div>
     <div class="car_item">
+      <%= button_to home_historico_km_path(car_id: device_id), method: :post, class: "btn", data: { turbo_stream: true } do %>
+        Histórico Km
+      <% end %>
+    </div>
+    <div class="car_item">
       <%= link_to home_location_path(car_id: device_id, url: info.url), class: "btn", data: { turbo_stream: true, turbo_prefetch: false } do %>
-        Ver no Google Maps
+        Ver no Maps
       <% end %>
     </div>
   </div>
+  <!--
   <% if @user_admin || @pessoal %>
     <br>
     <div class="car_container">
@@ -54,6 +60,7 @@
     </div>
     <br>
   <% end %>
+  -->
   <div id="detail_<%= device_id %>" > <!-- Será substituida quando o evento de Status for enviado pelo rastreador -->
     <%= render 'details/information', info: info %>
   </div>

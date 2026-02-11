@@ -31,6 +31,9 @@ Rails.application.routes.draw do
     resources :batteries do
       delete 'destroy_old_batteries', on: :collection
     end
+    resources :historicos do
+      delete 'destroy_old_historicos', on: :collection
+    end
     resources :notifications do
       post 'test_email', on: :collection
       post 'test_whatsapp', on: :collection
@@ -81,6 +84,8 @@ Rails.application.routes.draw do
   get "home/hide_details"
   get "home/battery_history"
   post "home/battery_history"
+  get "home/historico_km"
+  post "home/historico_km"
   post "home/last_events"
   post "home/odometro"
   post "home/block_and_desblock"

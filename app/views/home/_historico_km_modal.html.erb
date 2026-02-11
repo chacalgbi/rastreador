@@ -1,0 +1,105 @@
+<%= turbo_frame_tag "historico_km_modal", data: { action: "turbo:frame-load->dialog#showModal" } do %>
+
+  <div contents data-controller="dialog">
+    <dialog id="historico_km_dialog" class="dialog" role="dialog" aria-labelledby="dialog_label" data-dialog-target="menu" data-action="click->dialog#closeOnClickOutside" style="width: 95vw; max-width: 95vw; height: 90vh; max-height: 90vh;">
+      <div class="dialog__content" style="background: white; width: 100%; height: 100%; max-width: 100%;">
+
+        <button type="button" class="btn" onclick="document.getElementById('historico_km_dialog').close()">Fechar</button>
+
+        <div class="mb-2">
+          <span style="display:inline-block;width:14px;height:14px;background:#4299e1;border-radius:3px;margin-right:4px;vertical-align:middle;"></span> Semanal
+          <span style="display:inline-block;width:14px;height:14px;background:#48bb78;border-radius:3px;margin-left:12px;margin-right:4px;vertical-align:middle;"></span> Mensal
+        </div>
+
+        <% data = labels.each_with_index.map { |l, i| [l, valores[i]] } %>
+
+        <%= bar_chart data,
+          class: 'box',
+          height: '75vh',
+          options: {
+            title: {
+              text: "Quilômetros - #{device_name}",
+              left: 'center'
+            },
+            tooltip: {
+              show: true,
+              trigger: 'axis',
+              axisPointer: { type: 'shadow' },
+              formatter: RailsCharts.js(%Q{
+                function(params) {
+                  var p = params[0];
+                  return p.name + '<br/>' + p.value + ' km';
+                }
+              })
+            },
+            xAxis: {
+              axisLabel: {
+                rotate: 45,
+                fontSize: 11
+              }
+            },
+            yAxis: {
+              axisLabel: {
+                formatter: '{value} km'
+              }
+            },
+            series: {
+              itemStyle: {
+                color: RailsCharts.js(%Q{
+                  function(params) {
+                    var cores = #{cores.to_json};
+                    return cores[params.dataIndex] || '#4299e1';
+                  }
+                })
+              },
+              label: {
+                show: true,
+                position: 'top',
+                formatter: '{c} km',
+                fontSize: 10
+              }
+            }
+          }
+        %>
+
+      </div>
+    </dialog>
+  </div>
+
+  <script>
+    setTimeout(function() {
+      var dlg = document.getElementById('historico_km_dialog');
+      if (!dlg) return;
+
+      if (typeof dlg.showModal === 'function') {
+        try { dlg.showModal(); } catch(e) {}
+      }
+
+      try {
+        var scripts = dlg.querySelectorAll('script:not([data-evaluated])');
+        scripts.forEach(function(s) {
+          var newScript = document.createElement('script');
+          if (s.src) { newScript.src = s.src; } else { newScript.text = s.textContent; }
+          newScript.dataset.evaluated = 'true';
+          document.body.appendChild(newScript);
+          newScript.parentNode.removeChild(newScript);
+          s.dataset.evaluated = 'true';
+        });
+      } catch (e) { /* noop */ }
+
+      try {
+        var containers = dlg.querySelectorAll('[id^="rails_charts_"]');
+        containers.forEach(function(el){
+          var fnName = 'init_' + el.id;
+          var fn = window[fnName];
+          if (typeof fn === 'function') {
+            try { fn(); } catch (e) { /* noop */ }
+          }
+        });
+      } catch (e) { /* noop */ }
+
+      setTimeout(function(){ window.dispatchEvent(new Event('resize')); }, 50);
+    }, 0);
+  </script>
+
+<% end %>

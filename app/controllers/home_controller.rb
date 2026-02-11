@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
   # event_type
-  # ignitionOn ignitionOff deviceOffline deviceOnline deviceMoving deviceStopped geofenceExit geofenceEnter deviceOverspeed alarm commandResult
+  # ignitionOn ignitionOff deviceOffline deviceOnline deviceMoving deviceStopped geofenceExit geofenceEnter deviceOverspeed
+  # alarm commandResult
 
   # event_name
   # 'rele' 'resposta' 'ligado' 'desligado' 'movendo' 'parado' 'cerca' 'velocidade' 'Off-Line' 'On-Line' 'lowBattery' 'powerCut'
@@ -321,6 +322,88 @@ class HomeController < ApplicationController
           "battery_history_modal",
           partial: "home/battery_history_modal",
           locals: { device_name: @detail.device_name, bat: @bat, bkp: @bkp }
+        )
+      end
+    end
+  end
+
+  def historico_km
+    @device_id = params[:car_id]
+    @detail = Detail.find_by(device_id: @device_id)
+
+    if @detail.nil?
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.append(
+            "flash",
+            partial: "shared/flash_popup",
+            locals: { alert_message: "Dispositivo não encontrado." }
+          )
+        end
+      end
+      return
+    end
+
+    # Busca registros dos últimos 3 meses
+    data_limite = 3.months.ago.to_date
+    mes_limite = data_limite.month
+    ano_limite = data_limite.year
+
+    semanais = Historico.where(device_id: @device_id, tipo: 'semanal')
+                        .where("ano > ? OR (ano = ? AND numero >= ?)", ano_limite, ano_limite, data_limite.cweek)
+                        .order(:ano, :numero)
+    mensais  = Historico.where(device_id: @device_id, tipo: 'mensal')
+                        .where("ano > ? OR (ano = ? AND numero >= ?)", ano_limite, ano_limite, mes_limite)
+                        .order(:ano, :numero)
+
+    # Monta os dados intercalados: semanas do mês X, depois total do mês X, etc.
+    meses_index = mensais.index_by { |m| [m.ano, m.numero] }
+
+    # Agrupa semanas por mês/ano usando a data aproximada da semana
+    semanas_por_mes = {}
+    semanais.each do |s|
+      # Calcula a data da segunda-feira dessa semana ISO
+      data_semana = Date.commercial(s.ano, s.numero, 1) rescue Date.new(s.ano, 1, 1)
+      chave = [data_semana.year, data_semana.month]
+      semanas_por_mes[chave] ||= []
+      semanas_por_mes[chave] << s
+    end
+
+    # Coleta todos os meses que aparecem (das semanas ou dos registros mensais)
+    todos_meses = (semanas_por_mes.keys + meses_index.keys).uniq.sort
+
+    @labels = []
+    @valores = []
+    @cores = []
+
+    todos_meses.each do |ano, mes|
+      # Semanas desse mês
+      (semanas_por_mes[[ano, mes]] || []).each do |s|
+        @labels << "Semana #{s.numero}"
+        @valores << s.odometro.to_f.round(2)
+        @cores << '#4299e1' # azul para semanas
+      end
+
+      # Total do mês
+      if meses_index[[ano, mes]]
+        m = meses_index[[ano, mes]]
+        @labels << m.descricao
+        @valores << m.odometro.to_f.round(2)
+        @cores << '#48bb78' # verde para meses
+      end
+    end
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "historico_km_modal",
+          partial: "home/historico_km_modal",
+          locals: {
+            device_name: @detail.device_name,
+            labels: @labels,
+            valores: @valores,
+            cores: @cores
+          }
         )
       end
     end
