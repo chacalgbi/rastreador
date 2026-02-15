@@ -13,15 +13,15 @@ class TraccarUpdateDevice
 
   private
 
+  PERMITTED_FIELDS = %i[
+    device_name model ignition rele_state last_event_type last_user last_rele_modified url velo_max
+    battery bat_bck horimetro odometro cercas satelites version imei bat_nivel signal_gps
+    signal_gsm acc acc_virtual charge heartbeat obs status network params apn ip_and_port iccid
+  ].freeze
+
   def update_detail
     # Filtra os parâmetros para remover aqueles que têm valores vazios
-    params = ActionController::Parameters.new(@params)
-
-    filtered_params = params.permit(
-      :device_name, :model, :ignition, :rele_state, :last_event_type, :last_user, :last_rele_modified, :url, :velo_max,
-      :battery, :bat_bck, :horimetro, :odometro, :cercas, :satelites, :version, :imei, :bat_nivel, :signal_gps,
-      :signal_gsm, :acc, :acc_virtual, :charge, :heartbeat, :obs, :status, :network, :params, :apn, :ip_and_port, :iccid
-    ).to_h.reject { |_, v| v.blank? }
+    filtered_params = @params.slice(*PERMITTED_FIELDS).reject { |_, v| v.blank? }
 
     @changed_fields = detect_changed_fields(filtered_params)
     @status_changed = filtered_params.key?('status') && @detail.status != filtered_params['status']
@@ -30,7 +30,7 @@ class TraccarUpdateDevice
   end
 
   def update_view
-    Turbo::StreamsChannel.broadcast_action_to(
+    Turbo::StreamsChannel.broadcast_action_later_to(
       "home_stream",
       action: "replace",
       target: "detail_#{@detail.device_id}",
@@ -40,7 +40,7 @@ class TraccarUpdateDevice
 
     # Só desbloqueia o botão de (Ligar/desligar relé) se o dispositivo estiver online, pois se entrar nesse método
     # é porque o dispositivo está online e respondeu ao callBack
-    Turbo::StreamsChannel.broadcast_render_to(
+    Turbo::StreamsChannel.broadcast_render_later_to(
       "home_stream",
       partial: "shared/enable_button",
       locals: { device_id: @detail.device_id }
@@ -48,7 +48,7 @@ class TraccarUpdateDevice
 
     # Destaca campos que mudaram
     if @changed_fields.any?
-      Turbo::StreamsChannel.broadcast_render_to(
+      Turbo::StreamsChannel.broadcast_render_later_to(
         "home_stream",
         partial: "shared/highlight_changes",
         locals: { device_id: @detail.device_id, changed_fields: @changed_fields }
@@ -60,7 +60,7 @@ class TraccarUpdateDevice
   end
 
   def update_admin_view
-    Turbo::StreamsChannel.broadcast_action_to(
+    Turbo::StreamsChannel.broadcast_action_later_to(
       "admin_detail_stream",
       action: "replace",
       target: "admin_detail_stream_div",
@@ -97,7 +97,7 @@ class TraccarUpdateDevice
     return if send_command.nil?
     send_command = send_command.gsub('XXXX', @detail.imei) if @detail.model == 'st8310u'
 
-    Traccar.command(@detail.device_id, send_command)
+    SendCommandJob.perform_later({ device_id: @detail.device_id, command: send_command })
   end
 
   def criteria_for_obtaining_battery_voltage
@@ -115,7 +115,7 @@ class TraccarUpdateDevice
     SendCommandJob.perform_later({device_id: @detail.device_id, command: 'STATUS#'}) if @detail.status == 'online'
 
     # Atualiza o badge de status no card principal (_car.html.erb)
-    Turbo::StreamsChannel.broadcast_action_to(
+    Turbo::StreamsChannel.broadcast_action_later_to(
       "home_stream",
       action: "replace",
       target: "status_badge_#{@detail.device_id}",
@@ -124,7 +124,7 @@ class TraccarUpdateDevice
     )
 
     # Atualiza o botão de detalhes com o status correto
-    Turbo::StreamsChannel.broadcast_action_to(
+    Turbo::StreamsChannel.broadcast_action_later_to(
       "home_stream",
       action: "replace",
       target: "details_button_#{@detail.device_id}",
@@ -140,7 +140,7 @@ class TraccarUpdateDevice
     msg = StatusHelper.define_text(@detail, @detail.status)
     state = StatusHelper.define_state(@detail)
 
-    Turbo::StreamsChannel.broadcast_action_to(
+    Turbo::StreamsChannel.broadcast_action_later_to(
       "home_stream",
       action: "replace",
       target: "details_status_content_#{@detail.device_id}",

@@ -52,23 +52,36 @@ class Historico < ApplicationRecord
       descricao = "#{MESES[numero - 1]}/#{ano}"
     end
 
-    registro = find_or_initialize_by(device_id: device_id, tipo: tipo, numero: numero, ano: ano)
+    # Usa uma única query com INSERT ... ON DUPLICATE KEY UPDATE (MySQL)
+    # Aproveita o índice único idx_historicos_unique (device_id, tipo, numero, ano)
+    existing = where(device_id: device_id, tipo: tipo, numero: numero, ano: ano)
+                .select(:id, :odometro_inicio, :horimetro_inicio)
+                .first
 
-    if registro.new_record?
-      # Novo período: o valor inicial é o cumulativo atual, acumulado do período começa em 0
-      registro.descricao = descricao
-      registro.odometro_inicio = odometro_km
-      registro.horimetro_inicio = horimetro_min
-      registro.odometro = 0
-      registro.horimetro = 0
-    else
+    if existing
       # Período existente: calcula a diferença entre o cumulativo atual e o início do período
-      registro.odometro = (odometro_km - registro.odometro_inicio).round(2)
-      registro.horimetro = (horimetro_min - registro.horimetro_inicio).round(2)
-    end
+      new_odometro = (odometro_km - existing.odometro_inicio.to_f).round(2)
+      new_horimetro = (horimetro_min - existing.horimetro_inicio.to_f).round(2)
 
-    registro.save!
-    registro
+      where(id: existing.id).update_all(
+        odometro: new_odometro,
+        horimetro: new_horimetro,
+        updated_at: Time.current
+      )
+    else
+      # Novo período: o valor inicial é o cumulativo atual, acumulado do período começa em 0
+      create!(
+        device_id: device_id,
+        tipo: tipo,
+        numero: numero,
+        ano: ano,
+        descricao: descricao,
+        odometro_inicio: odometro_km,
+        horimetro_inicio: horimetro_min,
+        odometro: 0,
+        horimetro: 0
+      )
+    end
   rescue StandardError => e
     Rails.logger.error("Historico.atualizar_registro | Error: #{e.message}")
     nil

@@ -1,6 +1,11 @@
 require 'fileutils'
 
 class SaveLog
+  # Cache de loggers para evitar recriar instâncias a cada chamada
+  @@loggers = {}
+  @@mutex = Mutex.new
+  @@dirs_created = {}
+
   def initialize(type, log, log2 = nil, log3 = nil)
     @type = type
     @log = log
@@ -50,173 +55,101 @@ class SaveLog
 
   private
 
+  def self.get_logger(path, file_name)
+    file = File.join(path, file_name)
+    @@mutex.synchronize do
+      unless @@dirs_created[path.to_s]
+        FileUtils.mkdir_p(path)
+        @@dirs_created[path.to_s] = true
+      end
+      @@loggers[file] ||= Logger.new(file, 10, 5 * 1024 * 1024)
+    end
+  end
+
   def event_car
     return nil if @log.dig(:device, :id).nil? || @log.dig(:device, :name).nil?
     device_name = "#{@log.dig(:device, :id)}_#{@log.dig(:device, :name)}".downcase.gsub(/[^a-z0-9]/, '_')
     path = Rails.root.join('log', 'carros')
-    file = File.join(path, "#{device_name}.log")
 
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "#{device_name}.log")
     logger.info("\nPARAMETROS: #{@log}\nPADRONIZADO: #{@log2 || 'Sem padronização'}\nALERTA: #{@log3 || 'Sem alertas'}\n")
   end
 
   def info
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "info.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "info.log")
     logger.info("#{@log}\n")
   end
 
   def error_payload
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "error_payload.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "error_payload.log")
     logger.info("#{@log}\n")
   end
 
   def error_alert
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "error_alert.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "error_alert.log")
     logger.info("#{@log}\n")
   end
 
   def redefinir_senha
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "redefinir_senha.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "redefinir_senha.log")
     logger.info("#{@log}\n")
   end
 
   def enviar_sms
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "enviar_sms.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "enviar_sms.log")
     logger.info("#{@log}\n")
   end
 
   def error
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "error.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "error.log")
     logger.info("#{@log}\n")
   end
 
   def alert_job
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "alert_job.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "alert_job.log")
     logger.info("#{@log}\n")
   end
 
   def sleep_motos
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "sleep_motos.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "sleep_motos.log")
     logger.info("#{@log}\n")
   end
 
   def notify_error
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "notify_error.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "notify_error.log")
     logger.info("#{@log}\n")
   end
 
   def push_notification_error
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "push_notification_error.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "push_notification_error.log")
     logger.info("#{@log}\n")
   end
 
   def params
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "params.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "params.log")
     logger.info("#{@log}\n")
   end
 
   def payload_desconhecido
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "payload_desconhecido.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "payload_desconhecido.log")
     logger.info("#{@log}\n")
   end
 
   def search_stopped_motorcycles
     path = Rails.root.join('log', 'informacao')
-    file = File.join(path, "search_stopped_motorcycles.log")
-
-    FileUtils.mkdir_p(path) unless File.directory?(path)
-
-    FileUtils.touch(file)
-
-    logger = Logger.new(file, 10, 5 * 1024 * 1024) # 10 arquivos de backup, 5MB cada
+    logger = self.class.get_logger(path, "search_stopped_motorcycles.log")
     logger.info("#{@log}\n")
   end
 end

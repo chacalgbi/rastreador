@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_09_120000) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_15_171649) do
   create_table "action_mailbox_inbound_emails", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
@@ -75,6 +75,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_09_120000) do
     t.decimal "bkp", precision: 5, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["device_id"], name: "index_batteries_on_device_id"
   end
 
   create_table "check_lists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -107,6 +108,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_09_120000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "command_sms"
+    t.index ["type_device", "name"], name: "index_commands_on_type_device_and_name"
   end
 
   create_table "details", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -155,6 +157,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_09_120000) do
     t.string "category"
     t.string "cell_number"
     t.boolean "sleeping", default: false
+    t.index ["device_id"], name: "index_details_on_device_id", unique: true
   end
 
   create_table "events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -167,6 +170,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_09_120000) do
     t.text "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["car_id", "created_at"], name: "index_events_on_car_id_and_created_at"
+    t.index ["created_at"], name: "index_events_on_created_at"
   end
 
   create_table "historicos", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -194,6 +199,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_09_120000) do
     t.datetime "updated_at", null: false
     t.string "user_id"
     t.string "sms"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "push_notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
