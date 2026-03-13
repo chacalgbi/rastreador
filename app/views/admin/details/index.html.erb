@@ -56,6 +56,7 @@
               <th><%= sort_link @search, :alert_whatsApp %></th>
               <th><%= sort_link @search, :alert_telegram %></th>
               <th><%= sort_link @search, :alert_email %></th>
+              <th><%= sort_link @search, :alert_push %></th>
               <th><%= sort_link @search, :send_exit_cerca %></th>
               <th><%= sort_link @search, :send_battery %></th>
               <th><%= sort_link @search, :send_moving %></th>
@@ -124,6 +125,7 @@
                 <td style="<%= color_cel(detail.alert_whatsApp) %>"><%= detail.alert_whatsApp ? "Sim" : "Não" %></td>
                 <td style="<%= color_cel(detail.alert_telegram) %>"><%= detail.alert_telegram ? "Sim" : "Não" %></td>
                 <td style="<%= color_cel(detail.alert_email) %>"><%= detail.alert_email ? "Sim" : "Não" %></td>
+                <td style="<%= color_cel(detail.alert_push) %>"><%= detail.alert_push ? "Sim" : "Não" %></td>
                 <td style="<%= color_cel(detail.send_exit_cerca) %>"><%= detail.send_exit_cerca ? "Sim" : "Não" %></td>
                 <td style="<%= color_cel(detail.send_battery) %>"><%= detail.send_battery ? "Sim" : "Não" %></td>
                 <td style="<%= color_cel(detail.send_moving) %>"><%= detail.send_moving ? "Sim" : "Não" %></td>

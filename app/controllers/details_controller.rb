@@ -42,6 +42,7 @@ class DetailsController < ApplicationController
       :alert_whatsApp,
       :alert_telegram,
       :alert_email,
+      :alert_push,
       :send_exit_cerca,
       :send_battery,
       :send_velo_max,

@@ -1,0 +1,5 @@
+class AddAlertPushToDetails < ActiveRecord::Migration[8.0]
+  def change
+    add_column :details, :alert_push, :boolean, default: false
+  end
+end

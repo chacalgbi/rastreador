@@ -20,6 +20,11 @@
         <%= form.check_box :alert_email, class: "form-check-input" %>
         <%= form.label :alert_email, "Alerta por E-mail", class: "form-check-label" %>
       </div>
+
+      <div class="form-group">
+        <%= form.check_box :alert_push, class: "form-check-input" %>
+        <%= form.label :alert_push, "Alerta por Notificações no próprio App (Necessário permissão de envio de notificações)", class: "form-check-label" %>
+      </div>
     </div>
 
     <div class="settings-section">

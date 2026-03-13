@@ -287,6 +287,14 @@
   </div>
 
   <div class="form-group row mb-2">
+    <%= form.label :alert_push, class: "form-check-label col-md-3 col-form-label" %>
+    <div class="col-md px-0">
+      <%= form.checkbox :alert_push, class: "form-check-input" %>
+      <%= tag.div detail.errors[:alert_push].first, class: "invalid-feedback" %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
     <%= form.label :send_exit_cerca, class: "form-check-label col-md-3 col-form-label" %>
     <div class="col-md px-0">
       <%= form.checkbox :send_exit_cerca, class: "form-check-input" %>

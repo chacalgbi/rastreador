@@ -11,6 +11,8 @@ class SendAlertJob < ApplicationJob
       @phone = []
       @email = []
       @telegram = []
+      @push = []
+      @icon = arg[:alert_icon]
       @message = arg[:message]
       @evento = arg[:event]
 
@@ -18,9 +20,10 @@ class SendAlertJob < ApplicationJob
 
       save_log(arg)
 
-      send_telegram if arg[:alert_telegram] # Enviado pelo BOT @RastreadoresBahiaEventos
+      send_telegram if arg[:alert_telegram] # Enviado pelo BOT @GPS.ia.br
       send_whatsapp if arg[:alert_whatsApp]
       send_email    if arg[:alert_email]
+      send_push_notification if arg[:alert_push]
 
       true
     rescue StandardError => e
@@ -46,6 +49,10 @@ class SendAlertJob < ApplicationJob
       @email << notification.email if notification.email.present?
       @telegram << notification.telegram if notification.telegram.present?
     end
+
+    PushSubscription.where(user_id: user_ids.map(&:to_s), subscribed: true).find_each do |subscription|
+      @push << subscription.id if subscription.subscribed
+    end
   end
 
   def define_company_notifications
@@ -54,6 +61,10 @@ class SendAlertJob < ApplicationJob
       @email << notification.email if notification.email.present?
       @telegram << notification.telegram if notification.telegram.present?
     end
+
+    # PushSubscription.where(subscribed: true).find_each do |subscription|
+    #   @push << subscription.id if subscription.subscribed
+    # end
   end
 
   def send_whatsapp
@@ -77,6 +88,14 @@ class SendAlertJob < ApplicationJob
       @email.each do |email|
         # Notify.email(email, "Alerta(#{arg[:event]})", arg[:message]) # Não usando na versão atual
         NotifyMailer.notify(email, "Alerta(#{@evento})", @message).deliver_later
+      end
+    end
+  end
+
+  def send_push_notification
+    unless @push.nil? || @push.empty?
+      @push.each do |id|
+        SendPushNotification.new("Alerta(#{@evento})", @message, @icon).one(id)
       end
     end
   end

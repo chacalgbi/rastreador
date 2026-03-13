@@ -51,7 +51,10 @@
                   <% if detail.alert_email %>
                     <span class="badge badge-email">E-mail</span>
                   <% end %>
-                  <% unless [detail.alert_whatsApp, detail.alert_telegram, detail.alert_email].any? %>
+                  <% if detail.alert_push %>
+                    <span class="badge badge-push">Push</span>
+                  <% end %>
+                  <% unless [detail.alert_whatsApp, detail.alert_telegram, detail.alert_email, detail.alert_push].any? %>
                     <span class="no-config">Nenhum</span>
                   <% end %>
                 </div>
@@ -249,6 +252,11 @@
 
   .badge-email {
     background: #ea4335;
+    color: white;
+  }
+
+  .badge-push {
+    background: #ff9800;
     color: white;
   }
 

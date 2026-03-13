@@ -55,7 +55,8 @@ class BuildAlert
     @alert_whatsApp = @detail.alert_whatsApp
     @alert_telegram = @detail.alert_telegram
     @alert_email = @detail.alert_email
-
+    @alert_push = @detail.alert_push
+    @icon = define_icon(@payload.dig(:alarme_type))
     @device_id = @payload.dig(:device_id) || @detail.device_id
     @veiculo = @payload.dig(:device_name) || @detail.device_name
     @cerca = @payload.dig(:cerca)
@@ -196,6 +197,8 @@ class BuildAlert
       alert_whatsApp: @alert_whatsApp,
       alert_telegram: @alert_telegram,
       alert_email: @alert_email,
+      alert_push: @alert_push,
+      alert_icon: @icon,
       message: msg2,
       event: event
     }
@@ -221,6 +224,25 @@ class BuildAlert
       '🚷Movimentação'
     else
       alarme_type
+    end
+  end
+
+  def define_icon(alarme_type)
+    case alarme_type
+    when 'lowBattery', 'powerCut'
+      'warning'
+    when 'sos'
+      'danger'
+    when 'powerRestored'
+      'success'
+    when 'accident', 'hardAcceleration'
+      'danger'
+    when 'jamming'
+      'info'
+    when 'vibration'
+      'warning'
+    else
+      'default'
     end
   end
 end
