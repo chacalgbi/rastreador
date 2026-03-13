@@ -6,7 +6,7 @@
 
   <%= render "page_header_actions" do %>
     <%= link_to "Editar", edit_admin_historico_path(@historico), class: "btn btn-primary" %>
-    <%= link_to "Deletar", [:admin, @historico], class: "btn btn-white", data: { method: :delete, confirm: "Tem certeza?" } %>
+    <%= link_to "Deletar", [:admin, @historico], class: "btn btn-white", data: { turbo_method: :delete, turbo_confirm: "Tem certeza?" } %>
   <% end %>
 <% end %>
 
