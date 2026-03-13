@@ -24,13 +24,13 @@ class TraccarUpdateDevice
     filtered_params = @params.slice(*PERMITTED_FIELDS).reject { |_, v| v.blank? }
 
     @changed_fields = detect_changed_fields(filtered_params)
-    @status_changed = filtered_params.key?('status') && @detail.status != filtered_params['status']
+    @status_changed = filtered_params.key?(:status) && @detail.status != filtered_params[:status]
 
     @detail.update(filtered_params)
   end
 
   def update_view
-    Turbo::StreamsChannel.broadcast_action_later_to(
+    Turbo::StreamsChannel.broadcast_action_to(
       "home_stream",
       action: "replace",
       target: "detail_#{@detail.device_id}",
@@ -70,7 +70,7 @@ class TraccarUpdateDevice
   end
 
   def detect_changed_fields(new_params)
-    monitored_fields = %w[
+    monitored_fields = %i[
       signal_gps signal_gsm odometro horimetro ignition
       battery bat_bck network bat_nivel charge acc
     ]
