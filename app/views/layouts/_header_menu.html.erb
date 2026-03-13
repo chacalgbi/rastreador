@@ -46,6 +46,10 @@
       </label>
     <% end %>
 
+    <%= link_to edit_password_driver_path(Current.user), class: "text-primary", title: "Alterar senha" do %>
+      <%= image_tag "key-square.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
+    <% end %>
+
     <%= link_to session_path(Current.session), data: { turbo_method: :delete }, class: "text-primary" do %>
       <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
       Sair

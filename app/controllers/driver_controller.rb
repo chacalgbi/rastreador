@@ -123,7 +123,11 @@ class DriverController < ApplicationController
 
     if @user.update(password_params)
       flash[:notice] = "Senha do motorista #{@user.name} foi alterada com sucesso."
-      redirect_to driver_index_path
+      if Current.user&.admin
+        redirect_to driver_index_path
+      else
+        redirect_to root_path
+      end
     else
       render :edit_password, status: :unprocessable_entity
     end
@@ -132,8 +136,12 @@ class DriverController < ApplicationController
   private
 
   def check_main_user
-    unless Current.user&.admin
-      redirect_to root_path, alert: "Você não tem acesso a essa página"
+    return if Current.user&.admin
+
+    if Current.user&.pessoal && %w[edit_password update_password].include?(action_name) && params[:id].to_s == Current.user.id.to_s
+      return
     end
+
+    redirect_to root_path, alert: "Você não tem acesso a essa página"
   end
 end

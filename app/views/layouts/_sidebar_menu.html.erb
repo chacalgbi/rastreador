@@ -23,12 +23,14 @@
     <% end %>
 -->
   <% end %>
-  <%= link_to "#", class: "btn sidebar-menu__button mbs-auto" do %>
-    <% if Current.user %>
-      <%= link_to session_path(Current.session), data: { turbo_method: :delete }, class: "text-primary" do %>
-        <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
-        <%= Current.user.name.truncate(18) %> - Sair
-      <% end %>
+  <% if Current.user %>
+    <%= link_to edit_password_driver_path(Current.user), class: "btn sidebar-menu__button mbs-auto" do %>
+      <%= image_tag "key-square.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
+      Alterar senha
+    <% end %>
+    <%= link_to session_path(Current.session), data: { turbo_method: :delete }, class: "btn sidebar-menu__button" do %>
+      <%= image_tag "square-arrow-out-up-right.svg", size: 24, aria: { hidden: true }, class: "invertible" %>
+      <%= Current.user.name.truncate(18) %> - Sair
     <% end %>
   <% end %>
 </div>
