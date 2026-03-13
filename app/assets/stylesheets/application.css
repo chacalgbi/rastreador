@@ -60,6 +60,15 @@
   object-fit: contain;
 }
 
+/* Checkboxes com bordas mais visíveis nos formulários admin */
+.form-check-input[type="checkbox"] {
+  border: 2px solid #353636;
+}
+
+.form-check-input[type="checkbox"]:checked {
+  border-color: #0d6efd;
+}
+
 /* Oculta o checklist para usuários de manutenção */
 body[data-user-maintenance="true"] .checklist-container {
   display: none !important;
