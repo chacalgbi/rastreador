@@ -20,6 +20,34 @@
         Maps
       <% end %>
     </div>
+
+    <div class="car_item" data-controller="dialog">
+      <button type="button" class="btn" data-action="dialog#showModal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-gauge"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M13.41 10.59l2.59 -2.59" /><path d="M7 12a5 5 0 0 1 5 -5" /></svg>
+        Velo
+      </button>
+
+      <dialog class="dialog" data-dialog-target="menu" role="alertdialog" aria-labelledby="speed_limit_label" aria-describedby="speed_limit_desc">
+        <div class="dialog__content">
+          <h2 class="text-lg font-semibold leading-none mbe-2" id="speed_limit_label">Alterar Limite de Velocidade</h2>
+          <p class="text-lg text-subtle mbe-4" id="speed_limit_desc">
+            Informe o novo limite de velocidade (km/h) para este veículo.
+          </p>
+
+          <%= form_with url: home_change_speed_limit_path, method: :post, data: { turbo_stream: true } do |f| %>
+            <%= f.hidden_field :device_id, value: device_id %>
+            <div style="margin-bottom: 12px;">
+              <%= f.number_field :new_speed_limit, min: 1, step: 1, placeholder: "Ex: 120", required: true, class: "input", style: "width: 100%;" %>
+            </div>
+            <div class="flex items-center justify-end gap">
+              <button type="button" class="btn" data-action="click->dialog#close">Cancelar</button>
+              <%= f.submit "Salvar", class: "btn btn-primary btn-sm", data: { action: "click->dialog#close" } %>
+            </div>
+          <% end %>
+        </div>
+      </dialog>
+    </div>
+
   </div>
   <% if false # TODO: descomentar quando for usar %>
   <% if @user_admin || @pessoal %>

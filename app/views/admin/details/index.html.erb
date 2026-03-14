@@ -95,7 +95,7 @@
                 <td><%= detail.category %></td>
                 <td><%= button_to "Obter", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "parametros", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja OBTER os parametros?" }  %></td>
                 <td><%= button_to "#{detail.odometro } Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_hodometro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Hodômetro?" }  %></td>
-                <td><%= detail.horimetro %></td>
+                <td><%= button_to "#{detail.horimetro } Zerar", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "zerar_horimetro", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja ZERAR o Horímetro?" }  %></td>
                 <td style="display: flex; gap: 3px;">
                   <%= button_to "Get", admin_details_send_command_path, method: :post, params: { device_id: detail.device_id, model: detail.model, command: "get_iccid", imei: detail.imei }, class: "btn btn-primary btn-sm", data: { turbo_confirm: "Tem certeza que deseja OBTER o ICCID?" }  %>
                   <% if detail.iccid.present? %>

@@ -137,18 +137,22 @@ class Traccar
     response.code.to_i
   end
 
-  def self.update_contact(device_id, name, contact, imei, category = 'car')
-    log("update_contact #{device_id}")
+  def self.update_device(detail)
+    log("update_device #{detail.device_id}")
+    contact = detail.last_user.to_s.split(' ').first.presence || detail.last_user
 
     payload = {
-      id: device_id.to_i,
-      name: name,
-      uniqueId: imei,
+      id: detail.device_id.to_i,
+      name: detail.device_name,
+      uniqueId: detail.imei,
       contact: contact,
-      category: category
+      category: detail.category,
+      attributes:{
+        speedLimit: kmH_to_milhas_nauticas(detail.velo_max),
+      }
     }
 
-    uri = URI("#{ENV["TRACCAR_URL"]}/api/devices/#{device_id}")
+    uri = URI("#{ENV["TRACCAR_URL"]}/api/devices/#{detail.device_id}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     request = Net::HTTP::Put.new(uri.path, { 'Content-Type' => 'application/json' })
@@ -157,13 +161,13 @@ class Traccar
     response = http.request(request)
 
     if response.is_a?(Net::HTTPSuccess)
-      log("update_contact SUCESSO | Response: #{response.code.to_i}")
+      log("update_device SUCESSO | Response: #{response.code.to_i}")
     elsif response.code.to_i == 401
-      log("update_contact ERRO | 401 Tentando autenticar novamente")
+      log("update_device ERRO | 401 Tentando autenticar novamente")
       self.session
-      return self.update_contact(device_id, name, contact, imei) # Tenta novamente após autenticar
+      return self.update_device(detail) # Tenta novamente após autenticar
     else
-      log("update_contact ERRO | #{response.code} #{response.body}")
+      log("update_device ERRO | #{response.code} #{response.body}")
     end
 
     response.code.to_i
@@ -174,5 +178,10 @@ class Traccar
   def self.log(message)
     msg = "Traccar.#{message}"
     Rails.logger.info(msg)
+  end
+
+  def self.kmH_to_milhas_nauticas(string_velocidade)
+    km_h = string_velocidade.to_s[/\d+/].to_f
+    km_h / 1.852
   end
 end

@@ -178,13 +178,13 @@ class HomeController < ApplicationController
 
     command_name = params[:action_type] == 'bloquear' ? 'rele_on' : 'rele_off'
 
-    if @detail.category == 'motorcycle'
-      if command_name == 'rele_on'
-        command_name = 'rele_off'
-      else
-        command_name = 'rele_on'
-      end
-    end
+    # if @detail.category == 'motorcycle'
+    #   if command_name == 'rele_on'
+    #     command_name = 'rele_off'
+    #   else
+    #     command_name = 'rele_on'
+    #   end
+    # end
 
     command = Command.find_by(type_device: params[:model], name: command_name)
     send_command = command.type_device == 'st8310u' ? command.command.gsub('XXXX', params[:imei]) : command.command
@@ -209,8 +209,7 @@ class HomeController < ApplicationController
     @detail.save
     create_event_log('commandSend', "#{command_name} / #{send_command}", @detail.device_id, @detail.device_name, "#{params[:action_type]} - Resposta: #{response}", @detail.last_user)
 
-    driver_active = @detail.last_user.to_s.split(' ').first.presence || @detail.last_user
-    Traccar.update_contact(@detail.device_id, @detail.device_name, driver_active, @detail.imei, @detail.category)
+    UpdateDeviceJob.perform_later({ device_id: @detail.device_id }) # Atualiza o dispositivo no Traccar após o comando
 
     notice = "Aguarde alguns segundos e o veículo será #{params[:action_type] == 'bloquear' ? 'BLOQUEADO' : 'DESBLOQUEADO'}."
     new_button_text = 'Aguarde...'
@@ -441,6 +440,40 @@ class HomeController < ApplicationController
     end
   end
 
+  def change_speed_limit
+    device_id = params[:device_id]
+    detail = Detail.find_by(device_id: device_id)
+    new_speed_limit = params[:new_speed_limit]
+    detail.velo_max = "#{new_speed_limit} km/h"
+    detail.save
+    response = Traccar.update_device(detail)
+
+    if response == 200
+      notice = "Limite de velocidade atualizado com sucesso."
+      flash.now[:notice] = notice
+
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.append("flash", partial: "/alert", locals: { notice: notice }),
+            turbo_stream.append("flash", partial: "shared/flash_popup", locals: { notice_message: notice, redirect_on_success: true })
+          ]
+        end
+      end
+    else
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.append(
+            "flash",
+            partial: "shared/flash_popup",
+            locals: { alert_message: "Erro ao atualizar o limite de velocidade. Resposta: #{response}" }
+          )
+        end
+        format.html { redirect_to root_path, alert: "Erro ao atualizar o limite de velocidade. Resposta: #{response}" }
+      end
+    end
+  end
+
   private
 
   def query_events(device_id)
@@ -502,7 +535,8 @@ class HomeController < ApplicationController
     return "desbloquear" if event.rele_state == 'on' # Qualquer um pode desbloquear, porque o veículo está bloqueado e disponível para uso
     return "bloquear"    if event.rele_state == 'off' && event.last_user == Current.user.name # Se o evento é desbloquear e o motorista é o mesmo que desbloqueou, ele pode bloquear
     return "bloquear"    if event.rele_state == 'off' && Current.user.admin? # Se o evento é desbloquear e o motorista é admin, ele pode bloquear
-    return "not_user" # se chegar aqui, é porque o evento é desbloquear e o motorista é diferente do que desbloqueou, então ele não pode bloquear
+    return "bloquear"    if event.rele_state == 'off' && Current.user.pessoal? # Se o evento é desbloquear e o motorista é pessoal, ele pode bloquear
+    return "not_user" # se chegar aqui, é porque o evento é desbloquear e o motorista é diferente do que desbloqueou e não é admin ou pessoal, então ele não pode bloquear
   end
 
   helper_method :define_text, :define_state

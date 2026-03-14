@@ -223,7 +223,8 @@ class StandardizePayload::Xt40
   end
 
   def commandResult_releOn
-    estado_rele = @detail.category == "motorcycle" ? 'off' : 'on'
+    estado_rele = 'on'
+    # estado_rele = @detail.category == "motorcycle" ? 'off' : 'on'
     # Necessário pois quando for moto, o relé deve ficar ligado quando o veículo estiver em uso.
     # lembrar que o relé é invertido em motos. Bomba de combutível funciona com o relé ligado. Pino 30 a 87.
     # No chicote fio amarelo e vermelho (isolar o fio preto).
@@ -236,7 +237,8 @@ class StandardizePayload::Xt40
   end
 
   def commandResult_releOff
-    estado_rele = @detail.category == "motorcycle" ? 'on' : 'off'
+    estado_rele = 'off'
+    # estado_rele = @detail.category == "motorcycle" ? 'on' : 'off'
     # Necessário pois quando for moto, o relé deve ficar desligado quando o veículo estiver parado.
     # 'off' significa Bloquear na página dos motoristas.
     {
@@ -329,7 +331,7 @@ class StandardizePayload::Xt40
 
   def km_por_hora(milhas_nauticas)
     return nil if milhas_nauticas.nil?
-    km_por_hora = (milhas_nauticas * 1.853).to_i
+    km_por_hora = (milhas_nauticas * 1.852).to_i
     "#{km_por_hora} km/h"
   end
 
