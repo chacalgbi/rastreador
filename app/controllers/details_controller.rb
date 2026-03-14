@@ -25,6 +25,7 @@ class DetailsController < ApplicationController
 
   def update_settings
     if @detail.update(settings_params)
+      create_event(@detail)
       redirect_to details_path, notice: "Veículo '#{@detail.device_name || @detail.device_id}' atualizado com sucesso!"
     else
       render :edit_settings, status: :unprocessable_entity
@@ -55,5 +56,20 @@ class DetailsController < ApplicationController
     unless Current.user&.admin || Current.user&.pessoal
       redirect_to root_path, alert: "Você não tem acesso a essa página"
     end
+  end
+
+  def create_event(detail)
+    Event.create(
+      car_id: detail.device_id,
+      car_name: detail.device_name,
+      driver_name: detail.last_user,
+      event_type: 'commandSend',
+      event_name: 'Update Alerts',
+      message: "Canais(WhatsApp:#{true_or_false(detail.alert_whatsApp)} Telegram:#{true_or_false(detail.alert_telegram)} Email:#{true_or_false(detail.alert_email)} Push:#{true_or_false(detail.alert_push)})\n Alertas(Cerca:#{true_or_false(detail.send_exit_cerca)} Alarmes:#{true_or_false(detail.send_battery)} Velo. Máx:#{true_or_false(detail.send_velo_max)} Relé:#{true_or_false(detail.send_rele)} Movimento:#{true_or_false(detail.send_moving)})"
+    )
+  end
+
+  def true_or_false(value)
+    ActiveModel::Type::Boolean.new.cast(value) ? "🟢" : "🔴"
   end
 end

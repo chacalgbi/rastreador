@@ -1,7 +1,50 @@
 <%= form_with(model: [:admin, detail]) do |form| %>
   <div class="form-footer">
-    <%= form.submit class: "btn btn-primary" %>
-    <%= link_to "Cancel", admin_details_path, class: "btn btn-white" %>
+    <%= form.submit "Atualizar Veículo", class: "btn btn-primary" %>
+    <%= link_to "Cancelar", admin_details_path, class: "btn btn-white" %>
+  </div>
+  <br>
+
+  <div style="border: 2px solid #3d56e6; border-radius: 0.5rem; padding: 1rem; margin-bottom: 0.5rem;">
+    <div class="form-group row mb-2">
+      <%= form.label 'Id no Traccar', class: "form-label col-md-3 col-form-label" %>
+      <div class="col-md px-0">
+        <%= form.text_field :device_id, class: "form-control" %>
+        <%= tag.div detail.errors[:device_id].first, class: "invalid-feedback" %>
+      </div>
+    </div>
+
+    <div class="form-group row mb-2">
+      <%= form.label :device_name, class: "form-label col-md-3 col-form-label" %>
+      <div class="col-md px-0">
+        <%= form.text_field :device_name, class: "form-control" %>
+        <%= tag.div detail.errors[:device_name].first, class: "invalid-feedback" %>
+      </div>
+    </div>
+
+    <div class="form-group row mb-2">
+      <%= form.label 'Modelo do Rastreador', class: "form-label col-md-3 col-form-label" %>
+      <div class="col-md px-0">
+        <%= form.text_field :model, class: "form-control" %>
+        <%= tag.div detail.errors[:model].first, class: "invalid-feedback" %>
+      </div>
+    </div>
+
+    <div class="form-group row mb-2">
+      <%= form.label 'Categoria', class: "form-label col-md-3 col-form-label" %>
+      <div class="col-md px-0">
+        <%= form.select :category, [["Carro", "car"], ["Caminhão", "truck"], ["Moto", "motorcycle"], ["Pick-up", "pickup"]], {}, class: "form-control" %>
+        <%= tag.div detail.errors[:category].first, class: "invalid-feedback" %>
+      </div>
+    </div>
+
+    <div class="form-group row mb-2">
+      <%= form.label 'Estado Ignição', class: "form-label col-md-3 col-form-label" %>
+      <div class="col-md px-0">
+        <%= form.text_field :ignition, class: "form-control" %>
+        <%= tag.div detail.errors[:ignition].first, class: "invalid-feedback" %>
+      </div>
+    </div>
   </div>
 
   <div class="form-group row mb-2">
@@ -9,45 +52,6 @@
     <div class="col-md px-0">
       <%= form.text_field :cell_number, class: "form-control" %>
       <%= tag.div detail.errors[:cell_number].first, class: "invalid-feedback" if detail.errors[:cell_number].any? %>
-    </div>
-  </div>
-  <div class="form-group row mb-2">
-    <%= form.label :device_id, class: "form-label col-md-3 col-form-label" %>
-    <div class="col-md px-0">
-      <%= form.text_field :device_id, class: "form-control" %>
-      <%= tag.div detail.errors[:device_id].first, class: "invalid-feedback" %>
-    </div>
-  </div>
-
-  <div class="form-group row mb-2">
-    <%= form.label :category, class: "form-label col-md-3 col-form-label" %>
-    <div class="col-md px-0">
-      <%= form.select :category, [["Carro", "car"], ["Caminhão", "truck"], ["Moto", "motorcycle"], ["Pick-up", "pickup"]], {}, class: "form-control" %>
-      <%= tag.div detail.errors[:category].first, class: "invalid-feedback" %>
-    </div>
-  </div>
-
-  <div class="form-group row mb-2">
-    <%= form.label :device_name, class: "form-label col-md-3 col-form-label" %>
-    <div class="col-md px-0">
-      <%= form.text_field :device_name, class: "form-control" %>
-      <%= tag.div detail.errors[:device_name].first, class: "invalid-feedback" %>
-    </div>
-  </div>
-
-  <div class="form-group row mb-2">
-    <%= form.label :model, class: "form-label col-md-3 col-form-label" %>
-    <div class="col-md px-0">
-      <%= form.text_field :model, class: "form-control" %>
-      <%= tag.div detail.errors[:model].first, class: "invalid-feedback" %>
-    </div>
-  </div>
-
-  <div class="form-group row mb-2">
-    <%= form.label :ignition, class: "form-label col-md-3 col-form-label" %>
-    <div class="col-md px-0">
-      <%= form.text_field :ignition, class: "form-control" %>
-      <%= tag.div detail.errors[:ignition].first, class: "invalid-feedback" %>
     </div>
   </div>
 
@@ -311,7 +315,7 @@
     </div>
 
     <div class="form-group row mb-2">
-      <%= form.label :send_battery, class: "form-check-label col-md-3 col-form-label" %>
+      <%= form.label 'Alarmes', class: "form-check-label col-md-3 col-form-label" %>
       <div class="col-md px-0">
         <%= form.checkbox :send_battery, class: "form-check-input" %>
         <%= tag.div detail.errors[:send_battery].first, class: "invalid-feedback" %>
@@ -360,7 +364,7 @@
   </div>
 
   <div class="form-footer">
-    <%= form.submit class: "btn btn-primary" %>
-    <%= link_to "Cancel", admin_details_path, class: "btn btn-white" %>
+    <%= form.submit "Atualizar Veículo", class: "btn btn-primary" %>
+    <%= link_to "Cancelar", admin_details_path, class: "btn btn-white" %>
   </div>
 <% end %>

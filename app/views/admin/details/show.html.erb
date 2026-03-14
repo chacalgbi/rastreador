@@ -1,12 +1,12 @@
 <%= render "page_header" do %>
-  <%= render "page_header_breadcrumb", title: "Showing detail" do %>
+  <%= render "page_header_breadcrumb", title: "Exibir veículo" do %>
     <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
-    <li class="breadcrumb-item"><%= link_to "Details", admin_details_path %></li>
+    <li class="breadcrumb-item"><%= link_to "Veículos", admin_details_path %></li>
   <% end %>
 
   <%= render "page_header_actions" do %>
-    <%= link_to "Edit detail", edit_admin_detail_path(@detail), class: "btn btn-primary" %>
-    <%= link_to "Delete detail", [:admin, @detail], class: "btn btn-white", data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja deletar este veículo?" } %>
+    <%= link_to "Editar veículo", edit_admin_detail_path(@detail), class: "btn btn-primary" %>
+    <%= link_to "Deletar veículo", [:admin, @detail], class: "btn btn-white", data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja deletar este veículo?" } %>
   <% end %>
 <% end %>
 
@@ -14,7 +14,7 @@
   <div class="container-xl">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Detail details</h3>
+        <h3 class="card-title">Detalhes do veículo</h3>
       </div>
       <div class="card-body">
         <dl class="row">
@@ -135,7 +135,7 @@
           <dt class="col-md-3">Send exit cerca</dt>
           <dd class="col-md-9"><%= @detail.send_exit_cerca %></dd>
           <hr>
-          <dt class="col-md-3">Send battery</dt>
+          <dt class="col-md-3">Alarmes</dt>
           <dd class="col-md-9"><%= @detail.send_battery %></dd>
           <hr>
           <dt class="col-md-3">Send moving</dt>
