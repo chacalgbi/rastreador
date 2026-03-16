@@ -13,10 +13,17 @@
 <div class="page-body">
   <div class="container-fluid">
     <div class="card">
+      <%= form_with url: destroy_selected_admin_events_path, method: :delete, id: "bulk_delete_form", data: { turbo_confirm: "Tem certeza que deseja excluir os eventos selecionados?" } do %>
+      <div class="card-header">
+        <button type="submit" class="btn btn-danger btn-sm" id="btn_delete_selected" style="display: none;">
+          Excluir Selecionados (<span id="selected_count">0</span>)
+        </button>
+      </div>
       <div class="table-responsive">
         <table class="table table-vcenter table-nowrap card-table table-striped">
           <thead>
             <tr>
+              <th class="w-1"><input type="checkbox" id="select_all" class="form-check-input"></th>
               <th><%= sort_link @search, :id %></th>
               <th><%= sort_link @search, :car_id %></th>
               <th><%= sort_link @search, :updated_at %></th>
@@ -30,6 +37,7 @@
           <tbody>
             <% @events.each do |event| %>
               <tr>
+                <td><input type="checkbox" name="event_ids[]" value="<%= event.id %>" class="form-check-input event-checkbox"></td>
                 <td><%= event.id %></td>
                 <td><%= event.car_id %></td>
                 <td>
@@ -53,6 +61,7 @@
           </tbody>
         </table>
       </div>
+      <% end %>
       <div class="card-footer d-flex align-items-center fs-5">
         <div class="d-none d-md-block">
           <div>Download: <%= link_to "CSV", url_for(format: :csv, q: request.params[:q]) %></div>
@@ -156,3 +165,28 @@
     <% end %>
   </div>
 </div>
+
+<script>
+  document.addEventListener("turbo:load", function() {
+    const selectAll = document.getElementById("select_all");
+    const checkboxes = document.querySelectorAll(".event-checkbox");
+    const btnDelete = document.getElementById("btn_delete_selected");
+    const selectedCount = document.getElementById("selected_count");
+
+    function updateUI() {
+      const checked = document.querySelectorAll(".event-checkbox:checked").length;
+      selectedCount.textContent = checked;
+      btnDelete.style.display = checked > 0 ? "" : "none";
+      selectAll.checked = checked > 0 && checked === checkboxes.length;
+    }
+
+    selectAll.addEventListener("change", function() {
+      checkboxes.forEach(function(cb) { cb.checked = selectAll.checked; });
+      updateUI();
+    });
+
+    checkboxes.forEach(function(cb) {
+      cb.addEventListener("change", updateUI);
+    });
+  });
+</script>

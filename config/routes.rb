@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     post 'commands/send_command_sms'
     resources :events do
       delete 'destroy_old_events', on: :collection
+      delete 'destroy_selected', on: :collection
     end
     resources :commands
     resources :batteries do

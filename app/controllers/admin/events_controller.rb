@@ -57,6 +57,16 @@ class Admin::EventsController < Admin::BaseController
     redirect_to admin_events_url, alert: "Data inválida. Por favor, selecione uma data válida."
   end
 
+  def destroy_selected
+    ids = Array(params[:event_ids]).map(&:to_i).reject(&:zero?)
+    if ids.any?
+      deleted_count = Event.where(id: ids).delete_all
+      redirect_to admin_events_url, notice: "#{deleted_count} evento(s) foram deletados com sucesso."
+    else
+      redirect_to admin_events_url, alert: "Nenhum evento selecionado."
+    end
+  end
+
   private
     def set_event
       @event = Event.find(params[:id])
