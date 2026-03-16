@@ -207,7 +207,7 @@ class HomeController < ApplicationController
 
     @detail.last_user = params[:action_type] == 'bloquear' ? '' : Current.user.name
     @detail.save
-    create_event_log('commandSend', "#{command_name} / #{send_command}", @detail.device_id, @detail.device_name, "#{params[:action_type]} - Resposta: #{response}", @detail.last_user)
+    create_event_log('commandSend', "#{command_name} / #{send_command}", @detail.device_id, @detail.device_name, "#{params[:action_type]} - Resposta: #{response == 200 ? 'Sucesso' : 'Falha'}", @detail.last_user)
 
     UpdateDeviceJob.perform_later({ device_id: @detail.device_id }) # Atualiza o dispositivo no Traccar após o comando
 
@@ -449,7 +449,7 @@ class HomeController < ApplicationController
     response = Traccar.update_device(detail)
 
     if response == 200
-      create_event_log('commandSend', "Set Velo. Máx: #{new_speed_limit} km/h", detail.device_id, detail.device_name, "Resposta: #{response}", detail.last_user)
+      create_event_log('commandSend', "resposta", detail.device_id, detail.device_name, "Set Velo. Máx: #{new_speed_limit}km/h Resposta: #{response == 200 ? 'Sucesso' : 'Falha'}", detail.last_user)
       notice = "Limite de velocidade atualizado com sucesso."
       flash.now[:notice] = notice
 
