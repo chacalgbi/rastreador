@@ -79,7 +79,7 @@ Rails.application.routes.draw do
   get 'passwords/edit', to: 'passwords#edit', as: :edit_password
   patch 'passwords/update', to: 'passwords#update', as: :update_password
   get "home/index"
-  get "home/location"
+  post "home/location"
   get "home/details"
   get "home/hide_details"
   get "home/battery_history"

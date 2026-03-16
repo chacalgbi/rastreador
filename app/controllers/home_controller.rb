@@ -449,7 +449,7 @@ class HomeController < ApplicationController
     response = Traccar.update_device(detail)
 
     if response == 200
-      create_event_log('commandSend', "resposta", detail.device_id, detail.device_name, "Set Velo. Máx: #{new_speed_limit}km/h Resposta: #{response == 200 ? 'Sucesso' : 'Falha'}", detail.last_user)
+      create_event_log('commandSend', "Resposta: #{response == 200 ? 'Sucesso' : 'Falha'}", detail.device_id, detail.device_name, "Set Velo. Máx: #{new_speed_limit}km/h Resposta: #{response == 200 ? 'Sucesso' : 'Falha'}", detail.last_user)
       notice = "Limite de velocidade atualizado com sucesso."
       flash.now[:notice] = notice
 

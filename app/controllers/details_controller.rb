@@ -65,7 +65,7 @@ class DetailsController < ApplicationController
       driver_name: detail.last_user,
       event_type: 'commandSend',
       event_name: 'Update Alerts',
-      message: "Canais(WhatsApp:#{true_or_false(detail.alert_whatsApp)} Telegram:#{true_or_false(detail.alert_telegram)} Email:#{true_or_false(detail.alert_email)} Push:#{true_or_false(detail.alert_push)})\n Alertas(Cerca:#{true_or_false(detail.send_exit_cerca)} Alarmes:#{true_or_false(detail.send_battery)} Velo. Máx:#{true_or_false(detail.send_velo_max)} Relé:#{true_or_false(detail.send_rele)} Movimento:#{true_or_false(detail.send_moving)})"
+      message: "Canais(WhatsApp:#{true_or_false(detail.alert_whatsApp)} Telegram:#{true_or_false(detail.alert_telegram)} Email:#{true_or_false(detail.alert_email)} Push:#{true_or_false(detail.alert_push)})\n\nAlertas(Cerca:#{true_or_false(detail.send_exit_cerca)} Alarmes:#{true_or_false(detail.send_battery)} Velo. Máx:#{true_or_false(detail.send_velo_max)} Relé:#{true_or_false(detail.send_rele)} Movimento:#{true_or_false(detail.send_moving)})"
     )
   end
 
