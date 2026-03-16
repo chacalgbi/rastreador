@@ -252,7 +252,7 @@ class StandardizePayload::Xt40
     status = decode_status_string(@payload.dig(:position, :attributes, :result))
 
     rele_state = status["RELAYER"] == 'DISABLE' ? 'off' : 'on'
-    rele_state = @detail.category == "motorcycle" ? (rele_state == 'on' ? 'off' : 'on') : rele_state
+    # rele_state = @detail.category == "motorcycle" ? (rele_state == 'on' ? 'off' : 'on') : rele_state
 
     {
       odometro: kilometros,
