@@ -23,7 +23,6 @@
               <th><%= sort_link @search, :command %></th>
               <th><%= sort_link @search, :command_sms %></th>
               <th><%= sort_link @search, :description %></th>
-              <th><%= sort_link @search, :created_at %></th>
               <th><%= sort_link @search, :updated_at %></th>
               <th class="w-1"></th>
             </tr>
@@ -36,8 +35,7 @@
                 <td><%= command.name %></td>
                 <td><%= command.command %></td>
                 <td><%= command.command_sms %></td>
-                <td><%= command.description %></td>
-                <td><%= command.created_at %></td>
+                <td><%= truncate(command.description, length: 60) %></td>
                 <td><%= command.updated_at %></td>
                 <td>
                   <%= link_to "View", [:admin, command], class: "btn btn-white btn-sm" %>

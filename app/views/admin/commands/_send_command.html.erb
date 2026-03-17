@@ -44,9 +44,9 @@
 
     <div style="padding: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
       <%= form.text_field :deviceid, placeholder: "device_ids Ex: 14,8,87", class: "input", style: "flex: 1; min-width: 200px;" %>
-      <%= form.button "Moto SLPON", name: "comando", value: moto, class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar o comando Moto SLEEPON?" } %>
-      <%= form.button "Carro SLPOFF", name: "comando", value: carro, class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar o comando Carro SLPOFF?" } %>
-      <%= form.button "Diversos", name: "comando", value: diversos, class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar o comando Diversos?" } %>
+      <%= form.button "Moto SLPON", name: "comando", value: moto, class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar o comando 'Moto SLPON'?" } %>
+      <%= form.button "Carro SLPOFF", name: "comando", value: carro, class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar o comando 'Carro SLPOFF'?" } %>
+      <%= form.button "Diversos", name: "comando", value: diversos, class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar o comando 'Diversos'?" } %>
       <div class="text-info" style="flex-basis: 100%;">
           🏍️ <strong>Moto SLPON:</strong> <%= moto %><br>
           🚙 <strong>Carro SLPOFF:</strong> <%= carro %><br>
