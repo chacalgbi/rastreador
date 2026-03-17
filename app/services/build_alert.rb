@@ -21,6 +21,8 @@ class BuildAlert
         deviceOffline
       when 'deviceOnline'
         deviceOnline
+      when 'deviceUnknown'
+        deviceUnknown
       when 'deviceMoving'
         deviceMoving
       when 'deviceStopped'
@@ -127,6 +129,12 @@ class BuildAlert
 
     return nil unless @detail.send_exit_cerca
     payload_job_send_alert(msg2, @type)
+  end
+
+  def deviceUnknown
+    msg1 = "O veículo '#{@veiculo}' está 🟡Unknown."
+    events(@type, 'desconhecido', msg1)
+    nil
   end
 
   def deviceOverspeed

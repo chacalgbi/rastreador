@@ -21,7 +21,6 @@
               <th><%= sort_link @search, :type_device %></th>
               <th><%= sort_link @search, :name %></th>
               <th><%= sort_link @search, :command %></th>
-              <th><%= sort_link @search, :command_sms %></th>
               <th><%= sort_link @search, :description %></th>
               <th><%= sort_link @search, :updated_at %></th>
               <th class="w-1"></th>
@@ -34,7 +33,6 @@
                 <td><%= command.type_device %></td>
                 <td><%= command.name %></td>
                 <td><%= command.command %></td>
-                <td><%= command.command_sms %></td>
                 <td><%= truncate(command.description, length: 60) %></td>
                 <td><%= command.updated_at %></td>
                 <td>

@@ -40,7 +40,7 @@
   <%= form_with url: admin_commands_send_command_list_path, class: "card" do |form| %>
     <% moto = 'SETLOCX12# BLOCKNORMAL# ACCVIRTOFF# SLPON# SLEEP,5# WAKE,5#' %>
     <% carro = 'SETLOCX12# BLOCKNORMAL# ACCVIRTOFF# SLPOFF#' %>
-    <% diversos = 'STIME,15# SPEEDCHECK,ON,0,6,60,60# EXBATALM,ON,0,117,125,15# BEND,1,15#' %>
+    <% diversos = 'STIME,15# SPEEDCHECK,ON,0,6,60,60# EXBATALM,ON,0,117,125,15# BEND,1,15# VIBRATION,3# SWERVE,ON,0,45,60,3#' %>
 
     <div style="padding: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
       <%= form.text_field :deviceid, placeholder: "device_ids Ex: 14,8,87", class: "input", style: "flex: 1; min-width: 200px;" %>
