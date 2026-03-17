@@ -1,11 +1,11 @@
 <div class="container-xl">
 
   <%= form_with url: admin_commands_send_command_path, class: "card" do |form| %>
-    <div style="padding: 10px; display: flex;">
-      <%= form.text_field :comando, placeholder: "Digite o comando", class: "input" %>
-      <%= form.text_field :deviceid, placeholder: "device_ids Ex: 5,58,125", class: "input" %>
+    <div style="padding: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+      <%= form.text_field :comando, placeholder: "Digite o comando", class: "input", style: "flex: 1; min-width: 200px;" %>
+      <%= form.text_field :deviceid, placeholder: "device_ids Ex: 5,58,125", class: "input", style: "flex: 1; min-width: 200px;" %>
       <%= form.submit "Enviar para veículo(s)", class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar este comando?" } %>
-      <div class="text-info">
+      <div class="text-info" style="flex-basis: 100%;">
         💬 <strong>INFORMAÇÃO:</strong> O comando será enviado sem tratamento, tenha cuidado.<br>
         📝 <strong>Dica:</strong> Separe os IDs por vírgula (ex: 123, 456, 789).
       </div>
@@ -14,10 +14,10 @@
   <br>
 
   <%= form_with url: admin_commands_send_command_to_all_path, class: "card" do |form| %>
-    <div style="padding: 10px; display: flex;">
-      <%= form.text_field :comando, placeholder: "Digite o comando para todos os veículos", class: "input" %>
+    <div style="padding: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+      <%= form.text_field :comando, placeholder: "Digite o comando para todos os veículos", class: "input", style: "flex: 1; min-width: 200px;" %>
       <%= form.submit "Enviar para TODOS os veículos", class: "btn btn--danger", data: { turbo_confirm: "ATENÇÃO: Este comando será enviado para TODOS os veículos cadastrados. Você tem certeza?" } %>
-      <div class="text-warning">
+      <div class="text-warning" style="flex-basis: 100%;">
         ⚠️ <strong>ATENÇÃO:</strong> Este comando será enviado para TODOS os veículos cadastrados no sistema. Use com extrema cautela.
       </div>
     </div>
@@ -25,13 +25,32 @@
   <br>
 
   <%= form_with url: admin_commands_send_command_sms_path, class: "card" do |form| %>
-    <div style="padding: 10px; display: flex;">
-      <%= form.text_field :comando, placeholder: "Digite o comando SMS", class: "input" %>
-      <%= form.text_field :deviceid, placeholder: "device_ids Ex: 14,8,87", class: "input" %>
+    <div style="padding: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+      <%= form.text_field :comando, placeholder: "Digite o comando SMS", class: "input", style: "flex: 1; min-width: 200px;" %>
+      <%= form.text_field :deviceid, placeholder: "device_ids Ex: 14,8,87", class: "input", style: "flex: 1; min-width: 200px;" %>
       <%= form.submit "Enviar SMS para veículo(s)", class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar este comando?" } %>
-      <div class="text-info">
+      <div class="text-info" style="flex-basis: 100%;">
         💬 <strong>INFORMAÇÃO:</strong> O comando SMS será enviado sem tratamento, tenha cuidado.<br>
         📝 <strong>Dica:</strong> Separe os IDs por vírgula (ex: 17, 4, 789).
+      </div>
+    </div>
+  <% end %>
+  <br>
+
+  <%= form_with url: admin_commands_send_command_list_path, class: "card" do |form| %>
+    <% moto = 'SETLOCX12# BLOCKNORMAL# ACCVIRTOFF# SLPON# SLEEP,5# WAKE,5#' %>
+    <% carro = 'SETLOCX12# BLOCKNORMAL# ACCVIRTOFF# SLPOFF#' %>
+    <% diversos = 'STIME,15# SPEEDCHECK,ON,0,6,60,60# EXBATALM,ON,0,117,125,15# BEND,1,15#' %>
+
+    <div style="padding: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+      <%= form.text_field :deviceid, placeholder: "device_ids Ex: 14,8,87", class: "input", style: "flex: 1; min-width: 200px;" %>
+      <%= form.button "Moto SLPON", name: "comando", value: moto, class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar o comando Moto SLEEPON?" } %>
+      <%= form.button "Carro SLPOFF", name: "comando", value: carro, class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar o comando Carro SLPOFF?" } %>
+      <%= form.button "Diversos", name: "comando", value: diversos, class: "btn btn--primary", data: { turbo_confirm: "Você tem certeza que deseja enviar o comando Diversos?" } %>
+      <div class="text-info" style="flex-basis: 100%;">
+          🏍️ <strong>Moto SLPON:</strong> <%= moto %><br>
+          🚙 <strong>Carro SLPOFF:</strong> <%= carro %><br>
+          📝 <strong>Diversos:</strong> <%= diversos %>
       </div>
     </div>
   <% end %>

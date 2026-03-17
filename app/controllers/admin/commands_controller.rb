@@ -167,6 +167,45 @@ class Admin::CommandsController < Admin::BaseController
     redirect_to admin_commands_path, notice: message
   end
 
+  def send_command_list
+    comando = params[:comando]
+    device_ids_param = params[:deviceid]
+
+    if comando.blank?
+      redirect_to admin_commands_path, alert: "Comando não pode estar vazio."
+      return
+    end
+
+    if device_ids_param.blank?
+      redirect_to admin_commands_path, alert: "Device ID não pode estar vazio."
+      return
+    end
+
+    device_ids = device_ids_param.split(',').map(&:strip).reject(&:blank?)
+    comandos = comando.split(' ').reject(&:blank?)
+
+    if device_ids.empty?
+      redirect_to admin_commands_path, alert: "Nenhum Device ID válido fornecido. Devices: #{device_ids_param}"
+      return
+    end
+
+    if comandos.empty?
+      redirect_to admin_commands_path, alert: "Nenhum comando válido fornecido. Comandos: #{comando}"
+      return
+    end
+
+    device_ids.each do |device_id|
+      comandos.each_with_index do |cmd, index|
+        wait_time = (index + 1) * 5
+        SendCommandJob.set(wait: wait_time.seconds).perform_later({ device_id: device_id, command: cmd })
+      end
+    end
+
+    message = "Os comandos '#{comandos.join(', ')}' foram agendados para os veículos: #{device_ids.join(', ')}"
+    SaveLog.new('info', message).save
+    redirect_to admin_commands_path, notice: message
+  end
+
   private
   def set_command
     @command = Command.find(params[:id])

@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     post 'commands/send_command'
     post 'commands/send_command_to_all'
     post 'commands/send_command_sms'
+    post 'commands/send_command_list'
     resources :events do
       delete 'destroy_old_events', on: :collection
       delete 'destroy_selected', on: :collection
