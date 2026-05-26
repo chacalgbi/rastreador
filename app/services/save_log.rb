@@ -44,6 +44,8 @@ class SaveLog
         payload_desconhecido
       when 'search_stopped_motorcycles'
         search_stopped_motorcycles
+      when 'notify_temp_block'
+        notify_temp_block
       else
         nil
       end
@@ -90,6 +92,12 @@ class SaveLog
   def error_alert
     path = Rails.root.join('log', 'informacao')
     logger = self.class.get_logger(path, "error_alert.log")
+    logger.info("#{@log}\n")
+  end
+
+  def notify_temp_block
+    path = Rails.root.join('log', 'informacao')
+    logger = self.class.get_logger(path, "notify_temp_block.log")
     logger.info("#{@log}\n")
   end
 

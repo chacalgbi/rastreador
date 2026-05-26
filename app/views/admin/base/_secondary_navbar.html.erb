@@ -154,6 +154,16 @@
               </span>
             <% end %>
           </li>
+          <li class="nav-item <%= active_nav_item("admin/email_campaigns") %>">
+            <%= link_to new_admin_email_campaign_path, class: "nav-link" do %>
+              <span class="text-purple nav-link-icon d-md-none d-lg-inline-block">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-mail-share"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M13 19h-8a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v6" /><path d="M3 7l9 6l9 -6" /><path d="M16 22l5 -5" /><path d="M21 21.5v-4.5h-4.5" /></svg>
+              </span>
+              <span class="nav-link-title">
+                Campanha
+              </span>
+            <% end %>
+          </li>
           <li class="nav-item">
             <%= button_to "Sair", admin_sign_out_path, method: :delete, class: "btn btn-danger" %>
           </li>

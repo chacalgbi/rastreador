@@ -1,0 +1,105 @@
+<%= render "page_header" do %>
+  <%= render "page_header_breadcrumb", title: "Envio de Email" do %>
+    <li class="breadcrumb-item"><%= link_to "Admin", admin_path %></li>
+  <% end %>
+<% end %>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jodit/3.24.5/jodit.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jodit/3.24.5/jodit.min.js"></script>
+
+<div class="page-body">
+  <div class="container-xl">
+    <% if @campaign.errors.any? %>
+      <div class="alert alert-danger alert-dismissible mb-3" role="alert">
+        <div class="d-flex">
+          <div>
+            <h4 class="alert-title">Verifique os campos abaixo</h4>
+            <ul class="mb-0 ps-3">
+              <% @campaign.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Composição do Email</h3>
+        <div class="card-options">
+          <span class="text-muted fs-6">Os emails serão enviados em segundo plano via fila</span>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <%= form_with model: [:admin, @campaign], url: admin_email_campaign_path, method: :post do |form| %>
+          <div class="mb-3">
+            <%= form.label :subject, "Assunto", class: "form-label" %>
+            <%= form.text_field :subject,
+                  class: "form-control #{'is-invalid' if @campaign.errors[:subject].any?}",
+                  placeholder: "Assunto do email" %>
+            <% if @campaign.errors[:subject].any? %>
+              <div class="invalid-feedback"><%= @campaign.errors[:subject].first %></div>
+            <% end %>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label :recipients, "Destinatários", class: "form-label" %>
+            <%= form.text_area :recipients,
+                  class: "form-control #{'is-invalid' if @campaign.errors[:recipients].any?}",
+                  rows: 3,
+                  placeholder: "email1@exemplo.com, email2@exemplo.com, email3@exemplo.com" %>
+            <div class="form-hint">Insira os endereços de email separados por vírgula. Endereços inválidos são ignorados automaticamente.</div>
+            <% if @campaign.errors[:recipients].any? %>
+              <div class="invalid-feedback"><%= @campaign.errors[:recipients].first %></div>
+            <% end %>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label :body_html, "Corpo do Email", class: "form-label" %>
+            <%= form.text_area :body_html,
+                  id: "campaign_body_html",
+                  class: "form-control #{'is-invalid' if @campaign.errors[:body_html].any?}" %>
+            <% if @campaign.errors[:body_html].any? %>
+              <div class="text-danger mt-1 fs-6"><%= @campaign.errors[:body_html].first %></div>
+            <% end %>
+          </div>
+
+          <div class="d-flex gap-2 mt-4">
+            <%= form.submit "Enviar Emails", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    Jodit.make("#campaign_body_html", {
+      language: "pt_br",
+      height: 480,
+      buttons: [
+        "bold", "italic", "underline", "strikethrough", "|",
+        "font", "fontsize", "|",
+        "brush", "paragraph", "|",
+        "image", "link", "table", "|",
+        "align", "indent", "outdent", "|",
+        "ul", "ol", "|",
+        "hr", "eraser", "|",
+        "undo", "redo", "|",
+        "fullsize", "source"
+      ],
+      colorPickerDefaultTab: "color",
+      showCharsCounter: false,
+      showWordsCounter: false,
+      showXPathInStatusbar: false,
+      askBeforePasteHTML: false,
+      askBeforePasteFromWord: false,
+      defaultActionOnPaste: "insert_clear_html",
+      uploader: { insertImageAsBase64URI: true }
+    });
+  });
+</script>

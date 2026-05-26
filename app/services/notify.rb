@@ -7,7 +7,7 @@ class Notify
 
   def self.email(email, titulo, corpo)
     NotifyMailer.notify(email, titulo, corpo).deliver_later
-    log("email SUCCESS | Enviado para #{email}")
+    log("email ENQUEUED | Enfileirado para #{email}")
     { "erroGeral" => "nao", "msg" => "Email enviado com sucesso" }
   rescue StandardError => e
     msg = "email ERRO | To: #{email}, Title: #{titulo}, Body: #{corpo}, Exception: #{e.message} | #<#{e.backtrace.first(6).join("\n")}>"

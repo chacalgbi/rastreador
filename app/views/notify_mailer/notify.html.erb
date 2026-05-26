@@ -1,3 +1,99 @@
-<h1><%= ENV['APPLICATION_NAME'] %></h1>
-<br>
-<h3><%= @body %></h3>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		body { background-color: #e6d7d7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #f7f0f0; }
+		.wrapper { width: 100%; background-color: #ece5e5; padding: 40px 20px; }
+		.container { max-width: 620px; margin: 0 auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+		.header { background-color: #000000; padding: 24px 32px; border-bottom: 3px solid #c9a227; }
+		.header table { width: 100%; border-collapse: collapse; }
+		.header td { vertical-align: middle; }
+		.header .logo-cell { width: 90px; }
+		.header img.logo { width: 80px; height: 80px; border-radius: 12px; display: block; }
+		.header .brand-cell { padding-left: 20px; }
+		.header h1 { color: #c9a227; font-size: 22px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+		.header p { color: #a08840; font-size: 12px; margin-top: 5px; letter-spacing: 0.3px; }
+		.subject-bar { background: linear-gradient(135deg, #111111 0%, #2a2a2a 100%); padding: 16px 32px; border-left: 4px solid #c9a227; }
+		.subject-bar h2 { color: #c9a227; font-size: 17px; font-weight: 600; }
+		.body-content { padding: 36px 40px; line-height: 1.7; font-size: 15px; color: #374151; background-color: #ffffff; }
+		.body-content p { margin-bottom: 16px; }
+		.body-content h1, .body-content h2, .body-content h3 { color: #111111; margin-bottom: 12px; margin-top: 20px; }
+		.body-content ul, .body-content ol { margin-left: 24px; margin-bottom: 16px; }
+		.body-content li { margin-bottom: 6px; }
+		.body-content a { color: #b8880f; text-decoration: underline; }
+		.body-content img { max-width: 100%; height: auto; border-radius: 4px; margin: 12px 0; }
+		.body-content blockquote { border-left: 4px solid #c9a227; padding: 8px 16px; margin: 16px 0; background-color: #fdfaf0; color: #555; font-style: italic; }
+		.divider { height: 2px; background: linear-gradient(to right, #000000, #c9a227, #000000); }
+		.footer { padding: 28px 40px 32px; text-align: center; background-color: #111111; }
+		.footer .contact-title { font-size: 13px; color: #c9a227; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 14px; }
+		.footer .contact-table { margin: 0 auto; border-collapse: collapse; }
+		.footer .contact-table td { padding: 5px 14px; font-size: 13px; color: #aaaaaa; text-align: left; }
+		.footer .contact-table a { color: #c9a227; text-decoration: none; }
+		.footer .contact-table a:hover { text-decoration: underline; }
+		.footer .track-img { margin-top: 22px; }
+		.footer .track-img img { width: 100%; max-width: 460px; border-radius: 8px; display: block; margin: 0 auto; }
+		.footer .copyright { margin-top: 18px; font-size: 11px; color: #555555; }
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="container">
+
+			<div class="header">
+				<table>
+					<tr>
+						<td class="logo-cell">
+							<img src="https://gps.ia.br/images/logo.jpg" alt="GPS Track Logo" class="logo">
+						</td>
+						<td class="brand-cell">
+							<h1>GPS Track</h1>
+							<p>Monitoramento Veicular para Guanambi e Sudoeste da Bahia</p>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="subject-bar">
+				<h2>Notificação</h2>
+			</div>
+
+			<div class="body-content">
+				<%= simple_format(@body.to_s) %>
+			</div>
+
+			<div class="divider"></div>
+
+			<div class="footer">
+				<p class="contact-title">Entre em contato conosco</p>
+				<table class="contact-table">
+					<tr>
+						<td>
+							✉️ <a href="mailto:contato@gps.ia.br">contato@gps.ia.br</a>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							🌐 <a href="https://gps.ia.br">gps.ia.br</a>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							📸 <a href="https://instagram.com/gps.ia.br">@gps.ia.br</a>
+						</td>
+					</tr>
+				</table>
+
+				<div class="track-img">
+					<img src="https://gps.ia.br/images/track.jpg" alt="GPS Track - Rastreamento Veicular">
+				</div>
+
+				<p class="copyright">&copy; <%= Time.current.year %> GPS Track · Todos os direitos reservados</p>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>

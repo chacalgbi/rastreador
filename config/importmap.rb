@@ -10,3 +10,7 @@ pin "sweetalert2", to: "https://ga.jspm.io/npm:sweetalert2@11.14.4/dist/sweetale
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin "echarts", to: "echarts.min.js"
 pin "leaflet" # @1.9.4
+pin "trix"
+pin "@rails/actiontext", to: "@rails--actiontext.js"
+pin "@rails/actiontext", to: "@rails--actiontext.js" # @8.1.300
+pin "trix" # @2.1.19

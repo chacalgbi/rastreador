@@ -10,6 +10,8 @@ window.jQuery = window.$ = jQuery;
 window.L = L;
 
 import "echarts"
+import "trix"
+import "@rails/actiontext"
 
 document.addEventListener('turbo:load', function() {
   document.addEventListener('click', function(e) {

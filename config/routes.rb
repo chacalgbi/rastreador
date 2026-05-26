@@ -50,6 +50,7 @@ Rails.application.routes.draw do
       post "subscribe", on: :collection
     end
     resource  :password_reset
+    resource  :email_campaign, only: [:new, :create]
 
     resources :logs, only: [:index] do
       collection do

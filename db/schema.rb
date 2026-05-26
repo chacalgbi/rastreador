@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_13_131531) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_25_120000) do
   create_table "action_mailbox_inbound_emails", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "status", default: 0, null: false
     t.string "message_id", null: false
@@ -159,6 +159,14 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_13_131531) do
     t.boolean "sleeping", default: false
     t.boolean "alert_push", default: false
     t.index ["device_id"], name: "index_details_on_device_id", unique: true
+  end
+
+  create_table "email_campaigns", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "subject", null: false
+    t.text "recipients", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "body_html", size: :medium
   end
 
   create_table "events", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
