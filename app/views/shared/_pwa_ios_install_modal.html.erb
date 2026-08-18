@@ -1,0 +1,172 @@
+<div data-pwa-install-target="iosModal"
+     data-action="click->pwa-install#closeOnBackdrop"
+     class="pwa-ios-modal-overlay"
+     style="display: none;">
+  <div class="pwa-ios-modal" role="dialog" aria-modal="true" aria-labelledby="pwa-ios-modal-title">
+    <button type="button"
+            class="pwa-ios-close"
+            data-action="click->pwa-install#closeIosModal"
+            aria-label="Fechar">
+      &times;
+    </button>
+
+    <h3 id="pwa-ios-modal-title">Instalar aplicativo no iPhone</h3>
+    <p>Para instalar este aplicativo no seu iPhone ou iPad, siga os passos:</p>
+
+    <ol class="pwa-ios-steps">
+      <li>
+        Toque no botão <strong>Compartilhar</strong>
+        <%= image_tag "share.svg", size: 20, aria: { hidden: true }, class: "pwa-ios-share-icon" %>
+        na barra do navegador.
+      </li>
+      <li>Role a lista e toque em <strong>"Adicionar à Tela de Início"</strong>.</li>
+      <li>Toque em <strong>"Adicionar"</strong> no canto superior direito.</li>
+    </ol>
+
+    <p class="pwa-ios-note">
+      Dica: abra este site no <strong>Safari</strong> para garantir a opção de instalação.
+    </p>
+
+    <div class="pwa-ios-actions">
+      <button type="button"
+              data-action="click->pwa-install#dismissIosModal"
+              class="pwa-ios-btn pwa-ios-btn-secondary">
+        Não mostrar de novo
+      </button>
+      <button type="button"
+              data-action="click->pwa-install#closeIosModal"
+              class="pwa-ios-btn pwa-ios-btn-primary">
+        Fechar
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .pwa-ios-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .pwa-ios-modal {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    max-width: 420px;
+    width: 100%;
+    padding: 24px 20px 20px;
+  }
+
+  .pwa-ios-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 1.6em;
+    line-height: 1;
+    color: #666;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .pwa-ios-modal h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.15em;
+    padding-right: 24px;
+  }
+
+  .pwa-ios-modal p {
+    margin: 0 0 12px 0;
+    font-size: 0.92em;
+    color: #444;
+  }
+
+  .pwa-ios-steps {
+    margin: 0 0 12px 0;
+    padding-left: 22px;
+    font-size: 0.92em;
+    color: #333;
+  }
+
+  .pwa-ios-steps li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  .pwa-ios-share-icon {
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  .pwa-ios-note {
+    background: #f0f6ff;
+    border: 1px solid #d0e2ff;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 0.85em !important;
+  }
+
+  .pwa-ios-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .pwa-ios-btn {
+    padding: 9px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+  }
+
+  .pwa-ios-btn-primary {
+    background: #007bff;
+    color: #fff;
+  }
+
+  .pwa-ios-btn-secondary {
+    background: #e9ecef;
+    color: #333;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .pwa-ios-modal {
+      background: #1f2937;
+      color: #e5e7eb;
+    }
+
+    .pwa-ios-modal p,
+    .pwa-ios-steps {
+      color: #d1d5db;
+    }
+
+    .pwa-ios-close {
+      color: #9ca3af;
+    }
+
+    .pwa-ios-note {
+      background: #243447;
+      border-color: #35507a;
+    }
+
+    .pwa-ios-btn-secondary {
+      background: #374151;
+      color: #e5e7eb;
+    }
+
+    .pwa-ios-share-icon {
+      filter: invert(1);
+    }
+  }
+</style>

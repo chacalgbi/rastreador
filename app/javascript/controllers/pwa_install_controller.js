@@ -2,12 +2,26 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { autoPrompt: { type: Boolean, default: true } }
-  static targets = ["installButton"]
+  static targets = ["installButton", "iosModal"]
 
   connect() {
     this.deferredPrompt = null
     this.setupInstallPrompt()
-    this.checkIfInstalled()
+
+    if (this.checkIfInstalled()) {
+      return
+    }
+
+    if (this.isIOS()) {
+      console.log('PWA: Dispositivo iOS detectado, exibindo instalação manual')
+      this.showInstallButton()
+
+      if (!this.iosDismissed()) {
+        setTimeout(() => {
+          this.showIosModal()
+        }, 3000)
+      }
+    }
   }
 
   setupInstallPrompt() {
@@ -54,6 +68,8 @@ export default class extends Controller {
 
     if (this.deferredPrompt) {
       this.showInstallPrompt()
+    } else if (this.isIOS()) {
+      this.showIosModal()
     } else {
       console.log('PWA: deferredPrompt não disponível. Talvez o navegador não suporte ou a app já esteja instalada.')
       if (confirm('Parece que sua aplicação já está instalada ou seu navegador não suporta instalação automática. Deseja tentar acessar via configurações do navegador?')) {
@@ -63,19 +79,60 @@ export default class extends Controller {
   }
 
   checkIfInstalled() {
-    if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+    if (this.isInStandaloneMode()) {
       console.log('PWA: App já está instalada e rodando como PWA')
       this.hideInstallButton()
       return true
     }
 
-    if (window.navigator.standalone === true) {
-      console.log('PWA: App já está instalada no iOS')
-      this.hideInstallButton()
-      return true
-    }
-
     return false
+  }
+
+  isIOS() {
+    return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  }
+
+  isInStandaloneMode() {
+    return window.navigator.standalone === true ||
+      (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+  }
+
+  iosDismissed() {
+    try {
+      return localStorage.getItem('pwa_ios_install_dismissed') === 'true'
+    } catch (e) {
+      return false
+    }
+  }
+
+  showIosModal() {
+    if (this.hasIosModalTarget) {
+      this.iosModalTarget.style.display = 'flex'
+    } else {
+      console.log('PWA: Modal de instruções iOS não encontrado no DOM')
+    }
+  }
+
+  closeIosModal() {
+    if (this.hasIosModalTarget) {
+      this.iosModalTarget.style.display = 'none'
+    }
+  }
+
+  dismissIosModal() {
+    try {
+      localStorage.setItem('pwa_ios_install_dismissed', 'true')
+    } catch (e) {
+      console.log('PWA: Não foi possível salvar preferência de instalação iOS')
+    }
+    this.closeIosModal()
+  }
+
+  closeOnBackdrop(event) {
+    if (event.target === event.currentTarget) {
+      this.closeIosModal()
+    }
   }
 
   showInstallButton() {
