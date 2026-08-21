@@ -16,6 +16,12 @@ namespace :solid_queue do
           execute "cd #{current_path} && /home/deploy/.rbenv/shims/bundle exec rails runner 'SearchStoppedMotorcyclesJob.start_recurring'"
         end
       end
+
+      within current_path do
+        with rails_env: fetch(:rails_env) do
+          execute "cd #{current_path} && /home/deploy/.rbenv/shims/bundle exec rails runner 'SendMonthlyKmWhatsappJob.start_recurring'"
+        end
+      end
     end
   end
 

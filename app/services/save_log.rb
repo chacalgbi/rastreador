@@ -46,6 +46,8 @@ class SaveLog
         search_stopped_motorcycles
       when 'notify_temp_block'
         notify_temp_block
+      when 'monthly_km_whatsapp'
+        monthly_km_whatsapp
       else
         nil
       end
@@ -98,6 +100,12 @@ class SaveLog
   def notify_temp_block
     path = Rails.root.join('log', 'informacao')
     logger = self.class.get_logger(path, "notify_temp_block.log")
+    logger.info("#{@log}\n")
+  end
+
+  def monthly_km_whatsapp
+    path = Rails.root.join('log', 'informacao')
+    logger = self.class.get_logger(path, "monthly_km_whatsapp.log")
     logger.info("#{@log}\n")
   end
 
