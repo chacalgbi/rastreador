@@ -90,7 +90,10 @@ class SendMonthlyKmWhatsappJob < ApplicationJob
   end
 
   def self.already_scheduled?
-    SolidQueue::Job.where(class_name: name, finished_at: nil).exists?
+    target = next_run_time
+    SolidQueue::Job.where(class_name: name, finished_at: nil)
+                   .where(scheduled_at: (target - 1.minute)..(target + 1.minute))
+                   .exists?
   rescue
     false # Se der erro na consulta, permite criar o job
   end
