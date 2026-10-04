@@ -1,13 +1,41 @@
-<div class="header-layout">
-    <%= form_with url: session_path do |form| %>
-    <h1 class="font-bold text-2xl">Entre com seu telefone ou e-mail e senha</h1>
-      <%= form.text_field :phone, required: true, autofocus: true, autocomplete: "username", placeholder: "Digite seu telefone ou e-mail", value: params[:phone], class: "input" %><br>
-      <br>
-      <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Digite sua senha", maxlength: 72, class: "input" %><br>
-      <br>
-      <%= form.submit "Entrar", class: "btn btn--loading" %>
-      <br><br>
-      <%= link_to "Esqueceu sua senha?", new_password_path %>
-    <% end %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag "auth", "data-turbo-track": "reload" %>
+<% end %>
+
+<div class="auth-screen">
+  <%= render "shared/auth_brand" %>
+
+  <section class="auth-panel">
+    <div class="auth-card">
+      <h2 class="auth-card__title">Acesse sua conta</h2>
+      <p class="auth-card__subtitle">Entre com seu telefone ou e-mail e senha</p>
+
+      <%= form_with url: session_path do |form| %>
+        <div class="auth-field">
+          <%= form.label :phone, "Telefone ou e-mail" %>
+          <div class="auth-field__control">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <%= form.text_field :phone, required: true, autofocus: true, autocomplete: "username", placeholder: "Digite seu telefone ou e-mail", value: params[:phone], class: "input" %>
+          </div>
+        </div>
+
+        <div class="auth-field">
+          <%= form.label :password, "Senha" %>
+          <div class="auth-field__control">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Digite sua senha", maxlength: 72, class: "input" %>
+          </div>
+        </div>
+
+        <%= form.submit "Entrar", class: "btn btn--loading auth-btn" %>
+
+        <div class="auth-links">
+          <%= link_to "Esqueceu sua senha?", new_password_path %>
+        </div>
+      <% end %>
+    </div>
+
+    <p class="auth-foot">GPS · Telemetria · Bloqueio remoto · Monitoramento 24h</p>
+  </section>
 </div>
 

@@ -1,0 +1,38 @@
+<%# Painel de marca compartilhado das telas de autenticação (login e recuperação). %>
+<section class="auth-hero">
+  <div class="auth-brand">
+    <img src="/<%= icon(ENV['SERVIDOR']) %>.png" alt="" class="auth-brand__logo" width="56" height="56">
+    <div>
+      <h1 class="auth-brand__name"><%= ENV['APPLICATION_NAME'].presence || 'Rastreador' %></h1>
+      <p class="auth-brand__tag">Rastreamento e bloqueio veicular</p>
+    </div>
+  </div>
+
+  <div class="auth-radar" aria-hidden="true">
+    <span class="auth-radar__ring" style="--i: 1"></span>
+    <span class="auth-radar__ring" style="--i: 2"></span>
+    <span class="auth-radar__ring" style="--i: 3"></span>
+    <div class="auth-radar__sweep"></div>
+    <span class="auth-radar__blip" style="--x: 24%; --y: 30%; --d: 0s"></span>
+    <span class="auth-radar__blip" style="--x: 66%; --y: 22%; --d: 1.2s"></span>
+    <span class="auth-radar__blip" style="--x: 60%; --y: 68%; --d: 2.1s"></span>
+    <div class="auth-radar__center">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+    </div>
+  </div>
+
+  <ul class="auth-features">
+    <li>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+      Localização em tempo real
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></svg>
+      Alertas de velocidade, cercas geográficas e movimentos
+    </li>
+    <li>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.4 6.6a9 9 0 1 1-12.77.04"/></svg>
+      Bloqueio remoto do motor
+    </li>
+  </ul>
+</section>
