@@ -12,6 +12,7 @@ class SendMonthlyKmWhatsappJob < ApplicationJob
 
   def perform
     @failed = false
+    @sent_summaries = {}
     mes_ref = 1.month.ago.to_date
 
     Rails.logger.info("SendMonthlyKmWhatsappJob.perform")
@@ -33,7 +34,19 @@ class SendMonthlyKmWhatsappJob < ApplicationJob
 
   # Agenda a primeira execução para o próximo dia 01 às 08:00 (horário de Brasília).
   def self.start_recurring
-    set(wait_until: next_run_time).perform_later unless already_scheduled?
+    connection = SolidQueue::Job.connection
+    lock_acquired = connection.select_value("SELECT GET_LOCK('send_monthly_km_whatsapp_schedule', 10)").to_i == 1
+    return unless lock_acquired
+
+    target = next_run_time
+    scheduled_jobs = SolidQueue::Job.where(class_name: name, finished_at: nil)
+                                    .where(scheduled_at: (target - 1.minute)..(target + 1.minute))
+                                    .order(:scheduled_at, :id)
+
+    scheduled_jobs.offset(1).destroy_all
+    set(wait_until: target).perform_later unless scheduled_jobs.exists?
+  ensure
+    connection.select_value("SELECT RELEASE_LOCK('send_monthly_km_whatsapp_schedule')") if lock_acquired
   end
 
   # Próximo dia 01 às 08:00 no fuso da aplicação (America/Sao_Paulo).
@@ -49,7 +62,7 @@ class SendMonthlyKmWhatsappJob < ApplicationJob
     if @failed
       self.class.set(wait: RETRY_WAIT_ON_FAILURE).perform_later
     else
-      self.class.set(wait_until: self.class.next_run_time).perform_later
+      self.class.start_recurring
     end
   end
 
@@ -57,7 +70,7 @@ class SendMonthlyKmWhatsappJob < ApplicationJob
     user = User.find_by(id: notification.user_id)
     return if user.nil? || user.cars.blank?
 
-    device_ids = user.cars.split(',').map(&:strip).reject(&:blank?)
+    device_ids = user.cars.split(',').map(&:strip).reject(&:blank?).uniq
     return if device_ids.empty?
 
     historicos = Historico.where(device_id: device_ids, tipo: 'mensal', numero: mes_ref.month, ano: mes_ref.year)
@@ -68,8 +81,13 @@ class SendMonthlyKmWhatsappJob < ApplicationJob
       historico = historicos[device_id]
       next if historico.nil? || historico.odometro.to_f <= 0
 
+      recipient = notification.whatsapp.to_s.gsub(/\D/, '')
+      delivery_key = [user.id, recipient, device_id]
+      next if @sent_summaries[delivery_key]
+
       vehicle_name = details[device_id]&.device_name.presence || "ID #{device_id}"
       Notify.whatsapp(notification.whatsapp, build_message(user, vehicle_name, historico.odometro, mes_ref))
+      @sent_summaries[delivery_key] = true
     end
   end
 
@@ -89,13 +107,4 @@ class SendMonthlyKmWhatsappJob < ApplicationJob
     MSG
   end
 
-  def self.already_scheduled?
-    target = next_run_time
-    SolidQueue::Job.where(class_name: name, finished_at: nil)
-                   .where(scheduled_at: (target - 1.minute)..(target + 1.minute))
-                   .exists?
-  rescue
-    false # Se der erro na consulta, permite criar o job
-  end
-  private_class_method :already_scheduled?
 end
